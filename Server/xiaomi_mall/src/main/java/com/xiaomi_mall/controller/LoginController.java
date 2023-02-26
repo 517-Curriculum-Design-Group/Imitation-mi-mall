@@ -26,8 +26,9 @@ public class LoginController {
         return loginService.login(user);
     }
 
+    @PreAuthorize("hasAuthority('普通管理员')")
     @ApiOperation("退出登录接口")
-    @PostMapping ("/user/logout")
+    @GetMapping ("/user/logout")
     public Result logout() {
         return loginService.logout();
     }
