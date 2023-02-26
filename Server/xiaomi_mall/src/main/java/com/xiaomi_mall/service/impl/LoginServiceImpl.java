@@ -47,7 +47,7 @@ public class LoginServiceImpl implements LoginService {
         UsernamePasswordAuthenticationToken authentication = (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
         LoginUser loginUser = (LoginUser) authentication.getPrincipal();
         Long userid = loginUser.getUser().getId();
-        redisCache.deleteObject("login" + userid);
+        redisCache.deleteObject("login:" + userid);
         return new Result<>(200,"注销成功");
     }
 
