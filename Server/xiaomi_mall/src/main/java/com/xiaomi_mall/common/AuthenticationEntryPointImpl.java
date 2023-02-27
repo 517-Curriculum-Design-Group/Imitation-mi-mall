@@ -1,4 +1,4 @@
-package com.xiaomi_mall.interceptor;
+package com.xiaomi_mall.common;
 
 import com.alibaba.fastjson.JSON;
 import com.xiaomi_mall.config.Result;

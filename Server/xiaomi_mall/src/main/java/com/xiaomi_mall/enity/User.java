@@ -1,5 +1,8 @@
 package com.xiaomi_mall.enity;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -7,13 +10,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @ApiModel("用户实体")
+@TableName("user")
 public class User implements Serializable {
     private static final long serialVersionUID = -40356785423868312L;
     
@@ -47,17 +51,21 @@ public class User implements Serializable {
     @ApiModelProperty("用户类型")
     private String userType;
 
+    @TableField(fill = FieldFill.INSERT)
     @ApiModelProperty("创建人的用户id")
     private Long createBy;
 
+    @TableField(fill = FieldFill.INSERT)
     @ApiModelProperty("创建时间")
-    private Date createTime;
+    private LocalDateTime createTime;
 
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     @ApiModelProperty("更新人")
     private Long updateBy;
 
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     @ApiModelProperty("更新时间")
-    private Date updateTime;
+    private LocalDateTime updateTime;
 
     @ApiModelProperty("删除标志（0代表未删除，1代表已删除）")
     private Integer delFlag;
