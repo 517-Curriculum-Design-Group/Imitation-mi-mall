@@ -1,5 +1,6 @@
 package com.xiaomi_mall.filter;
 
+import com.xiaomi_mall.common.BaseContext;
 import com.xiaomi_mall.enity.authentication.LoginUser;
 import com.xiaomi_mall.util.JwtUtil;
 import com.xiaomi_mall.util.RedisCache;
@@ -48,6 +49,8 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         if(Objects.isNull(loginUser)){
             throw new RuntimeException("用户未登录");
         }
+        //将用户id获取到并存入BaseContext（mybatis-plus自动填充功能用到）
+        BaseContext.setCurrentId(loginUser.getUser().getId());
         //存入SecurityContextHolder
         //TODO 获取权限信息封装到Authentication中
         UsernamePasswordAuthenticationToken authenticationToken =

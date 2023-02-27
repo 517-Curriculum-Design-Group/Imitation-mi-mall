@@ -6,4 +6,6 @@ import com.xiaomi_mall.enity.User;
 
 public interface UserService extends IService<User> {
     boolean register(User user);
+
+    boolean addadmin(User user);
 }

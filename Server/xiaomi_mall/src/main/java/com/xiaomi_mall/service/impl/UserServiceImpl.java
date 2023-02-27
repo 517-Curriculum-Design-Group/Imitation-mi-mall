@@ -18,6 +18,13 @@ import java.util.Objects;
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
     @Autowired
     private UserMapper userMapper;
+
+    /**
+     * 普通用户注册
+     *
+     * @param user 用户
+     * @return boolean
+     */
     @Override
     public boolean register(User user) {
         //防止注册的用户重名
@@ -33,6 +40,31 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
             boolean flag = save(user);
             return flag;
+        }
+        return false;
+    }
+
+    /**
+     * 管理员注册
+     *
+     * @param user 用户
+     * @return boolean
+     */
+    @Override
+    public boolean addadmin(User user) {
+        //防止注册的用户重名
+        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(User::getUserName, user.getUserName());
+        User user2 = getOne(queryWrapper);
+
+        if (Objects.isNull(user2)) {
+            //user2为空时，说明不重名，可以注册
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            String encodePassword = passwordEncoder.encode(user.getPassword());
+            user.setPassword(encodePassword);
+            user.setUserType("超级管理员");
+            boolean res = save(user);
+            return res;
         }
         return false;
     }

@@ -36,11 +36,22 @@ public class LoginController {
         return loginService.logout();
     }
 
-    @ApiOperation("注册接口")
+    @ApiOperation("普通用户注册接口")
     @PostMapping("/register")
     public Result register(@RequestBody User user) {
         boolean flag = userService.register(user);
         if (flag) {
+            return new Result<>(200, "注册成功");
+        }
+        return new Result<>(400, "用户名已存在");
+    }
+
+    @PreAuthorize("hasAuthority('超级管理员')")
+    @ApiOperation("管理员增加接口")
+    @PostMapping("/addadmin")
+    public Result addadmin(@RequestBody User user) {
+        boolean res = userService.addadmin(user);
+        if (res) {
             return new Result<>(200, "注册成功");
         }
         return new Result<>(400, "用户名已存在");
