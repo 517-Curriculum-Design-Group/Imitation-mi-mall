@@ -3,6 +3,7 @@ package com.xiaomi_mall.controller;
 import com.xiaomi_mall.config.Result;
 import com.xiaomi_mall.enity.User;
 import com.xiaomi_mall.service.LoginService;
+import com.xiaomi_mall.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class LoginController {
     @Autowired
     private LoginService loginService;
+    @Autowired
+    private UserService userService;
 
     @ApiOperation("登录接口")
     @PostMapping ("/user/login")
@@ -26,11 +29,21 @@ public class LoginController {
         return loginService.login(user);
     }
 
-    @PreAuthorize("hasAuthority('普通管理员')")
+    @PreAuthorize("hasAnyAuthority('超级管理员', '普通管理员', '普通用户')")
     @ApiOperation("退出登录接口")
     @GetMapping ("/user/logout")
     public Result logout() {
         return loginService.logout();
+    }
+
+    @ApiOperation("注册接口")
+    @PostMapping("/register")
+    public Result register(@RequestBody User user) {
+        boolean flag = userService.register(user);
+        if (flag) {
+            return new Result<>(200, "注册成功");
+        }
+        return new Result<>(400, "用户名已存在");
     }
 
     @ApiOperation("测试接口1")
