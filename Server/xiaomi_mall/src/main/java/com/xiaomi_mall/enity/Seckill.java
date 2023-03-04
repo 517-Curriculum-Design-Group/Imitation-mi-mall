@@ -33,8 +33,8 @@ public class Seckill implements Serializable {
     private Integer stockCount;
 
     @ApiModelProperty("秒杀开始时间")
-    private LocalDateTime start_time;
+    private LocalDateTime startTime;
 
     @ApiModelProperty("秒杀结束时间")
-    private LocalDateTime end_time;
+    private LocalDateTime endTime;
 }

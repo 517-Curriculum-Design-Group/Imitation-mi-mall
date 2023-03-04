@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 @Data
 @AllArgsConstructor
@@ -26,5 +27,11 @@ public class Specification implements Serializable {
 
     @ApiModelProperty("属性值")
     private String value;
+
+    @ApiModelProperty("商品价格")
+    private BigDecimal price;
+
+    @ApiModelProperty("库存")
+    private Integer stock;
 
 }

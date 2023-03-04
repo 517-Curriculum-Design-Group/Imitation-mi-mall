@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import io.swagger.models.auth.In;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,12 +18,11 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @ApiModel("用户实体")
-@TableName("user")
+@TableName("User")
 public class User implements Serializable {
-    private static final long serialVersionUID = -40356785423868312L;
     
     @ApiModelProperty("主键")
-    private Long id;
+    private int userId;
 
     @ApiModelProperty("用户名")
     private String userName;
@@ -34,15 +34,15 @@ public class User implements Serializable {
     private String password;
 
     @ApiModelProperty("账号状态（0正常 1停用）")
-    private String status;
+    private int status;
 
     @ApiModelProperty("邮箱")
     private String email;
 
     @ApiModelProperty("手机号")
-    private String phonenumber;
+    private String mobile;
 
-    @ApiModelProperty("用户性别（0男，1女，2未知）")
+    @ApiModelProperty("用户性别（男.女）")
     private String sex;
 
     @ApiModelProperty("头像")
@@ -53,7 +53,7 @@ public class User implements Serializable {
 
     @TableField(fill = FieldFill.INSERT)
     @ApiModelProperty("创建人的用户id")
-    private Long createBy;
+    private int createBy;
 
     @TableField(fill = FieldFill.INSERT)
     @ApiModelProperty("创建时间")
@@ -61,12 +61,12 @@ public class User implements Serializable {
 
     @TableField(fill = FieldFill.INSERT_UPDATE)
     @ApiModelProperty("更新人")
-    private Long updateBy;
+    private int updateBy;
 
     @TableField(fill = FieldFill.INSERT_UPDATE)
     @ApiModelProperty("更新时间")
     private LocalDateTime updateTime;
 
     @ApiModelProperty("删除标志（0代表未删除，1代表已删除）")
-    private Integer delFlag;
+    private int delFlag;
 }
