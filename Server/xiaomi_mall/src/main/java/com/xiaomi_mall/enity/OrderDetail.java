@@ -14,25 +14,29 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 @ApiModel("订单详情实体")
-@TableName("order_detail")
+@TableName("OrderDetail")
 public class OrderDetail implements Serializable {
 
-    private static final long serialVersionUID = -40356785423868312L;
+    @ApiModelProperty("订单详情(主键)")
+    private int detailId;
 
-    @ApiModelProperty("主键")
-    private Integer orderDetailsId;
+    @ApiModelProperty("订单id(外键)")
+    private int orderId;
 
-    @ApiModelProperty("订单id")
-    private Integer orderId;
+    @ApiModelProperty("规格id(外键)")
+    private int skuId;
 
-    @ApiModelProperty("商品id")
-    private Integer productId;
+    @ApiModelProperty("选中商品的该规格名字")
+    private String skuName;
 
-    @ApiModelProperty("商品数量")
-    private Integer quantity;
+    @ApiModelProperty("选中商品的该规格对应图片")
+    private String skuImage;
 
-    @ApiModelProperty("订单的价格")
-    private BigDecimal price;
+    @ApiModelProperty("选中商品的该规格对应的价格")
+    private String skuPrice;
+
+    @ApiModelProperty("选中商品的该规格对应的数量")
+    private String skuQuantity;
 
 
 }

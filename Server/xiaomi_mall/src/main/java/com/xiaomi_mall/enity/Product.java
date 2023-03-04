@@ -1,5 +1,7 @@
 package com.xiaomi_mall.enity;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -16,32 +18,24 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @ApiModel("商品实体")
-@TableName("product")
+@TableName("Product")
 public class Product implements Serializable {
 
-    private static final long serialVersionUID = -40356785423868312L;
-
     @ApiModelProperty("主键")
-    private Integer productId;
+    private int productId;
+
+    @ApiModelProperty("分类id")
+    private int categoryId;
 
     @ApiModelProperty("商品名字")
-    private String name;
+    private String productName;
 
     @ApiModelProperty("商品描述")
-    private String description;
+    private String productDescription;
 
-    @ApiModelProperty("分类名字")
-    private String category_name;
+    @ApiModelProperty("创建时间")
+    @TableField(fill = FieldFill.INSERT)
+    private LocalDateTime createTime;
 
-    @ApiModelProperty("商品价格")
-    private BigDecimal price;
 
-    @ApiModelProperty("库存")
-    private Integer stock;
-
-    @ApiModelProperty("图片")
-    private String image;
-
-    @ApiModelProperty("商品状态")
-    private Integer status;
 }

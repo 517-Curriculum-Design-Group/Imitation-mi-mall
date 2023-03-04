@@ -13,15 +13,18 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @ApiModel("分类实体")
-@TableName("category")
+@TableName("Category")
 public class Category implements Serializable {
 
-    private static final long serialVersionUID = -40356785423868312L;
-
     @ApiModelProperty("主键")
-    private Integer id;
+    private int categoryId;
+
+    @ApiModelProperty("外键？")
+    private int parentId;
 
     @ApiModelProperty("分类名称")
     private String categoryName;
+
+
 
 }

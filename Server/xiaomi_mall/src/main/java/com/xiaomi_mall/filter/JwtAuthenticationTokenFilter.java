@@ -50,7 +50,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             throw new RuntimeException("用户未登录");
         }
         //将用户id获取到并存入BaseContext（mybatis-plus自动填充功能用到）
-        BaseContext.setCurrentId(loginUser.getUser().getId());
+        BaseContext.setCurrentId(loginUser.getUser().getUserId());
         //存入SecurityContextHolder
         //TODO 获取权限信息封装到Authentication中
         UsernamePasswordAuthenticationToken authenticationToken =
