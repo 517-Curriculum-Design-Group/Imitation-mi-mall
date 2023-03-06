@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import io.swagger.models.auth.In;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,27 +16,20 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel("订单实体")
-@TableName("Order")
-public class Order implements Serializable {
+@ApiModel("收藏实体")
+@TableName("Favorite")
+public class Favorite implements Serializable {
 
-    @ApiModelProperty("用户id(主键)")
-    private int orderId;
+    @ApiModelProperty("收藏id(主键)")
+    private int favoriteId;
 
     @ApiModelProperty("用户id(外键)")
     private Long userId;
 
-    @ApiModelProperty("地址id(外键)")
-    private int addressId;
+    @ApiModelProperty("商品id(外键)")
+    private int productId;
 
-    @ApiModelProperty("订单的价格")
-    private BigDecimal totalPrice;
-
-    @ApiModelProperty("订单生成时间")
+    @ApiModelProperty("收藏生成时间")
     @TableField(fill = FieldFill.INSERT)
-    private LocalDateTime orderTime;
-
-    @ApiModelProperty("订单状态")
-    private int status;
-
+    private LocalDateTime favoriteTime;
 }

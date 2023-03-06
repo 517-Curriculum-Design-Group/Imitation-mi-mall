@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
-@Api(tags = "登录、注册、退出登录接口")
-public class LoginController {
+@Api(tags = "用户个人模块")
+public class UserController {
     @Autowired
     private LoginService loginService;
     @Autowired
