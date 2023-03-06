@@ -20,7 +20,7 @@ public class Cart implements Serializable {
     private int cartId;
 
     @ApiModelProperty("用户id(外键)")
-    private int userId;
+    private Long userId;
 
     @ApiModelProperty("选中商品的该规格id(外键)")
     private int skuId;

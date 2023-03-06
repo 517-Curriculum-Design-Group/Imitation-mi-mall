@@ -25,7 +25,7 @@ public class Order implements Serializable {
     private int orderId;
 
     @ApiModelProperty("用户id(外键)")
-    private int userId;
+    private Long userId;
 
     @ApiModelProperty("地址id(外键)")
     private int addressId;

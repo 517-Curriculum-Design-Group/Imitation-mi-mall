@@ -21,7 +21,7 @@ public class Address implements Serializable {
     private int addressId;
 
     @ApiModelProperty("用户id(外键)")
-    private int userId;
+    private Long userId;
 
     @ApiModelProperty("收件人名字")
     private String recipientName;

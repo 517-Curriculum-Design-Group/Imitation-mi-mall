@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
 public class User implements Serializable {
     
     @ApiModelProperty("主键")
-    private int userId;
+    private Long userId;
 
     @ApiModelProperty("用户名")
     private String userName;

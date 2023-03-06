@@ -27,7 +27,7 @@ public class Comment implements Serializable {
     private int commentId;
 
     @ApiModelProperty("用户id(外键)")
-    private int userId;
+    private Long userId;
 
     @ApiModelProperty("商品id(外键)")
     private int productId;
