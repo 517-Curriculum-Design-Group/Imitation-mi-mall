@@ -10,21 +10,18 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@ApiModel("收藏实体")
+@TableName("Favorite")
+public class Favorite implements Serializable {
 
-@ApiModel("评论实体")
-@TableName("Comment")
-
-
-
-public class Comment implements Serializable {
-
-    @ApiModelProperty("评论id(主键)")
-    private int commentId;
+    @ApiModelProperty("收藏id(主键)")
+    private int favoriteId;
 
     @ApiModelProperty("用户id(外键)")
     private int userId;
@@ -32,20 +29,7 @@ public class Comment implements Serializable {
     @ApiModelProperty("商品id(外键)")
     private int productId;
 
-    @ApiModelProperty("评论内容")
-    private String content;
-
-    public enum CommentRate
-    {
-        好评, 一般, 差评
-    }
-    @ApiModelProperty("评价等级")
-    private CommentRate rate;
-
-    @ApiModelProperty("评价时间")
+    @ApiModelProperty("收藏生成时间")
     @TableField(fill = FieldFill.INSERT)
-    private LocalDateTime commentTime;
-
-    @ApiModelProperty("父评论ID")
-    private String parentId;
+    private LocalDateTime favoriteTime;
 }
