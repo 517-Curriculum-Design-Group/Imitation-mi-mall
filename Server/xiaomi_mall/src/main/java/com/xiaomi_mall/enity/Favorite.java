@@ -24,7 +24,11 @@ public class Favorite implements Serializable {
     private int favoriteId;
 
     @ApiModelProperty("用户id(外键)")
+<<<<<<< HEAD
     private Long userId;
+=======
+    private int userId;
+>>>>>>> 270223a033f837ac713fb9bcf73701404270cd82
 
     @ApiModelProperty("商品id(外键)")
     private int productId;
@@ -32,4 +36,8 @@ public class Favorite implements Serializable {
     @ApiModelProperty("收藏生成时间")
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime favoriteTime;
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 270223a033f837ac713fb9bcf73701404270cd82

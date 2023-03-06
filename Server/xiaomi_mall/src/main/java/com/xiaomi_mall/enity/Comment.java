@@ -15,8 +15,12 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+
 @ApiModel("评论实体")
 @TableName("Comment")
+
+
+
 public class Comment implements Serializable {
 
     @ApiModelProperty("评论id(主键)")
