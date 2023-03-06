@@ -1,10 +1,10 @@
 package com.xiaomi_mall.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.xiaomi_mall.enity.Specification;
+import com.xiaomi_mall.enity.Sku;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
-public interface SpecificationMapper extends BaseMapper<Specification> {
+public interface SkuMapper extends BaseMapper<Sku> {
 
 }

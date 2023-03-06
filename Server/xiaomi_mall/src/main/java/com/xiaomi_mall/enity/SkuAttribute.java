@@ -13,17 +13,13 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @ApiModel("商品属性实体")
-@TableName("attributes")
-public class Attributes implements Serializable {
-
-    private static final long serialVersionUID = -40356785423868312L;
+@TableName("SkuAttribute")
+public class SkuAttribute implements Serializable {
 
     @ApiModelProperty("属性id(主键)")
     private Integer attributeId;
 
-    @ApiModelProperty("属性名称")
-    private Integer attributeName;
+    @ApiModelProperty("key名称")
+    private String attributeName;
 
-    @ApiModelProperty("属性值")
-    private Integer attributeValue;
 }
