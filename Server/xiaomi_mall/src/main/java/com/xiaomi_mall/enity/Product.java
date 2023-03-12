@@ -29,7 +29,7 @@ public class Product implements Serializable {
     @ApiModelProperty("商品名字")
     private String productName;
 
-    @ApiModelProperty("商品名字")
+    @ApiModelProperty("SKU列表")
     private String skuList;
 
     @ApiModelProperty("商品描述")
