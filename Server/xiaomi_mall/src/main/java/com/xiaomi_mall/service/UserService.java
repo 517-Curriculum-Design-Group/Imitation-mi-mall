@@ -2,10 +2,14 @@ package com.xiaomi_mall.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.xiaomi_mall.config.Result;
-import com.xiaomi_mall.enity.User;
+import com.xiaomi_mall.exception.enity.User;
 
 public interface UserService extends IService<User> {
-    boolean register(User user);
+    Result register(User user);
 
-    boolean addadmin(User user);
+    Result addadmin(User user);
+
+    Result getUserList(Integer pageNum, Integer pageSize, String nickName);
+
+    Result updateUserStatus(Long userId);
 }

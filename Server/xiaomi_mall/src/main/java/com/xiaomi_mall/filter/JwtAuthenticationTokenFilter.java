@@ -1,9 +1,12 @@
 package com.xiaomi_mall.filter;
 
-import com.xiaomi_mall.common.BaseContext;
-import com.xiaomi_mall.enity.authentication.LoginUser;
+import com.alibaba.fastjson.JSON;
+import com.xiaomi_mall.config.Result;
+import com.xiaomi_mall.exception.enity.authentication.LoginUser;
+import com.xiaomi_mall.enums.AppHttpCodeEnum;
 import com.xiaomi_mall.util.JwtUtil;
 import com.xiaomi_mall.util.RedisCache;
+import com.xiaomi_mall.util.WebUtils;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -34,23 +37,28 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-        //解析token
+        //解析token,获取userid
         String userid;
         try {
             Claims claims = JwtUtil.parseJWT(token);
             userid = claims.getSubject();
         } catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException("token非法");
+            //token超时  token非法
+            //响应告诉前端需要重新登录
+            Result result = Result.errorResult(AppHttpCodeEnum.NEED_LOGIN);
+            WebUtils.renderString(response, JSON.toJSONString(result));
+            return;
         }
         //从redis中获取用户信息
         String redisKey = "login:" + userid;
         LoginUser loginUser = redisCache.getCacheObject(redisKey);
         if(Objects.isNull(loginUser)){
-            throw new RuntimeException("用户未登录");
+            Result result = Result.errorResult(AppHttpCodeEnum.NEED_LOGIN);
+            WebUtils.renderString(response, JSON.toJSONString(result));
+            return;
+
         }
-        //将用户id获取到并存入BaseContext（mybatis-plus自动填充功能用到）
-        BaseContext.setCurrentId(loginUser.getUser().getUserId());
         //存入SecurityContextHolder
         //TODO 获取权限信息封装到Authentication中
         UsernamePasswordAuthenticationToken authenticationToken =
