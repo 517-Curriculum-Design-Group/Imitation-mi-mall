@@ -14,4 +14,5 @@ public interface UserService extends IService<User> {
     Result updateUserStatus(Long userId);
 
     Result getAdminList(Integer pageNum, Integer pageSize, String nickName);
+    Result deleteUser(List<Long> userIds);
 }

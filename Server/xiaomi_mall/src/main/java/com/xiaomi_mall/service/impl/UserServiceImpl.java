@@ -29,7 +29,8 @@ import java.util.stream.Collectors;
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
-
+    @Autowired
+    private UserMapper userMapper;
     /**
      * 普通用户注册
      *
@@ -127,7 +128,24 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public Result updateUserStatus(Long userId) {
-        return null;
+        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(User::getUserId, userId);
+        User user = getOne(queryWrapper);
+        if (user.getStatus() == SystemConstants.USER_STATUS_NORMAL) {
+            user.setStatus(1);
+        }
+        else if (user.getStatus() == SystemConstants.USER_STATUS_ERROR){
+            user.setStatus(0);
+        }
+        updateById(user);
+        return Result.okResult();
+    }
+
+    @Override
+    public Result deleteUser(List<Long> userIds) {
+        List<User> users = listByIds(userIds);
+        userMapper.deleteBatchIds(users);
+        return Result.okResult();
     }
 
     @Override

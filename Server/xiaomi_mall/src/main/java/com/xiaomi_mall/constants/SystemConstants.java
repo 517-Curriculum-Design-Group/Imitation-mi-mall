@@ -39,4 +39,14 @@ public class SystemConstants {
      * 评论类型：友链评论
      */
     public static final String LINK_COMMENT = "1";
+
+    /**
+     * 用户状态正常
+     */
+    public static final int USER_STATUS_NORMAL = 0;
+
+    /**
+     * 用户状态错误
+     */
+    public static final int USER_STATUS_ERROR = 1;
 }
