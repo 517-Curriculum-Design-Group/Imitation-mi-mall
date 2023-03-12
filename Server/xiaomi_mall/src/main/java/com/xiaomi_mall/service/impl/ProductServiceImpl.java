@@ -5,7 +5,7 @@ import com.alibaba.fastjson.parser.Feature;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xiaomi_mall.config.Result;
-import com.xiaomi_mall.exception.enity.Product;
+import com.xiaomi_mall.enity.Product;
 import com.xiaomi_mall.mapper.ProductMapper;
 import com.xiaomi_mall.service.ProductService;
 import com.xiaomi_mall.util.BeanCopyUtils;

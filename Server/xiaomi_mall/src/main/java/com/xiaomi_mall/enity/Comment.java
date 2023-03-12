@@ -1,4 +1,4 @@
-package com.xiaomi_mall.exception.enity;
+package com.xiaomi_mall.enity;
 
 import com.baomidou.mybatisplus.annotation.*;
 import io.swagger.annotations.ApiModel;

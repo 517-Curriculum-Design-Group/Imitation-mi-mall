@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xiaomi_mall.config.Result;
 import com.xiaomi_mall.constants.SystemConstants;
-import com.xiaomi_mall.exception.enity.User;
+import com.xiaomi_mall.enity.User;
 import com.xiaomi_mall.enums.AppHttpCodeEnum;
 import com.xiaomi_mall.exception.SystemException;
 import com.xiaomi_mall.mapper.UserMapper;

@@ -2,7 +2,7 @@ package com.xiaomi_mall.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.xiaomi_mall.config.Result;
-import com.xiaomi_mall.exception.enity.User;
+import com.xiaomi_mall.enity.User;
 
 import java.util.List;
 
