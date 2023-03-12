@@ -129,4 +129,20 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public Result updateUserStatus(Long userId) {
         return null;
     }
+
+    @Override
+    public Result getAdminList(Integer pageNum, Integer pageSize, String nickName) {
+        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.like(Objects.nonNull(nickName),User::getNickName, nickName);
+        Page<User> pageInfo = new Page<>(pageNum, pageSize);
+        page(pageInfo, queryWrapper);
+        List<User> userList = pageInfo.getRecords();
+        List<User> filterList = userList.stream()
+                .filter(item -> Objects.equals(item.getUserType(), "普通管理员"))
+                .collect(Collectors.toList());
+        int total = filterList.size();
+        List<UserListVo> userListVos = BeanCopyUtils.copyBeanList(filterList, UserListVo.class);
+        UserListPageVo userListPageVo = new UserListPageVo(userListVos, total);
+        return Result.okResult(userListPageVo);
+    }
 }
