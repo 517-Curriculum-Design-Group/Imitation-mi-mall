@@ -1,7 +1,7 @@
 package com.xiaomi_mall.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.xiaomi_mall.exception.enity.Order;
+import com.xiaomi_mall.enity.Order;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
