@@ -1,8 +1,8 @@
 package com.xiaomi_mall.service.impl;
 
 import com.xiaomi_mall.config.Result;
-import com.xiaomi_mall.enity.User;
-import com.xiaomi_mall.enity.authentication.LoginUser;
+import com.xiaomi_mall.exception.enity.User;
+import com.xiaomi_mall.exception.enity.authentication.LoginUser;
 import com.xiaomi_mall.service.LoginService;
 import com.xiaomi_mall.util.BeanCopyUtils;
 import com.xiaomi_mall.util.JwtUtil;

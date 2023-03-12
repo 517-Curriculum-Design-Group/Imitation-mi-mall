@@ -1,6 +1,6 @@
 package com.xiaomi_mall.util;
 
-import com.xiaomi_mall.enity.authentication.LoginUser;
+import com.xiaomi_mall.exception.enity.authentication.LoginUser;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 

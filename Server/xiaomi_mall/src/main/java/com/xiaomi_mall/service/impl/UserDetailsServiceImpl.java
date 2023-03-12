@@ -1,8 +1,8 @@
 package com.xiaomi_mall.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.xiaomi_mall.enity.User;
-import com.xiaomi_mall.enity.authentication.LoginUser;
+import com.xiaomi_mall.exception.enity.User;
+import com.xiaomi_mall.exception.enity.authentication.LoginUser;
 import com.xiaomi_mall.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -1,4 +1,4 @@
-package com.xiaomi_mall.enity;
+package com.xiaomi_mall.exception.enity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -10,22 +10,23 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel("购物车实体")
-@TableName("Cart")
-public class Cart implements Serializable {
+@ApiModel("订单详情实体")
+@TableName("OrderDetail")
+public class OrderDetail implements Serializable {
 
-    @ApiModelProperty("购物车id(主键)")
+    @ApiModelProperty("订单详情(主键)")
     @TableId(type = IdType.AUTO)
-    private int cartId;
+    private int detailId;
 
-    @ApiModelProperty("用户id(外键)")
-    private Long userId;
+    @ApiModelProperty("订单id(外键)")
+    private int orderId;
 
-    @ApiModelProperty("选中商品的该规格id(外键)")
+    @ApiModelProperty("规格id(外键)")
     private int skuId;
 
     @ApiModelProperty("选中商品的该规格名字")

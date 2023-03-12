@@ -2,7 +2,7 @@ package com.xiaomi_mall.filter;
 
 import com.alibaba.fastjson.JSON;
 import com.xiaomi_mall.config.Result;
-import com.xiaomi_mall.enity.authentication.LoginUser;
+import com.xiaomi_mall.exception.enity.authentication.LoginUser;
 import com.xiaomi_mall.enums.AppHttpCodeEnum;
 import com.xiaomi_mall.util.JwtUtil;
 import com.xiaomi_mall.util.RedisCache;

@@ -1,4 +1,4 @@
-package com.xiaomi_mall.enity;
+package com.xiaomi_mall.exception.enity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;

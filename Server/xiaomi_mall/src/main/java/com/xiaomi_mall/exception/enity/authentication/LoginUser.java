@@ -1,7 +1,7 @@
-package com.xiaomi_mall.enity.authentication;
+package com.xiaomi_mall.exception.enity.authentication;
 
 import com.alibaba.fastjson.annotation.JSONField;
-import com.xiaomi_mall.enity.User;
+import com.xiaomi_mall.exception.enity.User;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;

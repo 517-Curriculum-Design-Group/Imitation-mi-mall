@@ -1,7 +1,7 @@
 package com.xiaomi_mall.controller;
 
 import com.xiaomi_mall.config.Result;
-import com.xiaomi_mall.enity.User;
+import com.xiaomi_mall.exception.enity.User;
 import com.xiaomi_mall.enums.AppHttpCodeEnum;
 import com.xiaomi_mall.exception.SystemException;
 import com.xiaomi_mall.service.LoginService;
