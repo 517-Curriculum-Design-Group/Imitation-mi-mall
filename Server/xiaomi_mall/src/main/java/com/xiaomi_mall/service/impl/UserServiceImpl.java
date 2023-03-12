@@ -1,23 +1,34 @@
 package com.xiaomi_mall.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.sun.deploy.ui.DialogTemplate;
 import com.xiaomi_mall.config.Result;
-import com.xiaomi_mall.enity.User;
+import com.xiaomi_mall.constants.SystemConstants;
+import com.xiaomi_mall.exception.enity.User;
+import com.xiaomi_mall.enums.AppHttpCodeEnum;
+import com.xiaomi_mall.exception.SystemException;
 import com.xiaomi_mall.mapper.UserMapper;
 import com.xiaomi_mall.service.UserService;
-import io.swagger.annotations.ApiOperation;
+import com.xiaomi_mall.util.BeanCopyUtils;
+import com.xiaomi_mall.vo.PageVo;
+import com.xiaomi_mall.vo.UserListPageVo;
+import com.xiaomi_mall.vo.UserListVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
     @Autowired
-    private UserMapper userMapper;
+    private PasswordEncoder passwordEncoder;
 
     /**
      * 普通用户注册
@@ -26,32 +37,61 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      * @return boolean
      */
     @Override
-    public boolean register(User user) {
-        //防止注册的用户重名
-        LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(User::getUserName, user.getUserName());
-        User user1 = getOne(wrapper);
-
-        if (Objects.isNull(user1)) {
-            //user1为空时，说明不重名，可以注册
-            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-            String encodePassword = passwordEncoder.encode(user.getPassword());
-            user.setPassword(encodePassword);
-
-            boolean flag = save(user);
-            return flag;
+    public Result register(User user) {
+        //对数据进行非空判断
+        if(!StringUtils.hasText(user.getUserName())){
+            throw new SystemException(AppHttpCodeEnum.USERNAME_NOT_NULL);
         }
-        return false;
+        if(!StringUtils.hasText(user.getPassword())){
+            throw new SystemException(AppHttpCodeEnum.PASSWORD_NOT_NULL);
+        }
+        if(!StringUtils.hasText(user.getEmail())){
+            throw new SystemException(AppHttpCodeEnum.EMAIL_NOT_NULL);
+        }
+        if(!StringUtils.hasText(user.getNickName())){
+            throw new SystemException(AppHttpCodeEnum.NICKNAME_NOT_NULL);
+        }
+        //对数据进行是否存在的判断
+        if(userNameExist(user.getUserName())){
+            throw new SystemException(AppHttpCodeEnum.USERNAME_EXIST);
+        }
+        if(nickNameExist(user.getNickName())){
+            throw new SystemException(AppHttpCodeEnum.NICKNAME_EXIST);
+        }
+        //对密码进行加密
+        String encodePassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encodePassword);
+        //存入数据库
+        save(user);
+        return Result.okResult();
+    }
+
+    private boolean nickNameExist(String nickName) {
+        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(User::getNickName, nickName);
+        if (count(queryWrapper) == SystemConstants.NICKNAME_NOT_EXIT) {
+            return false;
+        }
+        return true;
+    }
+
+    private boolean userNameExist(String userName) {
+        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(User::getUserName, userName);
+        if (count(queryWrapper) == SystemConstants.USERNAME_NOT_EXIT) {
+            return false;
+        }
+        return true;
     }
 
     /**
-     * 管理员注册
+     * 管理员添加
      *
      * @param user 用户
      * @return boolean
      */
     @Override
-    public boolean addadmin(User user) {
+    public Result addadmin(User user) {
         //防止注册的用户重名
         LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(User::getUserName, user.getUserName());
@@ -62,10 +102,31 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             String encodePassword = passwordEncoder.encode(user.getPassword());
             user.setPassword(encodePassword);
-            user.setUserType("超级管理员");
-            boolean res = save(user);
-            return res;
+            user.setUserType("普通管理员");
+            save(user);
+            return Result.okResult();
         }
-        return false;
+        return Result.errorResult(AppHttpCodeEnum.USERNAME_EXIST);
+    }
+
+    @Override
+    public Result getUserList(Integer pageNum, Integer pageSize, String nickName) {
+        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.like(Objects.nonNull(nickName),User::getNickName, nickName);
+        Page<User> pageInfo = new Page<>(pageNum, pageSize);
+        page(pageInfo, queryWrapper);
+        List<User> userList = pageInfo.getRecords();
+        List<User> filterList = userList.stream()
+                .filter(item -> Objects.equals(item.getUserType(), "普通用户"))
+                .collect(Collectors.toList());
+        int total = filterList.size();
+        List<UserListVo> userListVos = BeanCopyUtils.copyBeanList(filterList, UserListVo.class);
+        UserListPageVo userListPageVo = new UserListPageVo(userListVos, total);
+        return Result.okResult(userListPageVo);
+    }
+
+    @Override
+    public Result updateUserStatus(Long userId) {
+        return null;
     }
 }
