@@ -14,11 +14,7 @@ public interface UserService extends IService<User> {
     Result getUserList(Integer pageNum, Integer pageSize, String nickName);
 
     Result updateUserStatus(Long userId);
-<<<<<<< Updated upstream
 
-=======
-    
->>>>>>> Stashed changes
     Result getAdminList(Integer pageNum, Integer pageSize, String nickName);
 
     Result deleteUser(List<Long> userIds);
