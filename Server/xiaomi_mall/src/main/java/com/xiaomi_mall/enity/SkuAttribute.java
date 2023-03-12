@@ -1,4 +1,4 @@
-package com.xiaomi_mall.exception.enity;
+package com.xiaomi_mall.enity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -14,17 +14,15 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel("商品规格属性的值实体")
-@TableName("SkuAttributeValue")
-public class SkuAttributeValue implements Serializable {
+@ApiModel("商品属性实体")
+@TableName("SkuAttribute")
+public class SkuAttribute implements Serializable {
 
-    @ApiModelProperty("id(主键)")
+    @ApiModelProperty("属性id(主键)")
     @TableId(type = IdType.AUTO)
-    private Integer valueId;
-
-    @ApiModelProperty("属性id(外键)")
     private Integer attributeId;
 
-    @ApiModelProperty("key的value值")
-    private String valueName;
+    @ApiModelProperty("key名称")
+    private String attributeName;
+
 }

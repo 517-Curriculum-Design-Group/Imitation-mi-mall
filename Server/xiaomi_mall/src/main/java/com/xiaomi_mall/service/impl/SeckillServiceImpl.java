@@ -1,7 +1,7 @@
 package com.xiaomi_mall.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.xiaomi_mall.exception.enity.Seckill;
+import com.xiaomi_mall.enity.Seckill;
 import com.xiaomi_mall.mapper.SeckillMapper;
 import com.xiaomi_mall.service.SeckillService;
 import org.springframework.beans.factory.annotation.Autowired;
