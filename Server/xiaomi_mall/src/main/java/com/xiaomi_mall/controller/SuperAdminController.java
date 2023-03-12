@@ -7,8 +7,9 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -22,5 +23,19 @@ public class SuperAdminController {
     @GetMapping("/getAdminList")
     public Result getAdminList(Integer pageNum, Integer pageSize, String nickName) {
         return userService.getAdminList(pageNum, pageSize, nickName);
+    }
+
+    @PreAuthorize("hasAuthority('超级管理员')")
+    @ApiOperation("删除普通管理员接口")
+    @DeleteMapping("/deleteAdmin")
+    public Result deleteAdmin(List<Long> userIds) {
+        return userService.deleteUser(userIds);
+    }
+
+    @PreAuthorize("hasAuthority('超级管理员')")
+    @ApiOperation("普通管理员列表的修改用户信息接口")
+    @PutMapping("/updateAdminInfo/{userId}")
+    public Result updateAdminInfo(@PathVariable Long userId) {
+        return userService.updateUserInfo(userId);
     }
 }

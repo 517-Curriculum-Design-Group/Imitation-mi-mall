@@ -69,4 +69,11 @@ public class BackgroundController {
     public Result deleteUser(@PathVariable List<Long> userIds) {
         return userService.deleteUser(userIds);
     }
+
+    @PreAuthorize("hasAnyAuthority('超级管理员', '普通管理员')")
+    @ApiOperation("用户列表的修改用户信息接口")
+    @PutMapping("/updateUserInfo/{userId}")
+    public Result updateUserInfo(@PathVariable Long userId) {
+        return userService.updateUserInfo(userId);
+    }
 }
