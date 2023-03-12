@@ -19,7 +19,5 @@ public interface UserService extends IService<User> {
 
     Result deleteUser(List<Long> userIds);
 
-    Result deleteAdmin(List<Long> userIds);
-
     Result updateUserInfo(Long userId);
 }
