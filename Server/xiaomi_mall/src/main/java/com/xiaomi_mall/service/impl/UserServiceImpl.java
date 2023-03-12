@@ -27,7 +27,8 @@ import java.util.stream.Collectors;
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
-
+    @Autowired
+    private UserMapper userMapper;
     /**
      * 普通用户注册
      *
@@ -125,6 +126,39 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public Result updateUserStatus(Long userId) {
-        return null;
+        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(User::getUserId, userId);
+        User user = getOne(queryWrapper);
+        if (user.getStatus() == SystemConstants.USER_STATUS_NORMAL) {
+            user.setStatus(1);
+        }
+        else if (user.getStatus() == SystemConstants.USER_STATUS_ERROR){
+            user.setStatus(0);
+        }
+        updateById(user);
+        return Result.okResult();
+    }
+
+    @Override
+    public Result deleteUser(List<Long> userIds) {
+        List<User> users = listByIds(userIds);
+        userMapper.deleteBatchIds(users);
+        return Result.okResult();
+    }
+
+    @Override
+    public Result getAdminList(Integer pageNum, Integer pageSize, String nickName) {
+        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.like(Objects.nonNull(nickName),User::getNickName, nickName);
+        Page<User> pageInfo = new Page<>(pageNum, pageSize);
+        page(pageInfo, queryWrapper);
+        List<User> userList = pageInfo.getRecords();
+        List<User> filterList = userList.stream()
+                .filter(item -> Objects.equals(item.getUserType(), "普通管理员"))
+                .collect(Collectors.toList());
+        int total = filterList.size();
+        List<UserListVo> userListVos = BeanCopyUtils.copyBeanList(filterList, UserListVo.class);
+        UserListPageVo userListPageVo = new UserListPageVo(userListVos, total);
+        return Result.okResult(userListPageVo);
     }
 }

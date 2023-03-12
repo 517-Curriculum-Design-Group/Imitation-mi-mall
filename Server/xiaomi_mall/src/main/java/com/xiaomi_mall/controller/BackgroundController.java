@@ -14,6 +14,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @Slf4j
 @Api(tags = "后台模块")
@@ -56,9 +58,15 @@ public class BackgroundController {
 
     @PreAuthorize("hasAnyAuthority('超级管理员', '普通管理员')")
     @ApiOperation("修改用户状态接口")
-    @PostMapping("/updateUserStatus/{userId}")
+    @PutMapping("/updateUserStatus/{userId}")
     public Result updateUserStatus(@PathVariable Long userId) {
         return userService.updateUserStatus(userId);
     }
 
+    @PreAuthorize("hasAnyAuthority('超级管理员', '普通管理员')")
+    @ApiOperation("删除用户接口")
+    @DeleteMapping("/deleteUser/{userIds}")
+    public Result deleteUser(@PathVariable List<Long> userIds) {
+        return userService.deleteUser(userIds);
+    }
 }
