@@ -147,6 +147,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
+    public Result updateUserInfo(Long userId) {
+        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(User::getUserId, userId);
+        User user = getOne(queryWrapper);
+        updateById(user);
+        return Result.okResult();
+    }
+
+    @Override
     public Result getAdminList(Integer pageNum, Integer pageSize, String nickName) {
         LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.like(Objects.nonNull(nickName),User::getNickName, nickName);
