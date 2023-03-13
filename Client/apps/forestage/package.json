@@ -5,18 +5,20 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc && vite build",
+    "build": "vite build",
     "preview": "vite preview"
   },
   "dependencies": {
+    "ant-design-vue": "^3.2.15",
+    "unplugin-vue-components": "^0.24.0",
     "vue": "^3.2.45"
   },
   "devDependencies": {
+    "@unocss/reset": "^0.50.3",
     "@vitejs/plugin-vue": "^4.0.0",
-    "typescript": "^4.9.3",
-    "vite": "^4.1.0",
-    "vue-tsc": "^1.0.24",
-    "tsconfig": "workspace:*",
-    "eslint-config-custom": "workspace:*"
+    "eslint-config-custom": "workspace:*",
+    "theme-css": "workspace:*",
+    "unocss": "^0.50.3",
+    "vite": "^4.1.0"
   }
 }
