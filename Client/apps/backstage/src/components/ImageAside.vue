@@ -25,7 +25,7 @@
 
 </template>
 <script setup>
-import { reactive, ref } from "vue";
+import { reactive, ref, computed } from "vue";
 import FormDrawer from "./FormDrawer.vue"
 import {
     getImageClassList,
@@ -37,7 +37,6 @@ import AsideList from './AsideList.vue';
 import {
     toast
 } from "~/composables/util.js"
-import { computed } from "@vue/reactivity";
 
 // 加载动画
 const loading = ref(false)

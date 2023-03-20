@@ -13,9 +13,13 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
+    "@unocss/preset-attributify": "^0.50.6",
+    "@unocss/preset-icons": "^0.50.6",
+    "@unocss/preset-uno": "^0.50.6",
     "eslint-config-custom": "workspace:*",
     "prettier": "latest",
-    "turbo": "latest"
+    "turbo": "latest",
+    "unocss": "^0.50.3"
   },
   "engines": {
     "node": ">=14.0.0"
