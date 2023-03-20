@@ -1,5 +1,5 @@
 {
-  "name": "Client",
+  "name": "client",
   "version": "0.0.0",
   "private": true,
   "workspaces": [
@@ -7,10 +7,12 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "turbo run build",
-    "dev": "turbo run dev",
-    "lint": "turbo run lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "build": "pnpm --filter @apps/* -r exec  -- pnpm build",
+    "dev": "pnpm --filter @apps/* -r exec  -- pnpm dev",
+    "lint": "pnpm --filter @apps/* -r exec  -- pnpm lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "preinstall": "npx only-allow pnpm",
+    "clear": "pnpm recursive exec rm -rf node_modules dist && pnpm exec rm -rf node_modules dist"
   },
   "devDependencies": {
     "@unocss/preset-attributify": "^0.50.6",
@@ -18,7 +20,6 @@
     "@unocss/preset-uno": "^0.50.6",
     "eslint-config-custom": "workspace:*",
     "prettier": "latest",
-    "turbo": "latest",
     "unocss": "^0.50.3"
   },
   "engines": {
