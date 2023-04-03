@@ -117,12 +117,6 @@ public class BackProductController {
         return skuAttributeService.getSkuDetail(attributeId);
     }
 
-    @PreAuthorize("hasAnyAuthority('普通管理员', '超级管理员')")
-    @ApiOperation("添加商品规格接口")
-    @PostMapping("/addSkuAttribute")
-    public Result addSkuAttribute(@RequestBody SkuAttribute_ValueDto skuAttribute_valueDto) {
-        return skuAttributeService.addSkuAttribute(skuAttribute_valueDto);
-    }
 
     @PreAuthorize("hasAnyAuthority('普通管理员', '超级管理员')")
     @ApiOperation("修改商品规格接口")

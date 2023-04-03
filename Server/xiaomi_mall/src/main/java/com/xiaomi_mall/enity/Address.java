@@ -42,6 +42,9 @@ public class Address implements Serializable {
     @ApiModelProperty("县")
     private String district;
 
+    @ApiModelProperty("镇")
+    private String zhen;
+
     @ApiModelProperty("详细")
     private String detail;
 

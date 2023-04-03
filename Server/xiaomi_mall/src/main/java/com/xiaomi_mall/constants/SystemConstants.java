@@ -53,4 +53,12 @@ public class SystemConstants {
      * 分类可以删除
      */
     public static final int CATE_CAN_DELETE = 0;
+    /**
+     * 默认地址
+     */
+    public static final int DEFAULT_ADDRESS = 1;
+    /**
+     * 不是默认地址
+     */
+    public static final int NOT_DEFAULT_ADDRESS = 0;
 }

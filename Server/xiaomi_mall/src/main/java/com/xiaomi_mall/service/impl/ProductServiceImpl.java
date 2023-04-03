@@ -44,7 +44,6 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         pv.setProductName(product.getProductName());
         pv.setSkuList(JSON.parseObject(product.getSkuList(), LinkedHashMap.class, Feature.OrderedField));
         pv.setProductDescription(product.getProductDescription());
-        pv.setCreateTime(product.getCreateTime());
 
         return Result.okResult(pv);
     }
