@@ -33,6 +33,9 @@ public class Favorite implements Serializable {
     @TableField(fill = FieldFill.INSERT)
     private Date favoriteTime;
 
+    @ApiModelProperty("逻辑删除符")
+    private int delFlag;
+
 }
 
 

@@ -24,4 +24,7 @@ public class SkuAttributeValueRelation implements Serializable {
     @ApiModelProperty("valueid(主键、外键)")
     private Integer valueId;
 
+    @ApiModelProperty("逻辑删除符")
+    private int delFlag;
+
 }

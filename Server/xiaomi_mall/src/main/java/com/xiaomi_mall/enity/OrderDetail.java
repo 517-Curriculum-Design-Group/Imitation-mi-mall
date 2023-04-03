@@ -41,5 +41,8 @@ public class OrderDetail implements Serializable {
     @ApiModelProperty("选中商品的该规格对应的数量")
     private String skuQuantity;
 
+    @ApiModelProperty("逻辑删除符")
+    private int delFlag;
+
 
 }

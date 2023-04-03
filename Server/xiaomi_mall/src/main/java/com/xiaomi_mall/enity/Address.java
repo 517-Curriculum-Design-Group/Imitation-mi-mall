@@ -47,4 +47,8 @@ public class Address implements Serializable {
 
     @ApiModelProperty("地址是否默认标识")
     private int isDefault;
+
+    @ApiModelProperty("逻辑删除符")
+    private int delFlag;
+
 }

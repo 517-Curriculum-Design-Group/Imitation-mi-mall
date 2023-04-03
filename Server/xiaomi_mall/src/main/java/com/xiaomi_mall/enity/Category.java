@@ -41,4 +41,6 @@ public class Category implements Serializable {
     @TableField(exist = false)
     private BigDecimal skuPrice;
 
+    @ApiModelProperty("逻辑删除符")
+    private int delFlag;
 }

@@ -43,5 +43,8 @@ public class Product implements Serializable {
     @TableField(fill = FieldFill.INSERT)
     private Date createTime;
 
+    @ApiModelProperty("逻辑删除符")
+    private int delFlag;
+
 
 }

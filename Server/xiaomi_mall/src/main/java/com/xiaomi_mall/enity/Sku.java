@@ -43,4 +43,7 @@ public class Sku implements Serializable {
     @ApiModelProperty("商品规格创建时间")
     private Date createTime;
 
+    @ApiModelProperty("逻辑删除符")
+    private int delFlag;
+
 }

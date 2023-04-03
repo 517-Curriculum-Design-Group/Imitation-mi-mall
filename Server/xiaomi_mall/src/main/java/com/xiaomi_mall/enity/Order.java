@@ -40,4 +40,7 @@ public class Order implements Serializable {
     @ApiModelProperty("订单状态")
     private int status;
 
+    @ApiModelProperty("逻辑删除符")
+    private int delFlag;
+
 }

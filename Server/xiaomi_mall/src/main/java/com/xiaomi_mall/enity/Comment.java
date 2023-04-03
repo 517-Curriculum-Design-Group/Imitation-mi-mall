@@ -48,4 +48,7 @@ public class Comment implements Serializable {
 
     @ApiModelProperty("父评论ID")
     private String parentId;
+
+    @ApiModelProperty("逻辑删除符")
+    private int delFlag;
 }

@@ -41,4 +41,7 @@ public class Seckill implements Serializable {
 
     @ApiModelProperty("秒杀结束时间")
     private Date endTime;
+
+    @ApiModelProperty("逻辑删除符")
+    private int delFlag;
 }
