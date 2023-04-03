@@ -75,7 +75,6 @@ public class SkuAttributeServiceImpl extends ServiceImpl<SkuAttributeMapper, Sku
         return Result.okResult(skuValueDetailVo);
     }
 
-<<<<<<< Updated upstream
 
     @Autowired
     private SqlSessionFactory sqlSessionFactory;
@@ -195,8 +194,7 @@ public class SkuAttributeServiceImpl extends ServiceImpl<SkuAttributeMapper, Sku
         skuAttributeMapper.modifyAttributeStatus(attribute_id, 1);
         return Result.okResult(200, "删除成功");
     }
-=======
->>>>>>> Stashed changes
+
 
 
 
