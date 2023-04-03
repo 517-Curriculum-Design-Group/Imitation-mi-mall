@@ -1,7 +1,10 @@
 package com.xiaomi_mall.controller;
 
 import com.xiaomi_mall.config.Result;
+import com.xiaomi_mall.dto.SkuAttribute_ValueDto;
 import com.xiaomi_mall.enity.Category;
+import com.xiaomi_mall.enity.SkuAttribute;
+import com.xiaomi_mall.enity.SkuAttributeValue;
 import com.xiaomi_mall.service.CategoryService;
 import com.xiaomi_mall.service.ProductService;
 import com.xiaomi_mall.service.SkuAttributeService;
@@ -109,4 +112,18 @@ public class BackProductController {
     public Result getSkuDetail(@PathVariable Integer attributeId) {
         return skuAttributeService.getSkuDetail(attributeId);
     }
+
+    @PreAuthorize("hasAnyAuthority('普通管理员', '超级管理员')")
+    @ApiOperation("添加商品规格接口")
+    @PostMapping("/addSkuAttribute")
+    public Result addSkuAttribute(@RequestBody SkuAttribute_ValueDto skuAttribute_valueDto) {
+        return skuAttributeService.addSkuAttribute(skuAttribute_valueDto);
+    }
+
+//    @PreAuthorize("hasAnyAuthority('普通管理员', '超级管理员')")
+//    @ApiOperation("添加商品规格值接口")
+//    @PostMapping("/addSkuValue")
+//    public Result addSkuValue(@RequestBody SkuAttributeValue skuAttributeValue) {
+//        return skuAttributeService.addSkuValue(skuAttributeValue);
+//    }
 }
