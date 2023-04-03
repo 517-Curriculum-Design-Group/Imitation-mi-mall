@@ -49,4 +49,8 @@ public class SystemConstants {
      * 用户状态错误
      */
     public static final int USER_STATUS_ERROR = 1;
+    /**
+     * 分类可以删除
+     */
+    public static final int CATE_CAN_DELETE = 0;
 }

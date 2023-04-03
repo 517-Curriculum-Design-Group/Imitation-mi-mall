@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 
 @Data
@@ -56,7 +57,7 @@ public class User implements Serializable {
 
     @TableField(fill = FieldFill.INSERT)
     @ApiModelProperty("创建时间")
-    private LocalDateTime createTime;
+    private Date createTime;
 
     @TableField(fill = FieldFill.INSERT_UPDATE)
     @ApiModelProperty("更新人")
@@ -64,7 +65,7 @@ public class User implements Serializable {
 
     @TableField(fill = FieldFill.INSERT_UPDATE)
     @ApiModelProperty("更新时间")
-    private LocalDateTime updateTime;
+    private Date updateTime;
 
     @ApiModelProperty("删除标志（0代表未删除，1代表已删除）")
     private int delFlag;

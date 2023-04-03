@@ -18,8 +18,8 @@ import java.util.List;
 
 @RestController
 @Slf4j
-@Api(tags = "后台模块")
-public class BackgroundController {
+@Api(tags = "后台用户管理模块")
+public class BackUserController {
     @Autowired
     private LoginService loginService;
     @Autowired
@@ -65,15 +65,16 @@ public class BackgroundController {
 
     @PreAuthorize("hasAnyAuthority('超级管理员', '普通管理员')")
     @ApiOperation("删除用户接口")
-    @DeleteMapping("/deleteUser/{userIds}")
-    public Result deleteUser(@PathVariable List<Long> userIds) {
-        return userService.deleteUser(userIds);
+    @DeleteMapping("/deleteUser")
+    public Result deleteUser(@RequestBody List<Long> userIds) {
+        userService.removeByIds(userIds);
+        return Result.okResult();
     }
 
-    @PreAuthorize("hasAnyAuthority('超级管理员', '普通管理员')")
-    @ApiOperation("用户列表的修改用户信息接口")
-    @PutMapping("/updateUserInfo/{userId}")
-    public Result updateUserInfo(@PathVariable Long userId) {
-        return userService.updateUserInfo(userId);
-    }
+//    @PreAuthorize("hasAnyAuthority('超级管理员', '普通管理员')")
+//    @ApiOperation("用户列表的修改用户信息接口")
+//    @PutMapping("/updateUserInfo")
+//    public Result updateUserInfo(@RequestBody User user) {
+//        return userService.updateUserInfo(user);
+//    }
 }

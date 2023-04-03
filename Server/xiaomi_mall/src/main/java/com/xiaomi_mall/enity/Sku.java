@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Data
 @AllArgsConstructor
@@ -40,6 +41,6 @@ public class Sku implements Serializable {
     private Integer skuStock;
 
     @ApiModelProperty("商品规格创建时间")
-    private LocalDateTime createTime;
+    private Date createTime;
 
 }

@@ -17,7 +17,9 @@ public enum AppHttpCodeEnum {
     NICKNAME_NOT_NULL(509, "昵称不能为空"),
     PASSWORD_NOT_NULL(510, "密码不能为空"),
     EMAIL_NOT_NULL(511, "邮箱不能为空"),
-    NICKNAME_EXIST(512, "昵称已存在");
+    NICKNAME_EXIST(512, "昵称已存在"),
+    PRODUCT_EXIST(513, "当前分类关联的商品存在，不能删除"),
+    CHILDREN_CATEGORY_EXIST(514, "当前分类关联的子分类，不能删除");
     int code;
     String msg;
 
