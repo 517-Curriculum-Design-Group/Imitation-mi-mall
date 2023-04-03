@@ -19,4 +19,7 @@ public interface CategoryMapper extends BaseMapper<Category> {
             "GROUP BY p.product_name \n" +
             "ORDER BY sku_price;\n")
     List<Category> getAllByCategory(Integer category_id);
+
+    @Select(("select * from Category where parent_id = #{category_id}"))
+    List<Category> getChildrenCate(Integer category_id);
 }

@@ -8,6 +8,10 @@ import com.xiaomi_mall.enity.Product;
 public interface ProductService extends IService<Product> {
 
     Result getProductDetail(Integer product_id);
+
+    Result getProductList(Integer pageNum, Integer pageSize, String productName);
+
+    Result deleteCategory(Integer categoryId);
 }
 
 

@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Data
 @AllArgsConstructor
@@ -30,7 +31,7 @@ public class Favorite implements Serializable {
 
     @ApiModelProperty("收藏生成时间")
     @TableField(fill = FieldFill.INSERT)
-    private LocalDateTime favoriteTime;
+    private Date favoriteTime;
 
 }
 

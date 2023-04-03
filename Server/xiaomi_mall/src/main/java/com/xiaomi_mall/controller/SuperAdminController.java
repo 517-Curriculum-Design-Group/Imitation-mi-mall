@@ -1,6 +1,7 @@
 package com.xiaomi_mall.controller;
 
 import com.xiaomi_mall.config.Result;
+import com.xiaomi_mall.enity.User;
 import com.xiaomi_mall.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -28,14 +29,15 @@ public class SuperAdminController {
     @PreAuthorize("hasAuthority('超级管理员')")
     @ApiOperation("删除普通管理员接口")
     @DeleteMapping("/deleteAdmin")
-    public Result deleteAdmin(List<Long> userIds) {
-        return userService.deleteUser(userIds);
+    public Result deleteAdmin(@RequestBody List<Long> userIds) {
+        userService.removeByIds(userIds);
+        return Result.okResult();
     }
 
-    @PreAuthorize("hasAuthority('超级管理员')")
-    @ApiOperation("普通管理员列表的修改用户信息接口")
-    @PutMapping("/updateAdminInfo/{userId}")
-    public Result updateAdminInfo(@PathVariable Long userId) {
-        return userService.updateUserInfo(userId);
-    }
+//    @PreAuthorize("hasAuthority('超级管理员')")
+//    @ApiOperation("普通管理员列表的修改用户信息接口")
+//    @PutMapping("/updateAdminInfo")
+//    public Result updateAdminInfo(@RequestBody User user) {
+//        return userService.updateUserInfo(user);
+//    }
 }

@@ -11,6 +11,7 @@ import com.xiaomi_mall.service.CategoryService;
 import com.xiaomi_mall.service.SkuService;
 import com.xiaomi_mall.util.BeanCopyUtils;
 import com.xiaomi_mall.vo.CateProductVo;
+import net.bytebuddy.asm.Advice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -59,6 +60,20 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
             }
             return Result.okResult(res);
         }
+    }
+
+    @Override
+    public Result updateCategoryName(Category category) {
+        updateById(category);
+        return Result.okResult();
+
+    }
+
+    @Override
+    public Result getCategoryName(Integer categoryId) {
+        Category category = categoryMapper.selectById(categoryId);
+        String categoryName = category.getCategoryName();
+        return Result.okResult(categoryName);
     }
 
 
