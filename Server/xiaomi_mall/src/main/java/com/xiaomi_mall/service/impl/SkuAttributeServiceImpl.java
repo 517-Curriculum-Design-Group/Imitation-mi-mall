@@ -1,7 +1,9 @@
 package com.xiaomi_mall.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xiaomi_mall.config.Result;
+import com.xiaomi_mall.dto.SkuAttribute_ValueDto;
 import com.xiaomi_mall.enity.SkuAttribute;
 import com.xiaomi_mall.enity.SkuAttributeValue;
 import com.xiaomi_mall.mapper.SkuAttributeMapper;
@@ -65,5 +67,11 @@ public class SkuAttributeServiceImpl extends ServiceImpl<SkuAttributeMapper, Sku
 
         return Result.okResult(skuValueDetailVo);
     }
+
+    @Override
+    public Result addSkuAttribute(SkuAttribute_ValueDto skuAttribute_valueDto) {
+        skuAttributeMapper.addSkuName(skuAttribute_valueDto.getAttributename());
+    }
+
 
 }
