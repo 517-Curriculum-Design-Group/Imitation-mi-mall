@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Data
 @AllArgsConstructor
@@ -43,7 +44,7 @@ public class Comment implements Serializable {
 
     @ApiModelProperty("评价时间")
     @TableField(fill = FieldFill.INSERT)
-    private LocalDateTime commentTime;
+    private Date commentTime;
 
     @ApiModelProperty("父评论ID")
     private String parentId;

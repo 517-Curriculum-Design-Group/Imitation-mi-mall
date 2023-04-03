@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Data
 @AllArgsConstructor
@@ -36,8 +37,8 @@ public class Seckill implements Serializable {
     private Integer stockCount;
 
     @ApiModelProperty("秒杀开始时间")
-    private LocalDateTime startTime;
+    private Date startTime;
 
     @ApiModelProperty("秒杀结束时间")
-    private LocalDateTime endTime;
+    private Date endTime;
 }

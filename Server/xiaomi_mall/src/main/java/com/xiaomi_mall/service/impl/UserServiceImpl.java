@@ -140,17 +140,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public Result deleteUser(List<Long> userIds) {
-        List<User> users = listByIds(userIds);
-        userMapper.deleteBatchIds(users);
-        return Result.okResult();
-    }
-
-    @Override
-    public Result updateUserInfo(Long userId) {
-        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(User::getUserId, userId);
-        User user = getOne(queryWrapper);
+    public Result updateUserInfo(User user) {
         updateById(user);
         return Result.okResult();
     }

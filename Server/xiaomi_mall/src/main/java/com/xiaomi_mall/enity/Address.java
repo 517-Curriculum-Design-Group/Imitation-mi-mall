@@ -32,7 +32,7 @@ public class Address implements Serializable {
     @ApiModelProperty("收件人电话号码")
     private String recipientPhone;
 
-    //以下为地址（省-市-县-详细
+    //以下为地址（省-市-县-详细）
     @ApiModelProperty("省")
     private String province;
 
