@@ -13,7 +13,6 @@
     name="username"
     class="username"
     :rules="[{ required: true , message: '邮箱/手机号/小米ID' }]"
-    label=" "
     :label-col="{ span: 0 }"
     :wrapper-col="{ span: 24 }"
   >
@@ -26,9 +25,6 @@
     name="password"
     class="password"
     :rules="[{ required: true, message: '密码不能为空'  }]"
-    label=" "
-    :label-col="{ span: 0 }"
-    :wrapper-col="{ span: 24 }"
   >
   <div class="input-wrapper"><a-input-password v-model:value="formState.password" class="psw" type="password" @click="ChangeType()"/>
   <span class="placeholder">密码</span>
@@ -38,7 +34,7 @@
     <a-checkbox v-model:checked="formState.remember">Remember me</a-checkbox>
   </a-form-item> -->
 
-  <a-form-item :wrapper-col="{ offset: 0, span: 18 }">
+  <a-form-item class="w-full">
     <a-button type="primary" html-type="submit">登录</a-button>
   </a-form-item>
 </a-form>
@@ -78,11 +74,11 @@ function ChangeType(){
 <style scoped>
 .username{
   padding-top:20px;
+  width: 100%;
 }
 .input-wrapper {
     position: relative;
     height: 60px;
-
 }
 .placeholder {
   position: absolute;
@@ -119,10 +115,11 @@ function ChangeType(){
   height: 60px;
   font-size: 16px;
   border-radius: 8px;
+  width: 100%;
 }
 .ant-btn{
   height: 60px;
-  width: 356px;
+  width: 100%;
   margin:20px 0px 10px;
   padding: 0px 20px;
   background-color: var(--hover--color);
@@ -140,5 +137,12 @@ function ChangeType(){
 .ant-input-affix-wrapper:hover{
   border-color: var(--hover--color);
   box-shadow:var(--hover--color);
+}
+.ant-input-affix-wrapper-focused{
+  border-color: var(--hover--color);
+  box-shadow:var(--hover--color);
+}
+.password{
+  width: 100%;
 }
 </style>
