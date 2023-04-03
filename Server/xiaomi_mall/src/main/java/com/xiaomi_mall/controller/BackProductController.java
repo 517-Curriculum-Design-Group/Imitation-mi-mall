@@ -3,15 +3,12 @@ package com.xiaomi_mall.controller;
 import com.xiaomi_mall.config.Result;
 import com.xiaomi_mall.dto.SkuAttribute_ValueDto;
 import com.xiaomi_mall.enity.Category;
-import com.xiaomi_mall.enity.SkuAttribute;
-import com.xiaomi_mall.enity.SkuAttributeValue;
+import com.xiaomi_mall.enity.Product;
 import com.xiaomi_mall.service.CategoryService;
 import com.xiaomi_mall.service.ProductService;
 import com.xiaomi_mall.service.SkuAttributeService;
-import com.xiaomi_mall.service.SkuService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -43,6 +40,13 @@ public class BackProductController {
     @GetMapping("/getProductList")
     public Result getProductList(Integer pageNum, Integer pageSize, String productName) {
         return productService.getProductList(pageNum, pageSize, productName);
+    }
+
+    @PreAuthorize("hasAnyAuthority('普通管理员', '超级管理员')")
+    @ApiOperation("新增商品接口")
+    @PostMapping("/addProductList")
+    public Result addProductList(@RequestBody Product product) {
+        return productService.addProductList(product);
     }
 
     @PreAuthorize("hasAnyAuthority('普通管理员', '超级管理员')")
@@ -118,6 +122,22 @@ public class BackProductController {
     @PostMapping("/addSkuAttribute")
     public Result addSkuAttribute(@RequestBody SkuAttribute_ValueDto skuAttribute_valueDto) {
         return skuAttributeService.addSkuAttribute(skuAttribute_valueDto);
+    }
+
+    @PreAuthorize("hasAnyAuthority('普通管理员', '超级管理员')")
+    @ApiOperation("修改商品规格接口")
+    @PostMapping("/modifySkuAttribute")
+    public Result modifySkuAttribute(@RequestBody SkuAttribute_ValueDto skuAttribute_valueDto)
+    {
+        return skuAttributeService.modifySkuAttribute(skuAttribute_valueDto);
+    }
+
+    @PreAuthorize("hasAnyAuthority('普通管理员', '超级管理员')")
+    @ApiOperation("删除商品规格接口")
+    @PostMapping("/deleteSkuAttribute")
+    public Result deleteSkuAttribute(@RequestBody Integer sku_id)
+    {
+        return skuAttributeService.deleteSkuAttribute(sku_id);
     }
 
 //    @PreAuthorize("hasAnyAuthority('普通管理员', '超级管理员')")

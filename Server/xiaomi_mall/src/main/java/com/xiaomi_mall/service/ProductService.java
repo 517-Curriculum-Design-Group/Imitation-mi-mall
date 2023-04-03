@@ -12,6 +12,8 @@ public interface ProductService extends IService<Product> {
     Result getProductList(Integer pageNum, Integer pageSize, String productName);
 
     Result deleteCategory(Integer categoryId);
+
+    Result addProductList(Product product);
 }
 
 

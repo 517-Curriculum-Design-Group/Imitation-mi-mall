@@ -2,7 +2,7 @@ spring:
   datasource:
     druid:
       driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://8.134.87.155:3306/Xiaomi_mnd
+      url: jdbc:mysql://8.134.87.155:3306/Xiaomi_mnd?rewriteBatchedStatements=true
       username: root
       password: 6579927
   redis:

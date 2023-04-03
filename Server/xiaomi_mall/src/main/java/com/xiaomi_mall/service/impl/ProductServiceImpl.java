@@ -16,9 +16,11 @@ import com.xiaomi_mall.service.CategoryService;
 import com.xiaomi_mall.service.ProductService;
 import com.xiaomi_mall.util.BeanCopyUtils;
 import com.xiaomi_mall.vo.ProductListVo;
+import com.xiaomi_mall.vo.ProductVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -86,6 +88,15 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
             return Result.okResult();
         }
 
+    }
+
+    @Override
+    public Result addProductList(Product product)
+    {
+
+
+
+        return null;
     }
 
     private List<ProductListVo> toProductListVo(List<Product> list) {

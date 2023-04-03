@@ -1,7 +1,6 @@
 package com.xiaomi_mall.controller;
 
 import com.xiaomi_mall.config.Result;
-import com.xiaomi_mall.enity.User;
 import com.xiaomi_mall.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

@@ -25,4 +25,7 @@ public class SkuAttribute implements Serializable {
     @ApiModelProperty("key名称")
     private String attributeName;
 
+    @ApiModelProperty("状态")
+    private int status;
+
 }

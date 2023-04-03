@@ -11,6 +11,8 @@ import java.util.List;
 @NoArgsConstructor
 public class SkuAttribute_ValueDto {
 
+    private int attributeId;
+
     private String attributename;
 
     private List<String> valueName;

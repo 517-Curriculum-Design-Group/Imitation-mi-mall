@@ -11,7 +11,6 @@ import com.xiaomi_mall.service.CategoryService;
 import com.xiaomi_mall.service.SkuService;
 import com.xiaomi_mall.util.BeanCopyUtils;
 import com.xiaomi_mall.vo.CateProductVo;
-import net.bytebuddy.asm.Advice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
