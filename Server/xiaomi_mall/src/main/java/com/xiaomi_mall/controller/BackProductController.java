@@ -15,6 +15,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -44,9 +45,24 @@ public class BackProductController {
 
     @PreAuthorize("hasAnyAuthority('普通管理员', '超级管理员')")
     @ApiOperation("新增商品接口")
-    @PostMapping("/addProductList")
-    public Result addProductList(@RequestBody Product product) {
-        return productService.addProductList(product);
+    @PostMapping("/addNewProduct")
+    public Result addNewProduct(@RequestBody Map<String, Object> map) {
+        return productService.addNewProduct(map);
+    }
+
+
+    @PreAuthorize("hasAnyAuthority('普通管理员', '超级管理员')")
+    @ApiOperation("查看商品SKU接口")
+    @GetMapping("/getProductSku/{productId}")
+    public Result getProductSku(@PathVariable Integer productId) {
+        return productService.getProductSku(productId);
+    }
+
+    @PreAuthorize("hasAnyAuthority('普通管理员', '超级管理员')")
+    @ApiOperation("修改商品SKU接口")
+    @PostMapping("/modifyProductSku")
+    public Result modifyProductSku(@RequestBody Map<String, Object> map) {
+        return productService.modifyProductSku(map);
     }
 
     @PreAuthorize("hasAnyAuthority('普通管理员', '超级管理员')")
@@ -119,25 +135,18 @@ public class BackProductController {
 
 
     @PreAuthorize("hasAnyAuthority('普通管理员', '超级管理员')")
-    @ApiOperation("修改商品规格接口")
+    @ApiOperation("修改规格接口")
     @PostMapping("/modifySkuAttribute")
     public Result modifySkuAttribute(@RequestBody SkuAttribute_ValueDto skuAttribute_valueDto)
     {
         return skuAttributeService.modifySkuAttribute(skuAttribute_valueDto);
     }
 
-    @PreAuthorize("hasAnyAuthority('普通管理员', '超级管理员')")
-    @ApiOperation("删除商品规格接口")
-    @PostMapping("/deleteSkuAttribute")
-    public Result deleteSkuAttribute(@RequestBody Integer sku_id)
-    {
-        return skuAttributeService.deleteSkuAttribute(sku_id);
-    }
-
 //    @PreAuthorize("hasAnyAuthority('普通管理员', '超级管理员')")
-//    @ApiOperation("添加商品规格值接口")
-//    @PostMapping("/addSkuValue")
-//    public Result addSkuValue(@RequestBody SkuAttributeValue skuAttributeValue) {
-//        return skuAttributeService.addSkuValue(skuAttributeValue);
+//    @ApiOperation("删除商品规格接口")
+//    @PostMapping("/deleteSkuAttribute")
+//    public Result deleteSkuAttribute(@RequestBody Integer sku_id)
+//    {
+//        return skuAttributeService.deleteSkuAttribute(sku_id);
 //    }
 }

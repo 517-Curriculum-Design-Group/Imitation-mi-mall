@@ -20,7 +20,7 @@ import java.util.Date;
 @TableName("Order")
 public class Order implements Serializable {
 
-    @ApiModelProperty("用户id(主键)")
+    @ApiModelProperty("订单id(主键)")
     @TableId(type = IdType.AUTO)
     private int orderId;
 

@@ -183,17 +183,17 @@ public class SkuAttributeServiceImpl extends ServiceImpl<SkuAttributeMapper, Sku
         return Result.okResult(200, "修改成功");
     }
 
-    //这是单个规格删除，批量删除不做
-    @Override
-    public Result deleteSkuAttribute(Integer attribute_id)
-    {
-        List<SkuAttribute> attribute_list = skuAttributeMapper.getAllByAttributeId(attribute_id);
-        if(attribute_list.get(0).getStatus() == 1)
-            return Result.errorResult(800, "该规格已被删除");
-
-        skuAttributeMapper.modifyAttributeStatus(attribute_id, 1);
-        return Result.okResult(200, "删除成功");
-    }
+    //这是单个规格删除
+//    @Override
+//    public Result deleteSkuAttribute(Integer attribute_id)
+//    {
+//        List<SkuAttribute> attribute_list = skuAttributeMapper.getAllByAttributeId(attribute_id);
+//        if(attribute_list.get(0).getStatus() == 1)
+//            return Result.errorResult(800, "该规格已被删除");
+//
+//        skuAttributeMapper.modifyAttributeStatus(attribute_id, 1);
+//        return Result.okResult(200, "删除成功");
+//    }
 
 
 

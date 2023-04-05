@@ -21,4 +21,6 @@ public interface SkuAttributeValueMapper extends BaseMapper<SkuAttributeValue> {
     @Update("UPDATE SkuAttributeValue SET del_flag = #{del_flag} WHERE value_id = #{value_id}")
     int modifyAttributeValueStatus(int value_id, int del_flag);
 
+    @Select("SELECT * FROM SkuAttributeValue WHERE del_flag = '0'")
+    List<SkuAttributeValue> getAll();
 }

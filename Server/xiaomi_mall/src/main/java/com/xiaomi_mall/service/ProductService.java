@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.xiaomi_mall.config.Result;
 import com.xiaomi_mall.enity.Product;
 
+import java.util.Map;
+
 public interface ProductService extends IService<Product> {
 
     Result getProductDetail(Integer product_id);
@@ -13,7 +15,11 @@ public interface ProductService extends IService<Product> {
 
     Result deleteCategory(Integer categoryId);
 
-    Result addProductList(Product product);
+    Result addNewProduct(Map<String, Object> map);
+
+    Result modifyProductSku(Map<String, Object> map);
+
+    Result getProductSku(Integer productId);
 }
 
 

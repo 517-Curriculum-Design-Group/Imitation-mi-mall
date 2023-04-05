@@ -65,7 +65,6 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
     public Result updateCategoryName(Category category) {
         updateById(category);
         return Result.okResult();
-
     }
 
     @Override
