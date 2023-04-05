@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 @Data
@@ -17,6 +18,7 @@ public class ProductVo {
     private String productName;
     private String productPic;
     private Map<String, Object> skuList = new LinkedHashMap<>();
+    private List<SkuVo> skuVoList;
     private String productDescription;
     private Date createTime;
 }

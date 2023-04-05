@@ -29,6 +29,9 @@ public class OrderDetail implements Serializable {
     @ApiModelProperty("规格id(外键)")
     private int skuId;
 
+    @ApiModelProperty("商品名")
+    private String productName;
+
     @ApiModelProperty("选中商品的该规格名字")
     private String skuName;
 
