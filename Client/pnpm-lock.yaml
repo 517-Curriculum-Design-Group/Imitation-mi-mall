@@ -15,7 +15,7 @@ importers:
       '@unocss/preset-icons': registry.npmmirror.com/@unocss/preset-icons/0.50.6
       '@unocss/preset-uno': registry.npmmirror.com/@unocss/preset-uno/0.50.6
       eslint-config-custom: link:packages/eslint-config-custom
-      prettier: registry.npmmirror.com/prettier/2.8.5
+      prettier: registry.npmmirror.com/prettier/2.8.7
       unocss: registry.npmmirror.com/unocss/0.50.6
 
   apps/backstage:
@@ -69,6 +69,7 @@ importers:
       '@unocss/preset-uno': ^0.50.6
       '@vitejs/plugin-vue': ^4.1.0
       ant-design-vue: ^3.2.15
+      sass: ^1.60.0
       unocss: ^0.50.3
       vite: ^4.2.0
       vue: ^3.2.47
@@ -81,8 +82,9 @@ importers:
       '@unocss/preset-attributify': registry.npmmirror.com/@unocss/preset-attributify/0.50.6
       '@unocss/preset-uno': registry.npmmirror.com/@unocss/preset-uno/0.50.6
       '@vitejs/plugin-vue': registry.npmmirror.com/@vitejs/plugin-vue/4.1.0_vite@4.2.0+vue@3.2.47
+      sass: registry.npmmirror.com/sass/1.60.0
       unocss: registry.npmmirror.com/unocss/0.50.6_vite@4.2.0
-      vite: registry.npmmirror.com/vite/4.2.0
+      vite: registry.npmmirror.com/vite/4.2.0_sass@1.60.0
 
   packages/eslint-config-custom:
     specifiers:
@@ -975,7 +977,7 @@ packages:
       chokidar: registry.npmmirror.com/chokidar/3.5.3
       fast-glob: registry.npmmirror.com/fast-glob/3.2.12
       magic-string: registry.npmmirror.com/magic-string/0.30.0
-      vite: registry.npmmirror.com/vite/4.2.0
+      vite: registry.npmmirror.com/vite/4.2.0_sass@1.60.0
     transitivePeerDependencies:
       - rollup
     dev: true
@@ -1004,7 +1006,7 @@ packages:
       vite: ^4.0.0
       vue: ^3.2.25
     dependencies:
-      vite: registry.npmmirror.com/vite/4.2.0
+      vite: registry.npmmirror.com/vite/4.2.0_sass@1.60.0
       vue: registry.npmmirror.com/vue/3.2.47
     dev: true
 
@@ -2770,6 +2772,12 @@ packages:
     engines: {node: '>= 4'}
     dev: false
 
+  registry.npmmirror.com/immutable/4.3.0:
+    resolution: {integrity: sha512-0AOCmOip+xgJwEVTQj1EfiDDOkPmuyllDuTuEX+DDXUgapLAsBIfkg3sxCYyCEA8mQqZrrxPUGjcOQ2JS3WLkg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/immutable/-/immutable-4.3.0.tgz}
+    name: immutable
+    version: 4.3.0
+    dev: true
+
   registry.npmmirror.com/import-fresh/3.3.0:
     resolution: {integrity: sha512-veYYhQa+D1QBKznvhUHxb8faxlrwUnxseDAbAp457E0wLNio2bOSKnjYDhMj+YiAq61xrMGhQk9iXVk5FzgQMw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/import-fresh/-/import-fresh-3.3.0.tgz}
     name: import-fresh
@@ -3515,10 +3523,10 @@ packages:
     engines: {node: '>= 0.8.0'}
     dev: false
 
-  registry.npmmirror.com/prettier/2.8.5:
-    resolution: {integrity: sha512-3gzuxrHbKUePRBB4ZeU08VNkUcqEHaUaouNt0m7LGP4Hti/NuB07C7PPTM/LkWqXoJYJn2McEo5+kxPNrtQkLQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/prettier/-/prettier-2.8.5.tgz}
+  registry.npmmirror.com/prettier/2.8.7:
+    resolution: {integrity: sha512-yPngTo3aXUUmyuTjeTUT75txrf+aMh9FiD7q9ZE/i6r0bPb22g4FsE6Y338PQX1bmfy08i9QQCB7/rcUAVntfw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/prettier/-/prettier-2.8.7.tgz}
     name: prettier
-    version: 2.8.5
+    version: 2.8.7
     engines: {node: '>=10.13.0'}
     hasBin: true
     dev: true
@@ -3687,6 +3695,18 @@ packages:
       get-intrinsic: registry.npmmirror.com/get-intrinsic/1.2.0
       is-regex: registry.npmmirror.com/is-regex/1.1.4
     dev: false
+
+  registry.npmmirror.com/sass/1.60.0:
+    resolution: {integrity: sha512-updbwW6fNb5gGm8qMXzVO7V4sWf7LMXnMly/JEyfbfERbVH46Fn6q02BX7/eHTdKpE7d+oTkMMQpFWNUMfFbgQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/sass/-/sass-1.60.0.tgz}
+    name: sass
+    version: 1.60.0
+    engines: {node: '>=12.0.0'}
+    hasBin: true
+    dependencies:
+      chokidar: registry.npmmirror.com/chokidar/3.5.3
+      immutable: registry.npmmirror.com/immutable/4.3.0
+      source-map-js: registry.npmmirror.com/source-map-js/1.0.2
+    dev: true
 
   registry.npmmirror.com/scroll-into-view-if-needed/2.2.31:
     resolution: {integrity: sha512-dGCXy99wZQivjmjIqihaBQNjryrz5rueJY7eHfTdyWEiR4ttYpsajb14rn9s5d4DY4EcY6+4+U/maARBXJedkA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/scroll-into-view-if-needed/-/scroll-into-view-if-needed-2.2.31.tgz}
@@ -4165,8 +4185,9 @@ packages:
       fsevents: registry.npmmirror.com/fsevents/2.3.2
     dev: true
 
-  registry.npmmirror.com/vite/4.2.0:
+  registry.npmmirror.com/vite/4.2.0_sass@1.60.0:
     resolution: {integrity: sha512-AbDTyzzwuKoRtMIRLGNxhLRuv1FpRgdIw+1y6AQG73Q5+vtecmvzKo/yk8X/vrHDpETRTx01ABijqUHIzBXi0g==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/vite/-/vite-4.2.0.tgz}
+    id: registry.npmmirror.com/vite/4.2.0
     name: vite
     version: 4.2.0
     engines: {node: ^14.18.0 || >=16.0.0}
@@ -4196,6 +4217,7 @@ packages:
       postcss: registry.npmmirror.com/postcss/8.4.21
       resolve: registry.npmmirror.com/resolve/1.22.1
       rollup: registry.npmmirror.com/rollup/3.19.1
+      sass: registry.npmmirror.com/sass/1.60.0
     optionalDependencies:
       fsevents: registry.npmmirror.com/fsevents/2.3.2
     dev: true
