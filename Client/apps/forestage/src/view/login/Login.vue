@@ -8,37 +8,37 @@
     @finish="onFinish"
     @finishFailed="onFinishFailed"
   >
-    <a-form-item name="username" :rules="[{ message: '邮箱/手机号/小米ID' }]">
+    <a-form-item name="username" :rules="[{ required:true, message: '请输入账号' }]">
       <div class="input-wrapper">
         <a-input
           id="formUsername"
           v-model:value="formState.username"
-          class="text-lg font-normal"
+          class="text-lg font-normal bg-gray-100 border-transparent"
           placeholder=" "
         />
         <label for="formUsername">邮箱/手机号/小米ID</label>
       </div>
     </a-form-item>
 
-    <a-form-item name="password" :rules="[{ message: '密码不能为空' }]">
+    <a-form-item name="password" :rules="[{ required:true, message: '请登录输入密码' }]">
       <div class="input-wrapper">
         <a-input
           id="formUserpws"
           v-model:value="formState.password"
-          class="text-lg font-normal"
+          class="text-lg font-normal bg-gray-100 border-transparent"
           placeholder=" "
           type="password"
-          @click="ChangeType()"
         />
         <label for="formUserpws">密码</label>
+        <span id="eye" class="svg-eye i-ph-eye-closed-bold?mask text-gray-300 hover:text-gray-500" @click="ChangeType()"></span>     
       </div>
     </a-form-item>
-
+   
     <a-form-item class="mt-2">
       <button
         w="full"
         h="15"
-        class="font-normal text-lg text-light-50 align-top rounded-md bg-orange-500"
+        class="font-normal text-lg text-light-50 align-top rounded-md bg-orange-500 cursor-pointer"
         html-type="submit"
       >
         登 录
@@ -79,13 +79,17 @@ watch(checked, (value) => {
 });
 
 function ChangeType() {
-  let input = document.getElementsByClassName("psw");
-  if (input.type === "password") {
-    input.type = "text";
+  let btn = document.getElementById("formUserpws");
+  let icon = document.getElementById("eye")
+  if (btn.type == "password") {
+    btn.type = "text";
+    icon.className = "svg-eye i-ph-eye?mask text-gray-300 hover:text-gray-500"
   } else {
-    input.type = "password";
+    btn.type = "password";
+    icon.className = "svg-eye i-ph-eye-closed-bold?mask text-gray-300 hover:text-gray-500"
   }
 }
+
 </script>
 
 <style scoped lang="scss">
@@ -97,6 +101,10 @@ function ChangeType() {
   height: 60px;
   padding-top: 20px;
   border-radius: 4px;
+  &:hover,&:focus{
+    border-color: var(--button-hover-background-color);
+    box-shadow: var(--button-hover-background-color);
+  }
 }
 .input-wrapper label,
 .input-wrapper label:placeholder-shown {
@@ -117,5 +125,26 @@ function ChangeType() {
 
 .login-button {
   background-color: var(--button-hover-background-color);
+}
+
+.svg-eye {
+  height: 1.5rem;
+  width: 1.5rem;
+  position: absolute;
+  top: 32%;
+  right: 4%;
+  cursor: pointer;
+  transition: color 500ms;
+}
+
+.ant-form-item-has-error :not(.ant-input-disabled):not(.ant-input-borderless).ant-input {
+    border-color: #ff5c00;
+    box-shadow: 0 0 0 2px rgba(255,92,0,.2);  
+  & + label {
+    color: #ff4d4f;
+  }
+}
+.ant-form-item-has-error ~ .ant-form-item-has-error {
+  margin-top: 10px;
 }
 </style>

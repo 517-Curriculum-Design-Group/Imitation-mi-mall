@@ -6,6 +6,12 @@
 }
 
 body {
+  font-feature-settings: "tnum", "tnum";
+  background-color: #fff;
+  color: rgba(0, 0, 0, .85);
+  font-family: MiSans, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+  font-size: 14px;
+  font-variant: tabular-nums;
   box-sizing: border-box;
 }
 
@@ -14,6 +20,7 @@ body {
     background: #333;
     color: white;
   }
+
   .night.dark-scheme {
     background: black;
     color: #ddd;
@@ -35,6 +42,7 @@ body {
 a {
   color: var(--text-default-color);
 }
+
 a:hover {
   color: var(--text-hover-color);
 }

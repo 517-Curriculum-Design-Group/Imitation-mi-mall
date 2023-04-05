@@ -5,6 +5,11 @@ const routes = [
     path: "/",
     name: "Index",
     component: () => import("@/layouts/main.vue"),
+    children: [{
+      path: "/home",
+      name: "Home",
+      component: () => import("@/view/Home.vue"),
+    }]
   },
   {
     path: "/login",
