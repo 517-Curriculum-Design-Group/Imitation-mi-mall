@@ -14,16 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Service
 public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements OrderService {
-    @Autowired
-    @Lazy
-    private OrderService orderService;
+
     @Autowired
     private OrderMapper orderMapper;
     @Autowired
@@ -42,7 +37,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
 
         for (Order order: orderList)
         {
-            HashMap<String, Object> map = new HashMap<>();
+            HashMap<String, Object> map = new LinkedHashMap<>();
             map.put("orderId", order.getOrderId());
             map.put("orderTime", order.getOrderTime());
             map.put("totalPrice", order.getTotalPrice());
@@ -69,20 +64,20 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         List<OrderDetail> orderDetailList = orderDetailMapper.getDetailListByOrderId(orderId);
         Address address = addressMapper.selectById(order.getAddressId());
 
-        HashMap<String, HashMap<String, Object>> res = new HashMap<>();
+        HashMap<String, HashMap<String, Object>> res = new LinkedHashMap<>();
 
         //订单相关
-        HashMap<String, Object> map1 = new HashMap<>();
+        HashMap<String, Object> map1 = new LinkedHashMap<>();
         map1.put("orderId", order.getOrderId());
         map1.put("orderTime", order.getOrderTime());
         res.put("orderDetail", map1);
 
         //商品相关
-        HashMap<String, Object> map2 = new HashMap<>();
+        HashMap<String, Object> map2 = new LinkedHashMap<>();
         List<HashMap<String, Object>> productList = new ArrayList<>();
         for (OrderDetail orderDetail: orderDetailList)
         {
-            HashMap<String, Object> map = new HashMap<>();
+            HashMap<String, Object> map = new LinkedHashMap<>();
             map.put("productName", orderDetail.getProductName());
             map.put("skuName", orderDetail.getSkuName());
             map.put("skuImage", orderDetail.getSkuImage());
@@ -95,7 +90,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         res.put("productDetail", map2);
 
         //收货相关
-        HashMap<String, Object> map3 = new HashMap<>();
+        HashMap<String, Object> map3 = new LinkedHashMap<>();
         map3.put("recipientName", address.getRecipientName());
         map3.put("recipientPhone", address.getRecipientPhone());
         String specificAddress = address.getProvince() + address.getCity() + address.getDistrict() +

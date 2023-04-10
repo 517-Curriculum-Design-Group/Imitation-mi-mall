@@ -61,7 +61,7 @@ public class BackOrderController
      * @return {@link Result}
      */
     @PreAuthorize("hasAnyAuthority('普通管理员', '超级管理员')")
-    @ApiOperation("订单列表接口")
+    @ApiOperation("评论列表接口")
     @GetMapping("/getBackCommentList")
     public Result getBackCommentList(Integer pageNum, Integer pageSize)
     {
@@ -75,6 +75,7 @@ public class BackOrderController
         commentService.removeByIds(commentId);
         return Result.okResult();
     }
+
 
 
 
