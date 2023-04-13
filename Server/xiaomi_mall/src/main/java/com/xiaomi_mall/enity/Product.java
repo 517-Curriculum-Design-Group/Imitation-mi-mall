@@ -39,6 +39,9 @@ public class Product implements Serializable {
     @ApiModelProperty("商品描述")
     private String productDescription;
 
+    @ApiModelProperty("销售状态")
+    private int status;
+
     @ApiModelProperty("创建时间")
     @TableField(fill = FieldFill.INSERT)
     private Date createTime;

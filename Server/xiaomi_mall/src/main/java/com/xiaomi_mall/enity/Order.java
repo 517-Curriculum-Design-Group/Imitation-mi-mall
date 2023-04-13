@@ -17,7 +17,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @ApiModel("订单实体")
-@TableName("Order")
+@TableName("`Order`")
 public class Order implements Serializable {
 
     @ApiModelProperty("订单id(主键)")
