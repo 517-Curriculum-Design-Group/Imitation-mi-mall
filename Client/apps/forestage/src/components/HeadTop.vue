@@ -25,9 +25,9 @@ const totalprice = goods.reduce((pre, now) => {
         <span class="space"></span>
         <a-button type="default" class="news">消息通知</a-button>
         <span class="seq"></span>
-        <router-link to="/loginPage"><a-button type="default" class="register">注册</a-button></router-link>
+        <router-link to="/login"><a-button type="default" class="register">注册</a-button></router-link>
         <span class="seq"></span>
-        <router-link to="/loginPage"><a-button type="default" class="login">登录</a-button></router-link>
+        <router-link to="/login"><a-button type="default" class="login">登录</a-button></router-link>
     </div>
 </template>
 

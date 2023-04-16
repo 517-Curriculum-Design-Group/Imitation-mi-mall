@@ -124,5 +124,7 @@ input:checked+label::before {
 .address-input{
     background: url(https://api.iconify.design/mdi:magnify.svg) no-repeat 100%;
     background-position: 1rem;
+    z-index:1000;
 }
+
 </style>
