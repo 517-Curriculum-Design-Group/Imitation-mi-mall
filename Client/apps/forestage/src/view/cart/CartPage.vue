@@ -80,7 +80,7 @@ function DecCount(index) {
             </div>
         </div>
 
-        <div class="cartBottm stickyw-80% h-3rem m-auto mt-5 bg-light-50">
+        <div class="cartBottm sticky w-80% h-3rem m-auto mt-5 bg-light-50">
             <span class="text-gray-400 leading-3rem ml-3rem">继续购物</span>
             <span class="text-gray-400 leading-3rem ml-3rem">已选择</span>
             <span class="all text-gray-400 leading-3rem">{{ goods.length }}</span>
