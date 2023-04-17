@@ -63,7 +63,7 @@ button::before {
   width: 0;
   border-radius: 4px;
   background-color: var(--text-hover-color);
-  transition: all 300ms;
+  transition: all 200ms;
 }
 button.active::before {
   left: 0;

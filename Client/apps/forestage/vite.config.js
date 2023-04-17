@@ -22,4 +22,14 @@ export default defineConfig({
       "@": _resolve("src"),
     },
   },
+  server: {
+    proxy: {
+      // 接口地址代理
+      '/api': {
+        target: 'http://8.134.87.155:8087', // 接口的域名
+        changeOrigin: true, // 如果接口跨域，需要进行这个参数配置
+        rewrite: path => path.replace(/^\/api/, '')
+      },
+    }
+  },
 });

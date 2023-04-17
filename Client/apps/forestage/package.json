@@ -19,6 +19,7 @@
     "@unocss/preset-attributify": "^0.50.6",
     "@unocss/preset-uno": "^0.50.6",
     "@vitejs/plugin-vue": "^4.1.0",
+    "naive-ui": "^2.34.3",
     "sass": "^1.60.0",
     "unocss": "^0.50.3",
     "vite": "^4.2.0"

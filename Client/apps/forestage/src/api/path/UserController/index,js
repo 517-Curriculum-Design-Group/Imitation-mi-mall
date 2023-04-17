@@ -1,0 +1,9 @@
+import { Post } from "../../server";
+
+export function postLogin(userobj) {
+  return Post("/user/login", userobj);
+}
+
+export const userApi = {
+  postLogin,
+};

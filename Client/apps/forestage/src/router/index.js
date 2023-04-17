@@ -5,11 +5,14 @@ const routes = [
     path: "/",
     name: "Index",
     component: () => import("@/layouts/main.vue"),
-    children: [{
-      path: "/home",
-      name: "Home",
-      component: () => import("@/view/Home.vue"),
-    }]
+    redirect: '/home',
+    children: [
+      {
+        path: "/home",
+        name: "Home",
+        component: () => import("@/view/Home.vue"),
+      },
+    ],
   },
   {
     path: "/login",
@@ -17,10 +20,10 @@ const routes = [
     component: () => import("@/view/login/LoginPage.vue"),
   },
   {
-    path:"/cart",
-    name:"Cart",
-    component: () => import("@/view/cart/CartPage.vue")
-  }
+    path: "/cart",
+    name: "Cart",
+    component: () => import("@/view/cart/CartPage.vue"),
+  },
 ];
 
 const router = createRouter({
