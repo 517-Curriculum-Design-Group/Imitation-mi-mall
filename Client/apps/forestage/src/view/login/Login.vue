@@ -5,14 +5,15 @@
     :span-col="{ span: 8 }"
     :wrapper-col="{ span: 25 }"
     autocomplete="off"
-    @finish="onFinish"
-    @finishFailed="onFinishFailed"
   >
-    <a-form-item name="username" :rules="[{ required:true, message: '请输入账号' }]">
+    <a-form-item
+      name="username"
+      :rules="[{ required: true, message: '请输入账号' }]"
+    >
       <div class="input-wrapper">
         <a-input
           id="formUsername"
-          v-model:value="formState.username"
+          v-model:value="formState.userName"
           class="text-lg font-normal bg-gray-100 border-transparent"
           placeholder=" "
         />
@@ -20,7 +21,10 @@
       </div>
     </a-form-item>
 
-    <a-form-item name="password" :rules="[{ required:true, message: '请登录输入密码' }]">
+    <a-form-item
+      name="password"
+      :rules="[{ required: true, message: '请登录输入密码' }]"
+    >
       <div class="input-wrapper">
         <a-input
           id="formUserpws"
@@ -30,19 +34,26 @@
           type="password"
         />
         <label for="formUserpws">密码</label>
-        <span id="eye" class="svg-eye i-ph-eye-closed-bold?mask text-gray-300 hover:text-gray-500" @click="ChangeType()"></span>     
+        <span
+          id="eye"
+          class="svg-eye i-ph-eye-closed-bold?mask text-gray-300 hover:text-gray-500"
+          @click="ChangeType()"
+        ></span>
       </div>
     </a-form-item>
-   
+
     <a-form-item class="mt-2">
-      <button
+      <n-button
         w="full"
         h="15"
         class="font-normal text-lg text-light-50 align-top rounded-md bg-orange-500 cursor-pointer"
         html-type="submit"
+        color="rgb(249, 115, 22)"
+        :loading="loading"
+        @click="login"
       >
         登 录
-      </button>
+      </n-button>
     </a-form-item>
     <a-form-item>
       <a class="text-lg text-orange-500">忘记密码 ？</a>
@@ -58,19 +69,29 @@
 
 <script setup>
 import { ref, reactive, watch } from "vue";
+import { postLogin } from "@/api/path/UserController/index,js";
+import { useRouter } from "vue-router";
+import utils from "@/utils";
+import { useNotification } from "naive-ui";
 
+const notification = useNotification();
+
+function notify(type = "info", content, meta, options = {}) {
+  notification[type]({
+    content,
+    meta,
+    duration: 1500,
+    keepAliveOnHover: true,
+    ...options,
+  });
+}
+
+const router = useRouter();
+const loading = ref(false);
 const formState = reactive({
-  username: "",
+  userName: "",
   password: "",
 });
-
-const onFinish = (values) => {
-  console.log("Success:", values);
-};
-
-const onFinishFailed = (errorInfo) => {
-  console.log("Failed:", errorInfo);
-};
 
 const checked = ref(formState.remember);
 
@@ -80,16 +101,27 @@ watch(checked, (value) => {
 
 function ChangeType() {
   let btn = document.getElementById("formUserpws");
-  let icon = document.getElementById("eye")
+  let icon = document.getElementById("eye");
   if (btn.type == "password") {
     btn.type = "text";
-    icon.className = "svg-eye i-ph-eye?mask text-gray-300 hover:text-gray-500"
+    icon.className = "svg-eye i-ph-eye?mask text-gray-300 hover:text-gray-500";
   } else {
     btn.type = "password";
-    icon.className = "svg-eye i-ph-eye-closed-bold?mask text-gray-300 hover:text-gray-500"
+    icon.className =
+      "svg-eye i-ph-eye-closed-bold?mask text-gray-300 hover:text-gray-500";
   }
 }
 
+const login = async () => {
+  loading.value = !loading.value;
+  const [e, r] = await postLogin(formState);
+  if (!e && r) {
+    utils.setSession("token", r.data.token);
+    router.replace("/home");
+    notify("success", "通知", "登录成功");
+  }
+  loading.value = !loading.value;
+};
 </script>
 
 <style scoped lang="scss">
@@ -101,7 +133,8 @@ function ChangeType() {
   height: 60px;
   padding-top: 20px;
   border-radius: 4px;
-  &:hover,&:focus{
+  &:hover,
+  &:focus {
     border-color: var(--button-hover-background-color);
     box-shadow: var(--button-hover-background-color);
   }
@@ -137,9 +170,10 @@ function ChangeType() {
   transition: color 500ms;
 }
 
-.ant-form-item-has-error :not(.ant-input-disabled):not(.ant-input-borderless).ant-input {
-    border-color: #ff5c00;
-    box-shadow: 0 0 0 2px rgba(255,92,0,.2);  
+.ant-form-item-has-error
+  :not(.ant-input-disabled):not(.ant-input-borderless).ant-input {
+  border-color: #ff5c00;
+  box-shadow: 0 0 0 2px rgba(255, 92, 0, 0.2);
   & + label {
     color: #ff4d4f;
   }

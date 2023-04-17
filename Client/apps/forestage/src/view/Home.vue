@@ -18,9 +18,7 @@ export default{
 <template>
     <div>
       <HeadTop></HeadTop>
-      <!-- <SearchBox></SearchBox> -->
       <OrderList></OrderList>
       <CarouselMap></CarouselMap>
-      
     </div>
 </template>

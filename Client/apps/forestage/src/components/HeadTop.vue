@@ -9,7 +9,7 @@ const totalprice = goods.reduce((pre, now) => {
 </script>
 
 <template>
-    <div class="container">
+    <div class="containers">
         <a-button type="primary" class="cart">购物车</a-button>
         <div class="cartdetail bg-light-50 text-xs" v-if="!goods.length">购物车中还没有商品，赶紧选购吧！</div>
         <div class="cartdetail bg-light-50 text-xs" v-else>
@@ -33,7 +33,7 @@ const totalprice = goods.reduce((pre, now) => {
 
 
 <style scoped lang="scss">
-.container {
+.containers {
     display: flex;
     flex-direction: row-reverse;
     align-items: center;
