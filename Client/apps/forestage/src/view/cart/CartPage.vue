@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, watch } from 'vue'
+import { ref, reactive, watch, computed } from 'vue'
 import CartTop from './CartTop.vue';
 
 const goods = reactive([
@@ -7,24 +7,47 @@ const goods = reactive([
         name: "1",
         price: 500,
         count: 1,
+        checked: false,
     },
     {
         name: "2",
         price: 1000,
         count: 2,
+        checked: false,
+    },
+    {
+        name: "3",
+        price: 200,
+        count: 3,
+        checked: false,
     }
 ])
 
-const totalprice = ref(0);
-totalprice.value = goods.reduce((pre, now) => {
-    return pre + now.count * now.price
-}, 0)
-
-watch(goods,()=>{
-    totalprice.value = goods.reduce((pre, now) => {
-    return pre + now.count * now.price
-}, 0)
+const checkStatus = computed(() => {
+    return goods.every(item => item.checked == true)
 })
+
+const sum = computed(() => {
+   const totalprice = goods.reduce((pre, now) => {
+        if (now.checked == true)
+            return pre + now.count * now.price
+        else
+            return pre
+    }, 0)
+    return totalprice
+})
+
+const goodsLength = computed(() => {
+   const sumCount = goods.reduce((pre, now) =>{
+    if(now.checked == true)
+    return pre + 1;
+    else
+    return pre;
+},0)
+   return sumCount
+})
+
+watch(goods, sum)
 
 function AddCount(index) {
     goods[index].count++;
@@ -33,6 +56,15 @@ function AddCount(index) {
 function DecCount(index) {
     if (goods[index].count == 0) return 0;
     goods[index].count--;
+}
+
+function checkAll() {
+    if (checkStatus.value) goods.forEach(item => item.checked = false)
+    else goods.forEach(item => item.checked = true)
+}
+
+function ChangeChecked(index) {
+    goods[index].checked = !goods[index].checked
 }
 </script>
 
@@ -43,7 +75,7 @@ function DecCount(index) {
         <div class="cart grid w-80% bg-light-50 m-auto">
             <div class="flex flex-row-reverse">
                 <input id="checkbox" type="checkbox">全选
-                <label class="mr-1rem" for="checkbox"></label>
+                <label :class="['mr-1rem',checkStatus?'checkbox-active':'']" for="checkbox" @click="checkAll()"></label>
             </div>
             <div class="name">商品名称</div>
             <div>单价</div>
@@ -54,8 +86,8 @@ function DecCount(index) {
 
         <div class="cart grid w-80% bg-light-50 m-auto" v-for="(items, index) in goods" :key="index">
             <div class="flex flex-row-reverse text-light-50">
-                <input :id=index type="checkbox">全选
-                <label class="mr-1rem" :for=index></label>
+                <input :id=index type="checkbox"  :checked="goods[index].checked" :name="index">全选
+                <label :class="{'checkbox-active': goods[index].checked,'mr-1rem': true}" :for="index" @click="ChangeChecked(index)"></label>
             </div>
             <div class="goodsimg"></div>
             <div class="goodsname text-lg">{{ items.name }}</div>
@@ -63,14 +95,14 @@ function DecCount(index) {
 
             <div class="goodscoun relative w-9rem h-2.5rem border-solid border-1 border-gray-300">
                 <button class="h-full w-30% cursor-pointer bg-light-50 
-                    text-xl font-semibold text-gray-500 pb-5px float-left
-                    hover:bg-gray-200" @click="DecCount(index)">-</button>
+                                text-xl font-semibold text-gray-500 pb-5px float-left
+                                hover:bg-gray-200" @click="DecCount(index)">-</button>
 
                 <span class="absolute text-lg top-10% left-45%">{{ items.count }}</span>
 
                 <button class="h-full w-30% cursor-pointer bg-light-50 
-                    text-xl font-semibold text-gray-500 pb-5px float-right
-                    hover:bg-gray-200" @click="AddCount(index)">+</button>
+                                text-xl font-semibold text-gray-500 pb-5px float-right
+                                hover:bg-gray-200" @click="AddCount(index)">+</button>
             </div>
 
             <div class="goodstotalprice text-lg">{{ items.count * items.price }}元</div>
@@ -80,16 +112,18 @@ function DecCount(index) {
             </div>
         </div>
 
-        <div class="cartBottm sticky w-80% h-3rem m-auto mt-5 bg-light-50">
-            <span class="text-gray-400 leading-3rem ml-3rem">继续购物</span>
-            <span class="text-gray-400 leading-3rem ml-3rem">已选择</span>
-            <span class="all text-gray-400 leading-3rem">{{ goods.length }}</span>
-            <span class="text-gray-400 leading-3rem">件</span>
-
-            <span class="all leading-3rem ml-auto">合计:</span>
-            <span class="all leading-3rem text-3xl">{{ totalprice }}</span>
-            <span class="all leading-3rem mr-4rem">元</span>
-            <button class="sumbutton w-12rem h-full text-light-50 text-lg">去结算</button>
+        <div class="cartBottm sticky flex justify-between w-77rem h-3rem m-auto mt-5 bg-light-50">
+            <div class="text-gray-400 leading-3rem space-x-12"> 
+                <span class="ml-3rem">继续购物</span>
+                <span>已选择 <span class="all">{{ goodsLength }}</span>件</span>
+            </div>
+            <div>
+                <span class="all leading-3rem mr-4rem">合计:
+                <span class="text-3xl">{{ sum
+                }}</span>
+                元</span>
+                <button class="sumbutton w-12rem h-full text-light-50 text-lg">去结算</button>
+            </div>
         </div>
     </div>
 </template>
@@ -151,13 +185,12 @@ label {
     }
 }
 
-input:checked+label {
-    background-color: var(--button-background-color)
-}
+.checkbox-active {
+    background-color: var(--button-background-color);
 
-input:checked+label::before {
-    color: white;
-    opacity: 1;
+    &::before {
+        opacity: 1;
+    }
 }
 
 .delete-bg {
@@ -178,14 +211,16 @@ input:checked+label::before {
     align-items: center;
 }
 
-.all{
+.all {
     color: var(--text-hover-color);
 }
 
-.sumbutton{
+.sumbutton {
     background-color: var(--text-hover-color);
-    &:hover{
+
+    &:hover {
         background-color: var(--button-background-color);
     }
 }
+
 </style>
