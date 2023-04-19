@@ -6,10 +6,10 @@ const checked = ref(false)
 <template>
     <article class="order-list-box w-79.8% h-5.5rem m-auto">
         <div class="order-list float-left w-40% h-100%">
-            <li>综合</li>
-            <li>新品</li>
-            <li>销量</li>
-            <li>价格</li>
+            <li tabindex="1" >综合</li>
+            <li tabindex="1" >新品</li>
+            <li tabindex="1" >销量</li>
+            <li tabindex="1" >价格</li>
         </div>
 
         <form class="type-list float-right h-100% w-50%">
