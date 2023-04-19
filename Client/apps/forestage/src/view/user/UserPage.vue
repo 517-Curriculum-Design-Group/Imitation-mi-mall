@@ -1,18 +1,58 @@
 <script setup>
+import { useRouter } from 'vue-router'
 const menu = [
     {
         label: "订单中心",
-        children: ["我的订单", "评价晒单"]
+        children: [{
+            label: "我的订单",
+            name: "order"
+        },
+        {
+            label: "晒单评价",
+            name: "commment"
+        }
+        ]
     },
     {
         label: "个人中心",
-        children: ["我的个人中心", "消息中心", "喜欢的商品", "收获地址"]
+        children: [{
+            label: "我的个人中心",
+            name: "me"
+        },
+        {
+            label: "消息中心",
+            name: "news"
+        },
+        {
+            label: "收货地址",
+            name: "address"
+        }
+        ]
     },
     {
         label: "账户管理",
-        children: ["个人信息", "修改密码", "注销服务"]
+        children: [{
+            label: "个人信息",
+            name: "info"
+        },
+        {
+            label: "修改密码",
+            name: "password"
+        },
+        {
+            label: "注销服务",
+            name: "deleteServer"
+        }]
     }
 ]
+
+const router = useRouter()
+
+function TurnTo(item) {
+    router.push({
+        name: item.name
+    })
+}
 </script>
 
 <template>
@@ -22,15 +62,15 @@ const menu = [
                 <ul class="text-lg pb-5 leading-15" v-for="(items, index) in menu" :key="index">
                     {{ items.label }}
                     <li tabindex="1" class="text-base pb-3 cursor-pointer hover:text-gray-700"
-                        v-for="(item, num) in menu[index].children" :key="num">
-                        {{ item }}
+                        v-for="item in menu[index].children" :key="item" @click="TurnTo(item)">
+                        {{ item.label }}
                     </li>
                 </ul>
             </nav>
 
-            <article class="flex-1 bg-red-300 ml-1rem">
-            <router-view></router-view>
-        </article>
+            <article class="flex-1 ml-1rem">
+                <router-view></router-view>
+            </article>
         </div>
     </div>
 </template>
