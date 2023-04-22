@@ -73,7 +73,9 @@ import { postLogin } from "@/api/path/UserController/index,js";
 import { useRouter } from "vue-router";
 import utils from "@/utils";
 import { useNotification } from "naive-ui";
+import { userStore } from "@/stores/user.js"
 
+const store = userStore()
 const notification = useNotification();
 
 function notify(type = "info", content, meta, options = {}) {
@@ -117,6 +119,9 @@ const login = async () => {
   const [e, r] = await postLogin(formState);
   if (!e && r) {
     utils.setSession("token", r.data.token);
+    store.userid = r.data.userInfo.userId
+    console.log(r.data)
+    console.log(store.userid)
     router.replace("/home");
     notify("success", "通知", "登录成功");
   }

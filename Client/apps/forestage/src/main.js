@@ -9,10 +9,14 @@ import router from "./router";
 import naive from "naive-ui";
 import "uno.css";
 import { createPinia } from "pinia";
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
+
+const pinia = createPinia()
+pinia.use(piniaPluginPersistedstate)
 
 createApp(App)
   .use(Antd)
   .use(naive)
   .use(router)
-  .use(createPinia())
+  .use(pinia)
   .mount("#app");
