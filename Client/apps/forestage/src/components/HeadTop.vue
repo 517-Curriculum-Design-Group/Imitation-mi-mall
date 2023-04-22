@@ -198,7 +198,7 @@ const totalprice = goods.reduce((pre, now) => {
     align-items: center;
     flex-direction:column;
     top:40px;
-    right: 25.3rem;
+    right: 26.3rem;
     visibility: hidden;
     height: 0;
     overflow: hidden;
