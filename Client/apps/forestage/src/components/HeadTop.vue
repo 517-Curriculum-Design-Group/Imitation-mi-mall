@@ -14,7 +14,11 @@ const totalprice = goods.reduce((pre, now) => {
 
 <template>
     <div class="containers">
-        <a-button type="primary" class="cart">购物车 ({{ goods.length }})</a-button>
+        <a-button type="primary" class="cart flex justify-center">
+            <span class="i-mdi-shopping-search w-1rem h-1rem mr-1" v-if="!goods.length"></span>
+            <span class="i-mdi-shopping  w-1rem h-1rem mr-1" v-else></span>
+             购物车 ({{ goods.length }})
+        </a-button>
         <div class="cartdetail bg-light-50 text-xs" v-if="!goods.length">购物车中还没有商品，赶紧选购吧！</div>
         <div class="cartdetail bg-light-50 text-xs" v-else>
             <div class="goodslist" v-for="(items, index) in goods" :key="index">{{ items.name }}</div>
@@ -59,6 +63,7 @@ const totalprice = goods.reduce((pre, now) => {
 }
 
 .cart {
+    align-items: center;
     font-size: 11px;
     width: 120px;
     height: 40px;
