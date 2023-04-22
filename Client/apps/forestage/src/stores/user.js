@@ -11,7 +11,7 @@ export const userStore = defineStore('user', {
   },
   persist:{
     key:'userStore',
-    store:window.sessionStorage,
+    storage:window.sessionStorage,
     path:['userid']
   }
 })

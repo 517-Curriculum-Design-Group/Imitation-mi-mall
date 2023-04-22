@@ -14,7 +14,7 @@ const totalprice = goods.reduce((pre, now) => {
 
 <template>
     <div class="containers">
-        <a-button type="primary" class="cart">购物车</a-button>
+        <a-button type="primary" class="cart">购物车 ({{ goods.length }})</a-button>
         <div class="cartdetail bg-light-50 text-xs" v-if="!goods.length">购物车中还没有商品，赶紧选购吧！</div>
         <div class="cartdetail bg-light-50 text-xs" v-else>
             <div class="goodslist" v-for="(items, index) in goods" :key="index">{{ items.name }}</div>
