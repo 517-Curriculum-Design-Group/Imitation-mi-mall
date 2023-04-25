@@ -31,7 +31,7 @@
                     </el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-button round color="#0ea5e9" class="w-[250px]" type="primary" >登 录</el-button>
+                    <el-button round color="#0ea5e9" class="w-[250px]" type="primary" @click="onSubmit" :loading="loading">登 录</el-button>
                 </el-form-item>
             </el-form>
         </el-col>
@@ -40,7 +40,11 @@
 
 <script setup>
 import{ref,reactive} from 'vue'
+import{login} from '~/api/manager'
+import { ElNotification } from 'element-plus'
+import {useRouter} from 'vue-router'
 
+const router = useRouter()
 
 const form = reactive({
     username:"",
@@ -67,19 +71,23 @@ const rules ={
 const formRef = ref(null)
 const loading = ref(false)
 const onSubmit = () => {
-    formRef.value.validate((valid)=>{
-        if(!valid){
-            return false
-        }
-        loading.value = true
-        
-        store.dispatch("login",form).then(res=>{
-            toast("登录成功")
-            router.push("/")
-        }).finally(()=>{
-            loading.value = false
-        })
-    })
+    router.push('/')
+    // formRef.value.validate((valid)=>{
+    //     if(!valid){
+    //         return false
+    //     }
+    //     loading.value = true
+    //     login(form.username,form.password)
+    //     .then(res=>{
+    //         console.log(res);
+    //     })
+    //     .catch(err=>{
+    //         ElNotification({
+    //         message: err.response.data.message ||"请求失败",
+    //         type: 'error',
+    //     })
+    //     })
+    // })
 }
 
 // 监听回车事件
@@ -87,12 +95,4 @@ function onKeyUp(e){
     if(e.key == "Enter") onSubmit()
 }
 
-// 添加键盘监听
-onMounted(()=>{
-    document.addEventListener("keyup",onKeyUp)
-})
-// 移除键盘监听
-onBeforeUnmount(()=>{
-    document.removeEventListener("keyup",onKeyUp)
-})
 </script>
