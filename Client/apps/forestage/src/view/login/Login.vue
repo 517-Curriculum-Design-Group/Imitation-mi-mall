@@ -57,7 +57,7 @@
     </a-form-item>
     <a-form-item>
       <a class="text-lg text-orange-500">忘记密码 ？</a>
-      <a class="ml-47% text-lg text-orange-500">手机号登录</a>
+      <a class="text-lg text-orange-500 float-right">手机号登录</a>
     </a-form-item>
     <a-form-item>
       <div class="flex justify-center items-center">
@@ -73,9 +73,9 @@ import { postLogin } from "@/api/path/UserController/index,js";
 import { useRouter } from "vue-router";
 import utils from "@/utils";
 import { useNotification } from "naive-ui";
-import { userStore } from "@/stores/user.js"
+import { userStore } from "@/stores/user.js";
 
-const store = userStore()
+const store = userStore();
 const notification = useNotification();
 
 function notify(type = "info", content, meta, options = {}) {
@@ -119,9 +119,9 @@ const login = async () => {
   const [e, r] = await postLogin(formState);
   if (!e && r) {
     utils.setSession("token", r.data.token);
-    store.userid = r.data.userInfo.userId
-    console.log(r.data)
-    console.log(store.userid)
+    store.userid = r.data.userInfo.userId;
+    console.log(r.data);
+    console.log(store.userid);
     router.replace("/home");
     notify("success", "通知", "登录成功");
   }

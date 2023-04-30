@@ -1,20 +1,20 @@
 <template>
-  <div class="flex" h="100%">
-    <div w="20%" class="img-url"></div>
-    <div class="flex flex-1 flex-col">
+  <div class="flex" h="100%" w="100%" min-h="590px" min-w="320px">
+    <div v-if="!isShow" w="20%" class="img-url"></div>
+    <div class="flex flex-1 flex-col" w="100%">
       <div p="5" class="flex justify-between items-center h-25">
-        <h1>
+        <h1 class="text-[24px]">
           <img class="h-10 mr-2" src="../../assets/xiaomilogo.svg" />
           小米账号
         </h1>
-        <div class="space-x-8">
+        <div class="space-x-8 text-[12px]">
           <a href="#">用户协议</a>
           <a href="#">隐私政策</a>
           <a href="#">帮助中心</a>
         </div>
       </div>
-      <div class="flex flex-1 justify-center items-center">
-        <div class="shadow-lg p-5">
+      <div class="flex flex-1 justify-center items-center overflow-hidden">
+        <div class="shadow-lg <sm:shadow-none p-5">
           <button
             v-for="(_, tab) in tabs"
             :key="tab"
@@ -40,11 +40,13 @@
 <script setup>
 import Login from "./Login.vue";
 import Register from "./Register.vue";
-import { ref } from "vue";
+import { ref, computed } from "vue";
 
 const currentTab = ref("Login");
 
 const tabs = { Login, Register };
+const isShow = computed(() => window.innerWidth < 640);
+console.log(isShow.value);
 </script>
 
 <style scoped>
