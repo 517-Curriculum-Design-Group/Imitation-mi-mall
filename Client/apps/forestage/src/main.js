@@ -10,6 +10,7 @@ import naive from "naive-ui";
 import "uno.css";
 import { createPinia } from "pinia";
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
+import "@/utils/rem"
 
 const pinia = createPinia()
 pinia.use(piniaPluginPersistedstate)
