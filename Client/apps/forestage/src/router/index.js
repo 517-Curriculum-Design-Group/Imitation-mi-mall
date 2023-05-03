@@ -4,31 +4,36 @@ const routes = [
   {
     path: "/",
     name: "Index",
-    component: () => import("@/layouts/main.vue"),
-    redirect: '/home',
+    component: async () => await import("@/layouts/main.vue"),
+    redirect: "/home",
     children: [
+      {
+        path: "/category",
+        name: "Category",
+        component: async () => await import("@/view/category/index.vue"),
+      },
       {
         path: "/home",
         name: "Home",
-        component: () => import("@/view/Home.vue"),
+        component: async () => await import("@/view/HomeCom/Home.vue"),
       },
     ],
   },
   {
     path: "/login",
     name: "Login",
-    component: () => import("@/view/login/LoginPage.vue"),
+    component: async () => await import("@/view/login/index.vue"),
   },
   {
     path: "/cart",
     name: "Cart",
-    component: () => import("@/view/cart/CartPage.vue"),
+    component: async () => await import("@/view/cart/CartPage.vue"),
   },
   {
     path: "/user",
     name: "User",
-    component: () => import("@/view/user/UserPage.vue")
-  }
+    component: async () => await import("@/view/user/UserPage.vue"),
+  },
 ];
 
 const router = createRouter({

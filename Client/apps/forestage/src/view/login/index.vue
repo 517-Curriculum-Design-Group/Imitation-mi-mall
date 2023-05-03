@@ -46,7 +46,6 @@ const currentTab = ref("Login");
 
 const tabs = { Login, Register };
 const isShow = computed(() => window.innerWidth < 640);
-console.log(isShow.value);
 </script>
 
 <style scoped>
