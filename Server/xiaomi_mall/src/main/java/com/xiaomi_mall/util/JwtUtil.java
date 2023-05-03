@@ -1,5 +1,8 @@
 package com.xiaomi_mall.util;
 
+import com.alibaba.fastjson.JSON;
+import com.xiaomi_mall.config.Result;
+import com.xiaomi_mall.enums.AppHttpCodeEnum;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
@@ -7,6 +10,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
+import javax.servlet.http.HttpServletRequest;
 import java.util.Base64;
 import java.util.Date;
 import java.util.UUID;
@@ -107,6 +111,20 @@ public class JwtUtil {
                 .setSigningKey(secretKey)
                 .parseClaimsJws(jwt)
                 .getBody();
+    }
+
+    public static long getUserId(HttpServletRequest request) throws Exception {
+        try
+        {
+            String token = request.getHeader("token");
+            Claims claims = JwtUtil.parseJWT(token);
+            return Integer.parseInt(claims.getSubject());
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return -1;
+        }
     }
 
 

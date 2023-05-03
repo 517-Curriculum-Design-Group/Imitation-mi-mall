@@ -27,9 +27,6 @@ public class Order implements Serializable {
     @ApiModelProperty("用户id(外键)")
     private Long userId;
 
-    @ApiModelProperty("地址id(外键)")
-    private int addressId;
-
     @ApiModelProperty("订单的价格")
     private BigDecimal totalPrice;
 
@@ -39,6 +36,15 @@ public class Order implements Serializable {
 
     @ApiModelProperty("订单状态")
     private int status;
+
+    @ApiModelProperty("地址")
+    private String address;
+
+    @ApiModelProperty("收货人姓名")
+    private String name;
+
+    @ApiModelProperty("收货人电话")
+    private String phone;
 
     @ApiModelProperty("逻辑删除符")
     private int delFlag;

@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 @Data
 @AllArgsConstructor
@@ -25,6 +26,9 @@ public class Cart implements Serializable {
     @ApiModelProperty("用户id(外键)")
     private Long userId;
 
+    @ApiModelProperty("商品名)")
+    private String productName;
+
     @ApiModelProperty("选中商品的该规格id(外键)")
     private int skuId;
 
@@ -35,10 +39,10 @@ public class Cart implements Serializable {
     private String skuImage;
 
     @ApiModelProperty("选中商品的该规格对应的价格")
-    private String skuPrice;
+    private BigDecimal skuPrice;
 
     @ApiModelProperty("选中商品的该规格对应的数量")
-    private String skuQuantity;
+    private int skuQuantity;
 
     @ApiModelProperty("逻辑删除符")
     private int delFlag;

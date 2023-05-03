@@ -39,10 +39,10 @@ public class OrderDetail implements Serializable {
     private String skuImage;
 
     @ApiModelProperty("选中商品的该规格对应的价格")
-    private String skuPrice;
+    private BigDecimal skuPrice;
 
     @ApiModelProperty("选中商品的该规格对应的数量")
-    private String skuQuantity;
+    private int skuQuantity;
 
     @ApiModelProperty("逻辑删除符")
     private int delFlag;

@@ -40,6 +40,14 @@ public class BackOrderController
     }
 
     @PreAuthorize("hasAnyAuthority('普通管理员', '超级管理员')")
+    @ApiOperation("订单发货")
+    @GetMapping("/orderDelivery")
+    public Result orderDelivery(@RequestBody List<Integer> orderId)
+    {
+        return orderService.orderDelivery(orderId);
+    }
+
+    @PreAuthorize("hasAnyAuthority('普通管理员', '超级管理员')")
     @ApiOperation("获取订单详情接口")
     @GetMapping("/getOrderDetail/{orderId}")
     public Result getOrderDetail(@PathVariable Integer orderId)

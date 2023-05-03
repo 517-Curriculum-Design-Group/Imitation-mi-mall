@@ -3,23 +3,22 @@ package com.xiaomi_mall.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.parser.Feature;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.xiaomi_mall.config.Result;
 import com.xiaomi_mall.constants.SystemConstants;
-import com.xiaomi_mall.enity.Product;
-import com.xiaomi_mall.enity.Sku;
-import com.xiaomi_mall.enity.SkuAttribute;
-import com.xiaomi_mall.enity.SkuAttributeValue;
+import com.xiaomi_mall.enity.*;
 import com.xiaomi_mall.enums.AppHttpCodeEnum;
 import com.xiaomi_mall.exception.SystemException;
 import com.xiaomi_mall.mapper.*;
+import com.xiaomi_mall.service.CartService;
 import com.xiaomi_mall.service.CategoryService;
 import com.xiaomi_mall.service.ProductService;
 import com.xiaomi_mall.util.BeanCopyUtils;
-import com.xiaomi_mall.util.SecurityUtils;
+import com.xiaomi_mall.util.JwtUtil;
 import com.xiaomi_mall.vo.ProductListVo;
 import com.xiaomi_mall.vo.ProductVo;
 import com.xiaomi_mall.vo.SkuVo;
@@ -29,6 +28,7 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -39,11 +39,14 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     @Autowired
     private CategoryService categoryService;
     @Autowired
+    private CartService cartService;
+    @Autowired
     private CategoryMapper categoryMapper;
 
     @Autowired
     private ProductMapper productMapper;
-
+    @Autowired
+    private CartMapper cartMapper;
     @Autowired
     private SkuMapper skuMapper;
     @Autowired
@@ -155,6 +158,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
 
         return Result.okResult(skuVoList);
     }
+
 
     @Autowired
     private SqlSessionFactory sqlSessionFactory;
@@ -350,4 +354,35 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         }
         return productListVos;
     }
+
+
+    @Override
+    public Result addSkuToCart(HttpServletRequest request, Integer sku_id)
+    {
+        long userId = -1;
+        try {
+            userId = JwtUtil.getUserId(request);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        Sku sku = skuMapper.selectById(sku_id);
+        Product product = productMapper.selectById(sku.getProductId());
+
+        Cart cart = new Cart();
+        cart.setUserId(userId);
+        cart.setProductName(product.getProductName());
+        cart.setSkuId(sku_id);
+        cart.setSkuName(sku.getSkuName());
+        cart.setSkuImage(sku.getSkuImage());
+        cart.setSkuPrice(sku.getSkuPrice());
+        cart.setSkuQuantity(1);
+        cartService.save(cart);
+
+        return Result.okResult("加入购物车成功");
+    }
+
+
+
+
 }

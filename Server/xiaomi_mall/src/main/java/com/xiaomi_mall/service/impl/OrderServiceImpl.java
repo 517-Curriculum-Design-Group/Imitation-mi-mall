@@ -1,19 +1,22 @@
 package com.xiaomi_mall.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xiaomi_mall.config.Result;
+import com.xiaomi_mall.dto.OrderCommit;
 import com.xiaomi_mall.enity.*;
-import com.xiaomi_mall.mapper.AddressMapper;
-import com.xiaomi_mall.mapper.OrderDetailMapper;
-import com.xiaomi_mall.mapper.OrderMapper;
-import com.xiaomi_mall.mapper.UserMapper;
+import com.xiaomi_mall.mapper.*;
+import com.xiaomi_mall.service.OrderDetailService;
 import com.xiaomi_mall.service.OrderService;
 import com.xiaomi_mall.service.UserService;
+import com.xiaomi_mall.util.JwtUtil;
 import com.xiaomi_mall.vo.SkuValueDetailVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
 import java.util.*;
 
 @Service
@@ -27,6 +30,15 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     private AddressMapper addressMapper;
     @Autowired
     private UserService userService;
+    @Autowired
+    @Lazy
+    private OrderService orderService;
+    @Autowired
+    private SkuMapper skuMapper;
+    @Autowired
+    private ProductMapper productMapper;
+    @Autowired
+    private OrderDetailService orderDetailService;
 
     @Override
     public Result getBackOrderList(Integer pageNum, Integer pageSize) {
@@ -62,7 +74,6 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     public Result getOrderDetail(Integer orderId) {
         Order order = orderMapper.getOrderByOrderId(orderId);
         List<OrderDetail> orderDetailList = orderDetailMapper.getDetailListByOrderId(orderId);
-        Address address = addressMapper.selectById(order.getAddressId());
 
         HashMap<String, HashMap<String, Object>> res = new LinkedHashMap<>();
 
@@ -91,12 +102,144 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
 
         //收货相关
         HashMap<String, Object> map3 = new LinkedHashMap<>();
-        map3.put("recipientName", address.getRecipientName());
-        map3.put("recipientPhone", address.getRecipientPhone());
-        String specificAddress = address.getProvince() + address.getCity() + address.getDistrict() +
-                address.getZhen() + address.getDetail();
-        map3.put("specificAddress", specificAddress);
+        map3.put("address", order.getAddress());
+        map3.put("name", order.getName());
+        map3.put("phone", order.getPhone());
         res.put("addressDetail", map3);
         return Result.okResult(res);
     }
+
+
+    @Override
+    public Result checkOrder(HttpServletRequest request) {
+        long userId = -1;
+        try {
+            userId = JwtUtil.getUserId(request);
+            if (userId == -1) throw new RuntimeException();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        QueryWrapper<Address> addressListWrapper = new QueryWrapper<>();
+        addressListWrapper
+                .eq("user_id", userId)
+                .eq("del_flag", 0);
+        List<Map<String, Object>> addresses = addressMapper.selectMaps(addressListWrapper);
+
+        for (Map<String, Object> address:addresses) {
+            address.remove("user_id");
+            address.remove("is_default");
+            address.remove("del_flag");
+        }
+        return Result.okResult(addresses);
+    }
+
+    @Override
+    public Result generateOrder(HttpServletRequest request, List<OrderCommit> commits, Integer addressId)
+    {
+        //取userId
+        long userId = -1;
+        try {
+            userId = JwtUtil.getUserId(request);
+            if (userId == -1) throw new RuntimeException();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        //求单价*数量+总价
+        List<Integer> skuIds = new ArrayList<>();
+        for (OrderCommit commit:commits) {
+            skuIds.add(commit.getSkuId());
+        }
+
+        List<Sku> skus = skuMapper.selectBatchIds(skuIds);
+        List<Double> eachPrices = new ArrayList<>();
+        double sum = 0;
+        for (int i = 0; i < commits.size(); i++) {
+            double eachPrice = skus.get(i).getSkuPrice().doubleValue() * commits.get(i).getCommitCount();
+            eachPrices.add(eachPrice);
+            sum += eachPrice;
+        }
+        BigDecimal totalPrice = BigDecimal.valueOf(sum);
+
+        //得地址
+        Address address = addressMapper.selectById(addressId);
+
+        Order order = new Order();
+        order.setUserId(userId);
+        order.setOrderTime(new Date());
+        order.setTotalPrice(totalPrice);
+        order.setStatus(1);//已支付未发货
+        order.setAddress(address.getProvince() + address.getCity() + address.getDistrict() +
+                address.getZhen() + address.getDetail());
+        order.setName(address.getRecipientName());
+        order.setPhone(address.getRecipientPhone());
+        orderService.save(order);
+
+        //添订单详情
+        List<Integer> productIds = new ArrayList<>();
+        for (int i = 0; i < skus.size(); i++) {
+            productIds.add(skus.get(i).getProductId());
+        }
+        List<Product> products = productMapper.selectBatchIds(productIds);
+
+        List<OrderDetail> orderDetailList = new ArrayList<>();
+        for (int i = 0; i < commits.size(); i++)
+        {
+            OrderDetail orderDetail = new OrderDetail();
+            orderDetail.setOrderId(order.getOrderId());
+            orderDetail.setProductName(commits.get(i).getProductName());
+            orderDetail.setSkuId(commits.get(i).getSkuId());
+            orderDetail.setSkuName(skus.get(i).getSkuName());
+            orderDetail.setSkuImage(skus.get(i).getSkuImage());
+            orderDetail.setSkuPrice(skus.get(i).getSkuPrice());
+            orderDetail.setSkuQuantity(commits.get(i).getCommitCount());
+            orderDetailList.add(orderDetail);
+        }
+        orderDetailService.saveBatch(orderDetailList);
+        return Result.okResult("订单支付成功！");
+    }
+
+    @Override
+    public Result getOrderList(HttpServletRequest request) {
+        //取userId
+        long userId = -1;
+        try {
+            userId = JwtUtil.getUserId(request);
+            if (userId == -1) throw new RuntimeException();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        QueryWrapper<Order> orderQueryWrapper = new QueryWrapper<Order>();
+        orderQueryWrapper.eq("user_id", userId);
+        List<Map<String, Object>> orderList = orderMapper.selectMaps(orderQueryWrapper);
+
+        List<HashMap<String, Object>> res = new ArrayList<>();
+        for (Map<String, Object> order: orderList)
+        {
+            HashMap<String, Object> map = new LinkedHashMap<>();
+            map.put("orderId", order.get("orderId"));
+            map.put("orderTime", order.get("orderTime"));
+            map.put("totalPrice", order.get("totalPrice"));
+            map.put("status", order.get("status"));
+            res.add(map);
+        }
+        return Result.okResult(res);
+    }
+
+    @Override
+    public Result orderDelivery(List<Integer> orderId) {
+        List<Order> orders = orderMapper.selectBatchIds(orderId);
+        for (Order order : orders) {
+            if(order.getStatus() == 1)
+                order.setStatus(2);
+        }
+        orderService.updateBatchById(orders);
+        return Result.okResult("选中的已支付订单已通知发货！");
+    }
+
+
+
+
+
 }

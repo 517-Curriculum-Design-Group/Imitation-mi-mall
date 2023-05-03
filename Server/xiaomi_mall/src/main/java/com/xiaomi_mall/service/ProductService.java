@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.xiaomi_mall.config.Result;
 import com.xiaomi_mall.enity.Product;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 public interface ProductService extends IService<Product> {
@@ -20,6 +21,9 @@ public interface ProductService extends IService<Product> {
     Result modifyProductSku(Map<String, Object> map);
 
     Result getProductSku(Integer productId);
+
+    Result addSkuToCart(HttpServletRequest request, Integer sku_id);
+
 }
 
 
