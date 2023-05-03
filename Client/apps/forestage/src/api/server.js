@@ -1,4 +1,5 @@
 import axios from "axios";
+import { getSession } from "../utils/session";
 
 const inst = axios.create({
   baseURL: "/api",
@@ -8,6 +9,10 @@ const inst = axios.create({
 inst.interceptors.request.use(
   function (config) {
     // 在发送请求之前做些什么
+    const token = getSession("token");
+    if (token) {
+      config.headers.token = token;
+    }
     return config;
   },
   function (error) {

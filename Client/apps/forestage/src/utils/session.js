@@ -1,8 +1,8 @@
-const setSession = (key, value) => {
+export const setSession = (key, value) => {
   window.sessionStorage.setItem(key, value);
 };
 
-const getSession = (key) => {
+export const getSession = (key) => {
   return window.sessionStorage.getItem(key);
 };
 

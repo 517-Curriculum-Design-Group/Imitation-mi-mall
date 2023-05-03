@@ -2,7 +2,7 @@
   <div
     w="234px"
     h="300px"
-    class="flex flex-col text-center leading-[21px] card-shadow"
+    class="flex flex-col text-center leading-[21px] card-shadow inline-block"
   >
     <img :src="src" :alt="alt" class="object-cover aspect-square w-[160px]" />
     <h3 m="0px 10px 2px">{{ title }}</h3>
