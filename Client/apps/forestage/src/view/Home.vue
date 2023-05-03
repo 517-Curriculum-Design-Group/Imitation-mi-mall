@@ -1,5 +1,5 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <script>
-import HeadTop from '../components/HeadTop.vue'
 import CarouselMap from '../components/CarouselMap.vue'
 import SearchBox from '../components/SearchBox.vue';
 import OrderList from '../components/OrderList.vue';
@@ -7,7 +7,6 @@ import OrderList from '../components/OrderList.vue';
 export default{
   name:"Home",
   components:{
-    HeadTop,
     CarouselMap,
     SearchBox,
     OrderList,
@@ -17,7 +16,7 @@ export default{
 
 <template>
     <div>
-      <HeadTop></HeadTop>
+      
       <OrderList></OrderList>
       <CarouselMap></CarouselMap>
     </div>

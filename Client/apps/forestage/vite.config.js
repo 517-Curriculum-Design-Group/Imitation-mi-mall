@@ -12,12 +12,23 @@ function _resolve(dir) {
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  
   plugins: [
     vue(),
     Unocss({
       // 使用Unocss
-      presets: [presetUno(), presetAttributify(), presetIcons()],
+      presets: [
+        presetUno({
+          shortcuts: [{ "aspect-square": "aspect-ratio: 1 / 1" }],
+          theme: {
+            color: {
+              orangeColor: "var(--text-hover-color)",
+              cardDesc: "var(--text-cardDesc-color)",
+            },
+          },
+        }),
+        presetAttributify(),
+        presetIcons(),
+      ],
     }),
   ],
   resolve: {
