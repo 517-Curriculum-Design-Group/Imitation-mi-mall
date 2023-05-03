@@ -4,7 +4,7 @@ const props = defineProps(["src", "alt"]);
 </script>
 
 <template>
-  <div w="316px" h="170px" class="card-shadow overflow-hidden relative">
+  <div w="316px" h="170px" class="card-shadow overflow-hidden relative inline-block">
     <img :src="src" :alt="alt" w="100%" h="100%" class="object-cover" />
   </div>
 </template>
