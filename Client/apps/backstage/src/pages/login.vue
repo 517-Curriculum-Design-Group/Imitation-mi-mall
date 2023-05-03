@@ -16,8 +16,8 @@
             </div>
 
             <el-form ref="formRef" :rules="rules" :model="form" class="w-[250px]">
-                <el-form-item prop="username">
-                    <el-input v-model="form.username" placeholder="请输入用户名">
+                <el-form-item prop="userName">
+                    <el-input v-model="form.userName" placeholder="请输入用户名">
                         <template #prefix>
                             <el-icon><user /></el-icon>
                         </template>
@@ -47,12 +47,12 @@ import {useRouter} from 'vue-router'
 const router = useRouter()
 
 const form = reactive({
-    username:"",
+    userName:"",
     password:""
 })
 
 const rules ={
-    username:[
+    userName:[
         { 
             required: true, 
             message: '用户名不能为空', 
@@ -71,23 +71,29 @@ const rules ={
 const formRef = ref(null)
 const loading = ref(false)
 const onSubmit = () => {
-    router.push('/')
-    // formRef.value.validate((valid)=>{
-    //     if(!valid){
-    //         return false
-    //     }
-    //     loading.value = true
-    //     login(form.username,form.password)
-    //     .then(res=>{
-    //         console.log(res);
-    //     })
-    //     .catch(err=>{
-    //         ElNotification({
-    //         message: err.response.data.message ||"请求失败",
-    //         type: 'error',
-    //     })
-    //     })
-    // })
+    formRef.value.validate((valid)=>{
+        if(!valid){
+            return false
+        }
+        loading.value = true
+
+        login(form)
+        .then(res=>{
+            console.log(res);
+            ElNotification({
+            message: "err.response.message"||"请求成功",
+            type: 'sucess',
+        })
+            router.push("/")
+
+        })
+        .catch(err=>{
+            ElNotification({
+            message: "err.response.message "||"请求失败",
+            type: 'error',
+        })
+        })
+    })
 }
 
 // 监听回车事件
