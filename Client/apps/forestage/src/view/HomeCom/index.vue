@@ -8,7 +8,7 @@ import {
 
 const data = [
   {
-    src: "https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/d7d4be1a9e701e16de498f89b1865867.jpg?w=632&h=340",
+    src: "https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/0ef4ea18cb2d6ca963d39c2109460e02.jpg?w=632&h=340",
     alt: "广告1",
   },
   {
@@ -18,7 +18,7 @@ const data = [
   {
     src: "https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/0cf5e958bc88727b50c5c5fba7a8f47a.jpg?w=632&h=340",
     alt: "广告3",
-  },
+  }
 ];
 
 const getDetail = async () => {
@@ -49,21 +49,25 @@ const items = [
   },
   {
     name: "以旧换新",
-    icon:"i-mdi-clock-outline"
+    icon:"i-mdi-currency-usd-circle-outline"
   },
   {
     name: "话费充值",
-    icon:"i-mdi-clock-outline"
+    icon:"i-mdi-cellphone-iphone"
   },
 ]
 </script>
 
 <template>
-  {{}}
   <div class="flex flex-col items-center">
     <div class="flex mt-[12px] gap-x-4 justify-center align-item">
 
-      <div w="234px" h="170px" class="aside"></div>
+      <div w="234px" h="170px" class="flex flex-wrap aside cursor-pointer text-gray-300">
+        <span v-for="(item,index) in items" class="flex flex-col w-78px h-85px border-solid border-1 border-light-50 justify-center items-center hover:text-gray-200" :key="index">
+          <span :class="`${item.icon}`" class="h-24px w-24px" id="1"></span>
+          <span>{{ item.name }}</span>
+        </span>
+      </div>
 
       <template v-for="item in data" :key="item.src">
         <navCard :src="item.src" :alt="item.alt" />
