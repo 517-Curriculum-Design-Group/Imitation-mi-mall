@@ -69,7 +69,7 @@
 
 <script setup>
 import { ref, reactive, watch } from "vue";
-import { postLogin } from "@/api/path/UserController/index,js";
+import { postLogin } from "@/api/path/UserController/index";
 import { useRouter } from "vue-router";
 import utils from "@/utils";
 import { useNotification } from "naive-ui";
@@ -120,8 +120,6 @@ const login = async () => {
   if (!e && r) {
     utils.setSession("token", r.data.token);
     store.userid = r.data.userInfo.userId;
-    console.log(r.data);
-    console.log(store.userid);
     router.replace("/home");
     notify("success", "通知", "登录成功");
   }

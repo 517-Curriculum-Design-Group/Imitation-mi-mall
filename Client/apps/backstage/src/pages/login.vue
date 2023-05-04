@@ -16,8 +16,8 @@
             </div>
 
             <el-form ref="formRef" :rules="rules" :model="form" class="w-[250px]">
-                <el-form-item prop="username">
-                    <el-input v-model="form.username" placeholder="请输入用户名">
+                <el-form-item prop="userName">
+                    <el-input v-model="form.userName" placeholder="请输入用户名">
                         <template #prefix>
                             <el-icon><user /></el-icon>
                         </template>
@@ -43,16 +43,18 @@ import{ref,reactive} from 'vue'
 import{login} from '~/api/manager'
 import { ElNotification } from 'element-plus'
 import {useRouter} from 'vue-router'
+import { useCookies } from '@vueuse/integrations/useCookies'
+
 
 const router = useRouter()
 
 const form = reactive({
-    username:"",
+    userName:"",
     password:""
 })
 
 const rules ={
-    username:[
+    userName:[
         { 
             required: true, 
             message: '用户名不能为空', 
@@ -71,23 +73,34 @@ const rules ={
 const formRef = ref(null)
 const loading = ref(false)
 const onSubmit = () => {
-    router.push('/')
-    // formRef.value.validate((valid)=>{
-    //     if(!valid){
-    //         return false
-    //     }
-    //     loading.value = true
-    //     login(form.username,form.password)
-    //     .then(res=>{
-    //         console.log(res);
-    //     })
-    //     .catch(err=>{
-    //         ElNotification({
-    //         message: err.response.data.message ||"请求失败",
-    //         type: 'error',
-    //     })
-    //     })
-    // })
+    formRef.value.validate((valid)=>{
+        if(!valid){
+            return false
+        }
+        loading.value = true
+
+        login(form)
+        .then(res=>{
+            console.log(res);
+            ElNotification({
+            message: "登陆成功",
+            type: 'success',
+            duration: 3000
+        })
+
+            const cookie = useCookies()
+            cookie.set("admin-token",res.token)
+
+            router.push("/")
+
+        })
+        .catch(err=>{
+            ElNotification({
+            message: "请求失败",
+            type: 'error',
+        })
+        })
+    })
 }
 
 // 监听回车事件

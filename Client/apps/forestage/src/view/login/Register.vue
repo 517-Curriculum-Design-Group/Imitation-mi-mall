@@ -12,7 +12,7 @@
       <div class="input-wrapper">
         <a-input
           id="formUsername"
-          v-model:value="formState.username"
+          v-model:value="formState.userName"
           class="text-lg font-normal bg-gray-100 border-transparent"
           placeholder=" "
         />
@@ -24,7 +24,7 @@
       <div class="input-wrapper">
         <a-input
           id="formUsernum"
-          v-model:value="formState.phonenum"
+          v-model:value="formState.mobile"
           class="text-lg font-normal bg-gray-100 border-transparent"
           placeholder=" "
         />
@@ -77,12 +77,14 @@
 
 <script setup>
 import { ref, reactive, watch } from "vue";
+import { postRegister } from "@/api/path/UserController/index.js";
 
 const formState = reactive({
-  username: "",
+  userName: "",
+  nickname:"",
   password: "",
   confirmpsw: "",
-  phonenum: "",
+  mobile: "",
 });
 
 const Verify=ref(false)
@@ -114,9 +116,16 @@ function ChangeType(id1,id2) {
   }
 }
 
-function Verifypsw(){
-  if(formState.password == formState.confirmpsw){
+function Verifypsw() {
+  if (formState.password == formState.confirmpsw) {
     Verify.value = false;
+    delete formState.confirmpsw
+    formState.nickname = formState.userName
+    console.log(formState)
+    const register = async () => {
+      await postRegister(formState)
+    }
+    if(register) window.location.reload();
   }
   else Verify.value = true;
 }
