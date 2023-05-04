@@ -43,6 +43,8 @@ import{ref,reactive} from 'vue'
 import{login} from '~/api/manager'
 import { ElNotification } from 'element-plus'
 import {useRouter} from 'vue-router'
+import { useCookies } from '@vueuse/integrations/useCookies'
+
 
 const router = useRouter()
 
@@ -81,15 +83,20 @@ const onSubmit = () => {
         .then(res=>{
             console.log(res);
             ElNotification({
-            message: "err.response.message"||"请求成功",
-            type: 'sucess',
+            message: "登陆成功",
+            type: 'success',
+            duration: 3000
         })
+
+            const cookie = useCookies()
+            cookie.set("admin-token",res.token)
+
             router.push("/")
 
         })
         .catch(err=>{
             ElNotification({
-            message: "err.response.message "||"请求失败",
+            message: "请求失败",
             type: 'error',
         })
         })
