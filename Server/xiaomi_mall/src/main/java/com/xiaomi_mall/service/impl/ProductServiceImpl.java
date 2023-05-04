@@ -225,6 +225,18 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         if(row == 0)
             return Result.errorResult(806, "覆盖Product表中的旧SkuList失败，没有任意一行被修改");
 
+        //覆盖Product表中的旧least_price
+        double leastPrice = 0;
+        for(Map<String, Object> skuDetail : skuDetailList)
+        {
+            BigDecimal price = (BigDecimal)skuDetail.get("skuPrice");
+            leastPrice = Math.min(leastPrice, price.doubleValue());
+        }
+        if(leastPrice != 0)
+            productMapper.modifySkuList(productId, leastPrice + "元起");
+        else
+            productMapper.modifySkuList(productId, "");
+
         //修改/新增SKU，SKU即售卖的最小单元
         SqlSession sqlSession = sqlSessionFactory.openSession(ExecutorType.BATCH,false);
         SkuMapper skuMapperInSession = sqlSession.getMapper(SkuMapper.class);

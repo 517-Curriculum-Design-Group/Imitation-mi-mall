@@ -18,4 +18,6 @@ public interface UserService extends IService<User> {
     Result updateUserInfo(User user);
 
     Result getHome();
+
+    Result getUserHome();
 }

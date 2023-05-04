@@ -7,16 +7,11 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xiaomi_mall.config.Result;
 import com.xiaomi_mall.constants.SystemConstants;
-import com.xiaomi_mall.enity.Order;
-import com.xiaomi_mall.enity.Product;
-import com.xiaomi_mall.enity.Sku;
-import com.xiaomi_mall.enity.User;
+import com.xiaomi_mall.enity.*;
 import com.xiaomi_mall.enums.AppHttpCodeEnum;
 import com.xiaomi_mall.exception.SystemException;
-import com.xiaomi_mall.mapper.OrderMapper;
-import com.xiaomi_mall.mapper.ProductMapper;
-import com.xiaomi_mall.mapper.SkuMapper;
-import com.xiaomi_mall.mapper.UserMapper;
+import com.xiaomi_mall.mapper.*;
+import com.xiaomi_mall.service.CategoryService;
 import com.xiaomi_mall.service.OrderService;
 import com.xiaomi_mall.service.UserService;
 import com.xiaomi_mall.util.BeanCopyUtils;
@@ -47,6 +42,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private SkuMapper skuMapper;
     @Autowired
     private ProductMapper productMapper;
+
+    @Autowired
+    private CategoryService categoryService;
+    private CategoryMapper categoryMapper;
 
     /**
      * 普通用户注册
@@ -283,6 +282,96 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
         List<Sku> productStockLowList = skuMapper.selectList(skuWrapper);
         res.put("productStockLowCount", productStockLowList.size());
+
+        return Result.okResult(res);
+    }
+
+    @Override
+    public Result getUserHome() {
+        Map<String, Object> res = new LinkedHashMap<>();
+
+        //小米手机
+        //红米手机
+        //小米平板
+        //红米笔记本
+        //智能手环
+        int cates[] = {59, 60, 67, 70, 77};
+        String cateNames[] = {"小米手机", "红米手机", "小米平板", "红米笔记本", "智能手环"};
+        QueryWrapper<Product> productQueryWrapper = new QueryWrapper<Product>();
+        productQueryWrapper
+                .eq("del_flag", 0)
+                .eq("status", 1)
+                .and(wrapper->wrapper.eq("category_id", 59)
+                        .or().eq("category_id", 60)
+                        .or().eq("category_id", 67)
+                        .or().eq("category_id", 70)
+                        .or().eq("category_id", 77)
+                );
+        List<Product> products = productMapper.selectList(productQueryWrapper);
+        //System.out.println(products.size());
+
+        Map<String, Object> headerProducts = new LinkedHashMap<>();
+        for (int i = 0; i < cates.length; i++) {
+            List<Map<String, Object>> sameCategoryProducts = new ArrayList<Map<String, Object>>();
+            for (int j = 0; j < products.size(); j++) {
+                if(products.get(j).getCategoryId() != cates[i]) continue;
+                Map<String, Object> singleProduct = new LinkedHashMap<>();
+                singleProduct.put("product_id", products.get(j).getProductId());
+                singleProduct.put("product_name", products.get(j).getProductName());
+                singleProduct.put("product_pic", products.get(j).getProductPic());
+                singleProduct.put("product_price", products.get(j).getLeastPrice());
+                //singleProduct.put("product_price", products.get(j).getProductPic());
+                sameCategoryProducts.add(singleProduct);
+            }
+            headerProducts.put(cateNames[i], sameCategoryProducts);
+        }
+        res.put("headerProducts", headerProducts);
+
+
+        Map<String, Object> leftCategories = new LinkedHashMap<>();
+        Map<String, Object> lowerProducts = new LinkedHashMap<>();
+        List<Category> categories = categoryService.list();
+
+        for (int i = 0; i < categories.size(); i++) {
+            long parentId = categories.get(i).getParentId();
+            if (parentId != -1) continue;
+
+            List<Map<String, Object>> sameParentCategories = new ArrayList<>();
+            List<Map<String, Object>> eachCategoryProduct = new ArrayList<>();
+            int cateId = categories.get(i).getCategoryId();
+            List<Category> filterList = categories.stream()
+                    .filter(category -> category.getParentId() == cateId)
+                    .collect(Collectors.toList());
+            //System.out.println(filterList.size());
+            //每一子种类入列
+            for (Category category : filterList) {
+                Map<String, Object> singleCategory = new LinkedHashMap<>();
+                singleCategory.put("category_id", category.getCategoryId());
+                singleCategory.put("category_name", category.getCategoryName());
+                //singleCategory.put("category_pic", category.getCategoryId());
+                sameParentCategories.add(singleCategory);
+
+                Map<String, Object> eachCategory = new LinkedHashMap<>();
+                eachCategory.put("category_name", category.getCategoryName());
+                List<Product> tempProducts = new ArrayList<>();
+
+                //找子类下的所有商品，最多填满八个
+                QueryWrapper<Product> productQueryWrapper1 = new QueryWrapper<>();
+                productQueryWrapper1.eq("category_id", category.getCategoryId());
+                List<Product> tempProductList = productMapper.selectList(productQueryWrapper1);
+                for (Product product:tempProductList) {
+                    if(tempProducts.size() >= 8) break;
+                    tempProducts.add(product);
+                }
+                eachCategory.put("products", tempProducts);
+                eachCategoryProduct.add(eachCategory);
+
+            }
+            leftCategories.put(categories.get(i).getCategoryName(), sameParentCategories);
+            lowerProducts.put(categories.get(i).getCategoryName(), eachCategoryProduct);
+        }
+        res.put("leftCategories", leftCategories);
+        res.put("lowerProducts", lowerProducts);
 
         return Result.okResult(res);
     }
