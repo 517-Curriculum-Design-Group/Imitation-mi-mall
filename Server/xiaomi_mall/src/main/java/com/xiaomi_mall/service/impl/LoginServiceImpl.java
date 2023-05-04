@@ -3,6 +3,7 @@ package com.xiaomi_mall.service.impl;
 import com.xiaomi_mall.config.Result;
 import com.xiaomi_mall.enity.User;
 import com.xiaomi_mall.enity.authentication.LoginUser;
+import com.xiaomi_mall.mapper.UserMapper;
 import com.xiaomi_mall.service.LoginService;
 import com.xiaomi_mall.util.BeanCopyUtils;
 import com.xiaomi_mall.util.JwtUtil;
@@ -27,6 +28,10 @@ public class LoginServiceImpl implements LoginService {
     private AuthenticationManager authenticationManager;
     @Autowired
     private RedisCache redisCache;
+
+    @Autowired
+    private UserMapper userMapper;
+
     @Override
     public Result login(User user) {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user.getUserName(),user.getPassword());
@@ -72,6 +77,7 @@ public class LoginServiceImpl implements LoginService {
         //把token封装 返回
         Map<String,String> map = new HashMap<>();
         map.put("token",jwt);
+        map.put("adminType", userMapper.selectById(userId).getUserType());
         return Result.okResult(map);
     }
 
