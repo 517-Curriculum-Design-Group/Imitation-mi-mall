@@ -1,6 +1,7 @@
 <script setup>
 import { ref, reactive } from "vue";
 import { userStore } from "@/stores/user.js";
+import { postLogout } from "@/api/path/UserController/index.js";
 
 const Userstore = userStore();
 const { userid } = Userstore;
@@ -10,6 +11,12 @@ const goods = [];
 const totalprice = goods.reduce((pre, now) => {
   return pre + now.count * now.price;
 }, 0);
+//登出接口
+const logout = async () =>{
+   const isLogout = await postLogout(userid)
+   Userstore.userid = null
+   if(isLogout) window.location.reload(); 
+}
 </script>
 
 <template>
@@ -66,7 +73,7 @@ const totalprice = goods.reduce((pre, now) => {
       <span class="user-info w-full h-2rem cursor-pointer">个人中心</span>
       <span class="user-info w-full h-2rem cursor-pointer">晒单评价</span>
       <span class="user-info w-full h-2rem cursor-pointer">我的喜欢</span>
-      <span class="user-info w-full h-2rem cursor-pointer">退出登录</span>
+      <span class="user-info w-full h-2rem cursor-pointer" @click="logout">退出登录</span>
     </div>
   </div>
 </template>
