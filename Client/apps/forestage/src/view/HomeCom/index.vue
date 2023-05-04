@@ -29,13 +29,42 @@ const getDetail = async () => {
 onMounted(() => {
     getDetail()
 });
+
+const items = [
+  {
+    name: "保障服务",
+    icon:"i-mdi-clock-outline"
+  },
+  {
+    name: "企业团购",
+    icon:"i-mdi-city-variant-outline"
+  },
+  {
+    name: "F码通道",
+    icon:"i-mdi-alpha-f-circle-outline"
+  },
+  {
+    name: "米粉卡",
+    icon:"i-mdi-sim-outline"
+  },
+  {
+    name: "以旧换新",
+    icon:"i-mdi-clock-outline"
+  },
+  {
+    name: "话费充值",
+    icon:"i-mdi-clock-outline"
+  },
+]
 </script>
 
 <template>
   {{}}
   <div class="flex flex-col items-center">
     <div class="flex mt-[12px] gap-x-4 justify-center align-item">
-      <div w="234px" h="170px" class="bg-red-500"></div>
+
+      <div w="234px" h="170px" class="aside"></div>
+
       <template v-for="item in data" :key="item.src">
         <navCard :src="item.src" :alt="item.alt" />
       </template>
@@ -49,3 +78,9 @@ onMounted(() => {
     </div>
   </div>
 </template>
+
+<style scoped lang="scss">
+.aside{
+  background-color: #5f5750;
+}
+</style>
