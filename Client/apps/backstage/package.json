@@ -17,6 +17,7 @@
     "vite-plugin-windicss": "^1.8.10",
     "vue": "^3.2.47",
     "vue-router": "4",
+    "vuex": "^4.0.2",
     "windicss": "^3.5.6"
   },
   "devDependencies": {

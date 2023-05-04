@@ -41,13 +41,13 @@
 <script setup>
 import{ref,reactive} from 'vue'
 import{login} from '~/api/manager'
-import { ElNotification } from 'element-plus'
+import { toast } from '~/composables/util'
 import {useRouter} from 'vue-router'
-import { useCookies } from '@vueuse/integrations/useCookies'
-
+import { setToken } from '~/composables/auth'
+import {useStore} from 'vuex'
 
 const router = useRouter()
-
+ const store = useStore()
 const form = reactive({
     userName:"",
     password:""
@@ -70,6 +70,7 @@ const rules ={
     ]
 }
 
+
 const formRef = ref(null)
 const loading = ref(false)
 const onSubmit = () => {
@@ -80,25 +81,13 @@ const onSubmit = () => {
         loading.value = true
 
         login(form)
-        .then(res=>{
+        .then((res)=>{
             console.log(res);
-            ElNotification({
-            message: "登陆成功",
-            type: 'success',
-            duration: 3000
-        })
-
-            const cookie = useCookies()
-            cookie.set("admin-token",res.token)
-
+            store.commit("SET_USERTYPE",res.data.adminType);
+            console.log(store.state);
+            toast("登陆成功")
+            setToken(res.data.token)
             router.push("/")
-
-        })
-        .catch(err=>{
-            ElNotification({
-            message: "请求失败",
-            type: 'error',
-        })
         })
     })
 }
