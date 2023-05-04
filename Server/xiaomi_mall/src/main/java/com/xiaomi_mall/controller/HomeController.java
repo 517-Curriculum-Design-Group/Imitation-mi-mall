@@ -2,6 +2,7 @@ package com.xiaomi_mall.controller;
 
 import com.xiaomi_mall.config.Result;
 import com.xiaomi_mall.service.CategoryService;
+import com.xiaomi_mall.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +16,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class HomeController {
     @Autowired
     private CategoryService categoryService;
-
+    @Autowired
+    private UserService userService;
+    @ApiOperation("获取主页信息")
+    @GetMapping("/getUserHome")
+    public Result getUserHome() {
+        return userService.getUserHome();
+    }
     @ApiOperation("查询分类接口")
     @GetMapping("/getCategoryList")
     public Result getCategoryList() {

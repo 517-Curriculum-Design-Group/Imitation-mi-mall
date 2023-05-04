@@ -33,6 +33,9 @@ public class Product implements Serializable {
     @ApiModelProperty("商品图片")
     private String productPic;
 
+    @ApiModelProperty("起售价")
+    private String leastPrice;
+
     @ApiModelProperty("SKU列表")
     private String skuList;
 
