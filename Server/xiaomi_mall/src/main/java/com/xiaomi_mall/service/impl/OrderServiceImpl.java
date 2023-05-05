@@ -8,6 +8,7 @@ import com.xiaomi_mall.enity.*;
 import com.xiaomi_mall.mapper.*;
 import com.xiaomi_mall.service.OrderDetailService;
 import com.xiaomi_mall.service.OrderService;
+import com.xiaomi_mall.service.SkuService;
 import com.xiaomi_mall.service.UserService;
 import com.xiaomi_mall.util.JwtUtil;
 import com.xiaomi_mall.vo.SkuValueDetailVo;
@@ -18,6 +19,8 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.util.*;
+
+import static com.xiaomi_mall.enums.AppHttpCodeEnum.SKU_STOCK_LIMIT;
 
 @Service
 public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements OrderService {
@@ -35,6 +38,8 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     private OrderService orderService;
     @Autowired
     private SkuMapper skuMapper;
+    @Autowired
+    private SkuService skuService;
     @Autowired
     private ProductMapper productMapper;
     @Autowired
@@ -145,7 +150,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
             throw new RuntimeException(e);
         }
 
-        //求单价*数量+总价
+        //求单价*数量+总价 + //库存减少
         List<Integer> skuIds = new ArrayList<>();
         for (OrderCommit commit:commits) {
             skuIds.add(commit.getSkuId());
@@ -158,12 +163,19 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
             double eachPrice = skus.get(i).getSkuPrice().doubleValue() * commits.get(i).getCommitCount();
             eachPrices.add(eachPrice);
             sum += eachPrice;
+            //库存减少
+            int restStock = skus.get(i).getSkuStock() - commits.get(i).getCommitCount();
+            if(restStock < 0)
+                return Result.errorResult(SKU_STOCK_LIMIT);
+            skus.get(i).setSkuStock(restStock);
         }
         BigDecimal totalPrice = BigDecimal.valueOf(sum);
 
+        //提交减少后的库存
+        skuService.updateBatchById(skus);
+
         //得地址
         Address address = addressMapper.selectById(addressId);
-
         Order order = new Order();
         order.setUserId(userId);
         order.setOrderTime(new Date());
@@ -176,12 +188,6 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         orderService.save(order);
 
         //添订单详情
-        List<Integer> productIds = new ArrayList<>();
-        for (int i = 0; i < skus.size(); i++) {
-            productIds.add(skus.get(i).getProductId());
-        }
-        List<Product> products = productMapper.selectBatchIds(productIds);
-
         List<OrderDetail> orderDetailList = new ArrayList<>();
         for (int i = 0; i < commits.size(); i++)
         {

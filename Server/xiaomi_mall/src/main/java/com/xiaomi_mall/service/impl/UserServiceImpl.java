@@ -45,7 +45,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Autowired
     private CategoryService categoryService;
-    private CategoryMapper categoryMapper;
 
     /**
      * 普通用户注册
@@ -208,7 +207,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
         //订单总量
         QueryWrapper<Order> orderSumWrapper = Wrappers.query();
-        orderSumWrapper.eq("status", "3");
         int orderSum = orderMapper.selectCount(orderSumWrapper);
         res.put("orderSum", orderSum);
 
@@ -216,8 +214,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         QueryWrapper<Order> newOrderCountWrapper = Wrappers.query();
         newOrderCountWrapper
                 .ge("order_time", startTime)
-                .le("order_time", endTime)
-                .eq("status", "3");
+                .le("order_time", endTime);
         int newOrderCount = orderMapper.selectCount(newOrderCountWrapper);
         res.put("newOrderCount", newOrderCount);
 
