@@ -63,7 +63,7 @@ const items = [
     <div class="flex mt-[12px] gap-x-4 justify-center align-item">
 
       <div w="234px" h="170px" class="flex flex-wrap aside cursor-pointer text-gray-300">
-        <span v-for="(item,index) in items" class="flex flex-col w-78px h-85px border-solid border-1 border-light-50 justify-center items-center hover:text-gray-200" :key="index">
+        <span v-for="(item,index) in items" class="things relative flex flex-col w-[78px] h-[85px] justify-center items-center hover:text-gray-200" :key="index">
           <span :class="`${item.icon}`" class="h-24px w-24px" id="1"></span>
           <span>{{ item.name }}</span>
         </span>
@@ -86,5 +86,26 @@ const items = [
 <style scoped lang="scss">
 .aside{
   background-color: #5f5750;
+}
+
+.things{
+  &::before{
+    position: absolute;
+    height: 60px;
+    content: "";
+    border: 1px solid white;
+    left: 1px;
+    transform: scaleX(0.05);
+  }
+
+  &::after{
+    position: absolute;
+    height: 60px;
+    content: "";
+    border: 1px solid #b0b0b0;
+    top:-28px;
+    transform: rotate(90deg) scaleX(0.05);
+
+  }
 }
 </style>
