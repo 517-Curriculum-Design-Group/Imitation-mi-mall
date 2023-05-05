@@ -123,9 +123,6 @@ public class SkuAttributeServiceImpl extends ServiceImpl<SkuAttributeMapper, Sku
         if(attribute_list == null || attribute_list.isEmpty())
             return Result.errorResult(700, "无该规格");
 
-        if(attribute_list.get(0).getStatus() == 1)
-            return Result.errorResult(800, "该规格已被删除");
-
         if(skuAttribute_valueDto.getAttributename() == null && skuAttribute_valueDto.getAttributename().equals(""))
             return Result.errorResult(701, "传入字符串为空");
 
