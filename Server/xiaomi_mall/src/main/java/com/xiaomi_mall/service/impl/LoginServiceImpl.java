@@ -75,9 +75,9 @@ public class LoginServiceImpl implements LoginService {
         //authenticate存入redis
         redisCache.setCacheObject("login:"+userId,loginUser);
         //把token封装 返回
-        Map<String,String> map = new HashMap<>();
+        Map<String,Object> map = new HashMap<>();
         map.put("token",jwt);
-        map.put("adminType", userMapper.selectById(userId).getUserType());
+        map.put("user", userMapper.selectById(userId));
         return Result.okResult(map);
     }
 

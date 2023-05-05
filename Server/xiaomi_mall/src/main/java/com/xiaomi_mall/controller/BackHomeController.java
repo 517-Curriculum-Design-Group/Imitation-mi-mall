@@ -21,7 +21,7 @@ public class BackHomeController
 
 
     @PreAuthorize("hasAnyAuthority('超级管理员', '普通管理员')")
-    @ApiOperation("用户列表接口")
+    @ApiOperation("后台主页接口")
     @GetMapping("/getHome")
     public Result getHome()
     {
