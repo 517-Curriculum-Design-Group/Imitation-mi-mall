@@ -12,7 +12,7 @@
                     </template>
                     <!-- card body -->
                     <span class="text-3xl font-bond text-gray-500">
-                        {{ datas.userSum }}
+                        <CountTo :value="datas.userSum" />
                     </span>
                 </el-card>
                 
@@ -29,7 +29,7 @@
                     </template>
                     <!-- card body -->
                     <span class="text-3xl font-bond text-gray-500">
-                        {{ datas.newUserCount }}
+                        <CountTo :value="datas.newUserCount " />
                     </span>
                 </el-card>
                 </el-col>
@@ -44,7 +44,7 @@
                     </template>
                     <!-- card body -->
                     <span class="text-3xl font-bond text-gray-500">
-                        {{ datas.orderSum }}
+                        <CountTo :value="datas.orderSum" />
                     </span>
                 </el-card>
             </el-col>
@@ -59,7 +59,7 @@
                     </template>
                     <!-- card body -->
                     <span class="text-3xl font-bond text-gray-500">
-                        {{ datas.newOrderCount }}
+                        <CountTo :value="datas.newOrderCount" /> 
                     </span>
                 </el-card>
             </el-col>
@@ -71,7 +71,7 @@
 <script setup>
 import {home} from "~/api/manager.js"
 import{ref} from 'vue'
-
+import CountTo from "~/components/CountTo.vue";
 const datas = ref([])
 home()
 .then(res=>{

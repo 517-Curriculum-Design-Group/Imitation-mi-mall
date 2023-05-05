@@ -69,11 +69,11 @@ const logout = async () =>{
       {{ userid }}
       <span class="i-mdi-chevron-down ml-4px w-1.2rem h-1.2rem"></span>
     </div>
-    <div class="user-name flex absolute text-xs w-7rem shadow-lg z-300">
-      <span class="user-info w-full h-2rem cursor-pointer">个人中心</span>
-      <span class="user-info w-full h-2rem cursor-pointer">晒单评价</span>
-      <span class="user-info w-full h-2rem cursor-pointer">我的喜欢</span>
-      <span class="user-info w-full h-2rem cursor-pointer" @click="logout">退出登录</span>
+    <div class="user-name flex absolute text-xs w-[110px] shadow-lg z-300">
+      <span class="user-info w-full h-[30px] cursor-pointer">个人中心</span>
+      <span class="user-info w-full h-[30px] cursor-pointer">晒单评价</span>
+      <span class="user-info w-full h-[30px] cursor-pointer">我的喜欢</span>
+      <span class="user-info w-full h-[30px] cursor-pointer" @click="logout">退出登录</span>
     </div>
   </div>
 </template>
@@ -163,8 +163,8 @@ const logout = async () =>{
   flex-direction: column;
   overflow: hidden;
   top: 40px;
-  right: 9.5rem;
-  width: 20%;
+  right: 140px;
+  width: 316px;
   height: 0;
   min-height: 0;
   z-index: 300;
@@ -174,7 +174,7 @@ const logout = async () =>{
 
 .cart:hover + .cartdetail,
 .cartdetail:hover {
-  min-height: 5.5rem;
+  min-height: 100px;
   height: fit-content;
   /* max-height: fit-content; */
 }
@@ -221,24 +221,26 @@ const logout = async () =>{
 
   &:hover + .user-name {
     visibility: visible;
-    height: 8rem;
+    height: 164px;
   }
 }
 
 .user-name {
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
   flex-direction: column;
   top: 40px;
-  right: 26.3rem;
+  right: 410px;
   visibility: hidden;
   height: 0;
+  padding:7px 0px;
   overflow: hidden;
+  background-color: white;
   transition: all 250ms linear;
 
   &:hover {
     visibility: visible;
-    height: 8rem;
+    height: 164px;
   }
 }
 
