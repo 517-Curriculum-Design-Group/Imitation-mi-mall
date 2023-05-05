@@ -11,6 +11,8 @@ const store = createStore({
             state.user = user
         }
     }
-  })
+    }
+
+)
 
   export default store

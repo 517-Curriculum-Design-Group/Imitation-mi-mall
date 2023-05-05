@@ -10,7 +10,7 @@ const service = axios.create({
 service.interceptors.request.use(function (config) {
     // 在发送请求之前做些什么
 
-    const cookie = useCookies()
+
     const token = getToken()
     if(token){
       config.headers["token"] = token 
@@ -26,10 +26,10 @@ service.interceptors.request.use(function (config) {
 service.interceptors.response.use(function (response) {
     // 2xx 范围内的状态码都会触发该函数。
     // 对响应数据做点什么
-    return response.data;
+    return response.data.data;
   }, function (error) {
     // 超出 2xx 范围的状态码都会触发该函数。
-    toast(error.response.data.message||"操作失败","error")
+    toast(error.response.msg||"操作失败","error")
     // 对响应错误做点什么
     return Promise.reject(error);
   });

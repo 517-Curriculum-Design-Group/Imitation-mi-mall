@@ -18,3 +18,11 @@ export function login({
     )
 
 }
+
+export function home(){
+    return axios.get('/getHome')
+}
+
+export function logout(){
+    return axios.post('/admin/logout')
+}

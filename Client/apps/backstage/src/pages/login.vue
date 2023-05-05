@@ -1,12 +1,12 @@
 <template>
     <el-row class="min-h-screen bg-sky-500">
         <!---左半边--->
-        <el-col :lg="16" md="12" class="flex items-center justify-center flex-col" > 
+        <el-col :lg="16" :md="12" class="flex items-center justify-center flex-col" > 
             <div class="font-bold text-4xl text-light-50">仿小米商场后台</div>
         </el-col>
 
         <!---右半边--->
-        <el-col :lg="8" md="12" class="bg-light-50 flex items-center justify-center flex-col">
+        <el-col :lg="8" :md="12" class="bg-light-50 flex items-center justify-center flex-col">
             <h2 class="font-bold text-3xl text-gray-800">登  录</h2>
 
             <div class="flex items-center justify-center my-5 text-gray-300 space-x-2">
@@ -39,15 +39,14 @@
 </template>
 
 <script setup>
-import{ref,reactive} from 'vue'
+import{ref,reactive,onMounted,onBeforeUnmount} from 'vue'
 import{login} from '~/api/manager'
 import { toast } from '~/composables/util'
 import {useRouter} from 'vue-router'
-import { setToken } from '~/composables/auth'
-import {useStore} from 'vuex'
+import { setToken,setType} from '~/composables/auth'
+
 
 const router = useRouter()
- const store = useStore()
 const form = reactive({
     userName:"",
     password:""
@@ -83,12 +82,16 @@ const onSubmit = () => {
         login(form)
         .then((res)=>{
             console.log(res);
-            store.commit("SET_USERTYPE",res.data.adminType);
-            console.log(store.state);
             toast("登陆成功")
-            setToken(res.data.token)
+ 
+            setToken(res.token)
+            setType(res.adminType)
+
             router.push("/")
-        })
+        }).finally(()=>{
+            loading.value = false
+        }
+        )
     })
 }
 
@@ -96,5 +99,13 @@ const onSubmit = () => {
 function onKeyUp(e){
     if(e.key == "Enter") onSubmit()
 }
+
+onMounted(()=>{
+    document.addEventListener("keyup",onKeyUp)
+})
+// 移除键盘监听
+onBeforeUnmount(()=>{
+    document.removeEventListener("keyup",onKeyUp)
+})
 
 </script>
