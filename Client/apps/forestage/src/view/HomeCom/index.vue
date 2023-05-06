@@ -1,10 +1,5 @@
 <script setup>
 import navCard from "@/components/HomeIndex/navCard.vue";
-import { onMounted } from "vue";
-import {
-  getCategoryList,
-  getCateProduct,
-} from "@/api/path/HomeController/index";
 
 const data = [
   {
@@ -18,52 +13,50 @@ const data = [
   {
     src: "https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/0cf5e958bc88727b50c5c5fba7a8f47a.jpg?w=632&h=340",
     alt: "广告3",
-  }
+  },
 ];
-
-const getDetail = async () => {
-  const [e, r] = await getCategoryList();
-  console.log(e, r);
-};
-
-onMounted(() => {
-    getDetail()
-});
 
 const items = [
   {
     name: "保障服务",
-    icon:"i-mdi-clock-outline"
+    icon: "i-mdi-clock-outline",
   },
   {
     name: "企业团购",
-    icon:"i-mdi-city-variant-outline"
+    icon: "i-mdi-city-variant-outline",
   },
   {
     name: "F码通道",
-    icon:"i-mdi-alpha-f-circle-outline"
+    icon: "i-mdi-alpha-f-circle-outline",
   },
   {
     name: "米粉卡",
-    icon:"i-mdi-sim-outline"
+    icon: "i-mdi-sim-outline",
   },
   {
     name: "以旧换新",
-    icon:"i-mdi-currency-usd-circle-outline"
+    icon: "i-mdi-currency-usd-circle-outline",
   },
   {
     name: "话费充值",
-    icon:"i-mdi-cellphone-iphone"
+    icon: "i-mdi-cellphone-iphone",
   },
-]
+];
 </script>
 
 <template>
   <div class="flex flex-col items-center">
     <div class="flex mt-[12px] gap-x-4 justify-center align-item">
-
-      <div w="234px" h="170px" class="flex flex-wrap aside cursor-pointer text-gray-300">
-        <span v-for="(item,index) in items" class="things relative flex flex-col w-[78px] h-[85px] justify-center items-center hover:text-gray-200" :key="index">
+      <div
+        w="234px"
+        h="170px"
+        class="flex flex-wrap aside cursor-pointer text-gray-300"
+      >
+        <span
+          v-for="(item, index) in items"
+          class="things relative flex flex-col w-[78px] h-[85px] justify-center items-center hover:text-gray-200"
+          :key="index"
+        >
           <span :class="`${item.icon}`" class="h-24px w-24px" id="1"></span>
           <span>{{ item.name }}</span>
         </span>
@@ -84,12 +77,12 @@ const items = [
 </template>
 
 <style scoped lang="scss">
-.aside{
+.aside {
   background-color: #5f5750;
 }
 
-.things{
-  &::before{
+.things {
+  &::before {
     position: absolute;
     height: 60px;
     content: "";
@@ -98,14 +91,13 @@ const items = [
     transform: scaleX(0.05);
   }
 
-  &::after{
+  &::after {
     position: absolute;
     height: 60px;
     content: "";
     border: 1px solid #b0b0b0;
-    top:-28px;
+    top: -28px;
     transform: rotate(90deg) scaleX(0.05);
-
   }
 }
 </style>

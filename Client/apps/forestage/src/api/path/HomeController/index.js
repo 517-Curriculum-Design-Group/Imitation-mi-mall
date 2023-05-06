@@ -8,7 +8,12 @@ export function getCateProduct() {
   return Get("/getCateProduct");
 }
 
+export function getUserHome() {
+  return Get("/getUserHome");
+}
+
 export const userApi = {
   getCategoryList,
   getCateProduct,
+  getUserHome,
 };
