@@ -21,22 +21,18 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="flex items-center justify-between w-[1226px] h-[100px] m-auto">
+  <div class="flex items-center w-[1226px] h-[100px] m-auto">
     <img class="w-[56px] h-[56px]" src="../assets/xiaomilogo.svg" />
-    <div class="flex gap-x-4 pl-[20px] text-[16px] justify-center items-center">
+    <div class="flex ml-[160px] gap-x-4 pl-[20px] text-[16px] justify-center items-center">
       <template v-for="item in titles" :key="item">
         <nav class="nav-titile w-[100px] h-[88px] cursor-pointer">
           {{ item }}
         </nav>
       </template>
-      <div
-        class="flex items-center justify-between w-[1226px] h-[100px] m-auto"
-      >
-        <img class="w-[56px] h-[56px]" src="../assets/xiaomilogo.svg" />
-        <div class="flex w-[296.6px] h-[49.6px] container">
+        <div class="flex w-[296.6px] h-[49.6px] container ml-[120px]">
           <n-input
-            class="leading-[49.6px] search"
             v-model:value="value"
+            class="leading-[49.6px] search"
             style="
               --n-border-hover: 1px solid var(--button-background-color);
               --n-border-focus: 1px solid var(--button-background-color);
@@ -52,7 +48,6 @@ onMounted(() => {
           >
             <span class="i-mdi-magnify w-[24px] h-[24px]"></span>
           </n-button>
-        </div>
       </div>
     </div>
   </div>
