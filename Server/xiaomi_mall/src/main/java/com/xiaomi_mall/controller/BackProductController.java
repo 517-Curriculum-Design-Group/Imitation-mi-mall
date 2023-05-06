@@ -124,9 +124,9 @@ public class BackProductController {
     }
 
     @PreAuthorize("hasAnyAuthority('普通管理员', '超级管理员')")
-    @ApiOperation("删除Attribute列表接口")
-    @DeleteMapping("/deleteAttributeList")
-    public Result deleteAttributeList(@RequestBody Integer attributeId) {
+    @ApiOperation("删除Attribute接口")
+    @DeleteMapping("/deleteAttribute")
+    public Result deleteAttribute(@RequestParam Integer attributeId) {
         skuAttributeService.removeById(attributeId);
         List<Integer> attributeValueId = new ArrayList<>();
         for (SkuAttributeValue value: skuAttributeValueService.list()) {

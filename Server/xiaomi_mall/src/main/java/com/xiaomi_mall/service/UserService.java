@@ -19,5 +19,10 @@ public interface UserService extends IService<User> {
 
     Result getHome();
 
-    Result getUserHome();
+
+    Result getHeaderProducts();
+
+    Result getLeftCategories();
+
+    Result getLowerProducts();
 }
