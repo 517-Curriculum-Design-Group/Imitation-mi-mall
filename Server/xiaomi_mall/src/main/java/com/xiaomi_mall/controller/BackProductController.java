@@ -4,9 +4,11 @@ import com.xiaomi_mall.config.Result;
 import com.xiaomi_mall.dto.SkuAttribute_ValueDto;
 import com.xiaomi_mall.enity.Category;
 import com.xiaomi_mall.enity.Product;
+import com.xiaomi_mall.enity.SkuAttributeValue;
 import com.xiaomi_mall.service.CategoryService;
 import com.xiaomi_mall.service.ProductService;
 import com.xiaomi_mall.service.SkuAttributeService;
+import com.xiaomi_mall.service.SkuAttributeValueService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +29,8 @@ public class BackProductController {
     private CategoryService categoryService;
     @Autowired
     private SkuAttributeService skuAttributeService;
+    @Autowired
+    private SkuAttributeValueService skuAttributeValueService;
 
     /**
      * 后台商品管理
@@ -121,8 +125,8 @@ public class BackProductController {
     @PreAuthorize("hasAnyAuthority('普通管理员', '超级管理员')")
     @ApiOperation("删除规格列表接口")
     @DeleteMapping("/deleteSkuList")
-    public Result deleteSkuList(@RequestBody List<Integer> attributeId) {
-        skuAttributeService.removeByIds(attributeId);
+    public Result deleteSkuList(@RequestBody List<Integer> attributeValueId) {
+        skuAttributeValueService.removeByIds(attributeValueId);
         return Result.okResult();
     }
 
