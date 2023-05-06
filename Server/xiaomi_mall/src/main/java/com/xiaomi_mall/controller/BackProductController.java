@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -123,8 +124,22 @@ public class BackProductController {
     }
 
     @PreAuthorize("hasAnyAuthority('普通管理员', '超级管理员')")
-    @ApiOperation("删除规格列表接口")
-    @DeleteMapping("/deleteSkuList")
+    @ApiOperation("删除Attribute列表接口")
+    @DeleteMapping("/deleteAttributeList")
+    public Result deleteAttributeList(@RequestBody Integer attributeId) {
+        skuAttributeService.removeById(attributeId);
+        List<Integer> attributeValueId = new ArrayList<>();
+        for (SkuAttributeValue value: skuAttributeValueService.list()) {
+            if (value.getAttributeId() == attributeId)
+                attributeValueId.add(value.getValueId());
+        }
+        skuAttributeValueService.removeByIds(attributeValueId);
+        return Result.okResult();
+    }
+
+    @PreAuthorize("hasAnyAuthority('普通管理员', '超级管理员')")
+    @ApiOperation("删除AttributeValue列表接口")
+    @DeleteMapping("/deleteAttributeValueList")
     public Result deleteSkuList(@RequestBody List<Integer> attributeValueId) {
         skuAttributeValueService.removeByIds(attributeValueId);
         return Result.okResult();
