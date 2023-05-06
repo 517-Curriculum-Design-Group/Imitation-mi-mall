@@ -51,20 +51,21 @@ public class SkuAttributeServiceImpl extends ServiceImpl<SkuAttributeMapper, Sku
             map.put("attributeName", attributeName);
             map.put("attributeId", attributeId);
 
-            List<String> values = new ArrayList<>();
-            List<Integer> valueIds = new ArrayList<>();
+
+            List<Map<String, Object>> values = new ArrayList<>();
             for (int j = 0; j < skuAttributeValueList.size(); j++)
             {
+                Map<String, Object> map1 = new LinkedHashMap<>();
                 Integer subId = skuAttributeValueList.get(j).getAttributeId();
                 String valueName = skuAttributeValueList.get(j).getValueName();
                 if (Objects.equals(subId, attributeId))
                 {
-                    values.add(valueName);
-                    valueIds.add(skuAttributeValueList.get(j).getValueId());
+                    map1.put("valueName", valueName);
+                    map1.put("valueIds", skuAttributeValueList.get(j).getValueId());
+                    values.add(map1);
                 }
             }
             map.put("values", values);
-            map.put("valueIds", valueIds);
             res.add(map);
         }
 
