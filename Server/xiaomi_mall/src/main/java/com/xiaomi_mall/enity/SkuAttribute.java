@@ -25,9 +25,6 @@ public class SkuAttribute implements Serializable {
     @ApiModelProperty("key名称")
     private String attributeName;
 
-    @ApiModelProperty("状态")
-    private int status;
-
     @ApiModelProperty("逻辑删除符")
     private int delFlag;
 

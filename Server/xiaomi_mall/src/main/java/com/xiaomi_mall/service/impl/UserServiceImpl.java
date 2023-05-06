@@ -220,7 +220,37 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
         //过去一个月中，每天的订单情况
         List<Map<String, Object>> statsList = orderMapper.getOrderCountEachDay();
-        res.put("orderStatsList", statsList);
+        List<String> XList = new ArrayList<>();
+        List<Long> YList = new ArrayList<>();
+
+        SimpleDateFormat df = new SimpleDateFormat("MM-dd");
+        Date date = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        int day = calendar.get(Calendar.DATE);
+        calendar.set(Calendar.DATE, day-29);
+        for (int i = 1; i <= 30; i++)
+        {
+            String currentDate = df.format(calendar.getTime());
+            XList.add(currentDate);
+
+            for (Map<String, Object> stat: statsList)
+            {
+                if(stat.get("order_date").toString().contains(currentDate))
+                {
+                    YList.add((Long)stat.get("order_count"));
+                    break;
+                }
+            }
+            if(YList.size() < XList.size())
+                YList.add(0L);
+
+            int tempDay = calendar.get(Calendar.DATE);
+            calendar.set(Calendar.DATE,tempDay+1);
+        }
+
+        res.put("XList", XList);
+        res.put("YList", YList);
 
         //各类订单状态
         QueryWrapper<Order> orderDetailsWrapper = new QueryWrapper<>();
