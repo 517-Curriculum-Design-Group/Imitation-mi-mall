@@ -119,7 +119,7 @@ const login = async () => {
   const [e, r] = await postLogin(formState);
   if (!e && r) {
     utils.setSession("token", r.data.token);
-    store.userid = r.data.userInfo.userId;
+    store.setUserInfo(r.data.userInfo);
     router.replace("/home");
     notify("success", "通知", "登录成功");
   }

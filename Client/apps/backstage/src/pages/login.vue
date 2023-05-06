@@ -43,7 +43,7 @@ import{ref,reactive,onMounted,onBeforeUnmount} from 'vue'
 import{login} from '~/api/manager'
 import { toast } from '~/composables/util'
 import {useRouter} from 'vue-router'
-import { setToken,setType} from '~/composables/auth'
+import { setToken,setType,setNName} from '~/composables/auth'
 
 
 const router = useRouter()
@@ -85,8 +85,8 @@ const onSubmit = () => {
             toast("登陆成功")
  
             setToken(res.token)
-            setType(res.adminType)
-
+            setType(res.user.userType)
+            setNName(res.user.nickName)
             router.push("/")
         }).finally(()=>{
             loading.value = false

@@ -8,9 +8,9 @@
                 <el-dropdown>
 
             <span class="el-dropdown-link; flex items-center mr-10">
-                <el-avatar :size="25" />
+                <el-avatar  :size="25"  src="https://img.zcool.cn/community/01786557e4a6fa0000018c1bf080ca.png@1280w_1l_2o_100sh.png"/>
                 <span class="text-lg; text-light-100">
-                    username
+                    {{getNName()}}
                 </span>
             
             <el-icon class="el-icon--right; text-light-100">
@@ -32,9 +32,10 @@
 <script setup>
 import{logout} from '~/api/manager'
 import { useRouter } from "vue-router"
-import { removeToken,removeType,} from '~/composables/auth'
+import { removeToken,removeType,removeNName,getNName} from '~/composables/auth'
 import { toast,showModal } from '~/composables/util'
 const router = useRouter()
+
 
 const quite = () =>{
 
@@ -42,6 +43,7 @@ const quite = () =>{
             logout().finally(() => {
                 removeToken()
                 removeType()
+                removeNName()
                 // 跳转回登录页
                 router.push('/login')
                 // 提示退出登录成功
@@ -56,6 +58,7 @@ const quite = () =>{
 .f-header{
     @apply flex items-center bg-indigo-500 text-light-50 fixed top-0 left-0 right-0; 
     height:64px;
+    z-index: 1000;
 
 }
 </style>
