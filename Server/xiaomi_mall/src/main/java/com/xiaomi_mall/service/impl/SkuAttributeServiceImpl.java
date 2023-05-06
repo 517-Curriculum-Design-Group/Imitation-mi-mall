@@ -42,24 +42,49 @@ public class SkuAttributeServiceImpl extends ServiceImpl<SkuAttributeMapper, Sku
         List<SkuAttribute> skuAttributeList = skuAttributeService.list();
         //获取规格对应的值表的所有数据
         List<SkuAttributeValue> skuAttributeValueList = skuAttributeValueService.list();
-        //建立一个哈希表
-        HashMap<String, List<String>> map = new HashMap<>();
 
-        //循环访问
+        List<Map<String, Object>> res = new ArrayList<>();
         for (int i = 0; i < skuAttributeList.size(); i++) {
-            String key = skuAttributeList.get(i).getAttributeName();
-            Integer id = skuAttributeList.get(i).getAttributeId();
-            List<String> res = new ArrayList<>();
-            map.put(key, res);
-            for (int j = 0; j < skuAttributeValueList.size(); j++) {
+            Map<String, Object> map = new LinkedHashMap<>();
+            String attributeName = skuAttributeList.get(i).getAttributeName();
+            Integer attributeId = skuAttributeList.get(i).getAttributeId();
+            map.put("attributeName", attributeName);
+            map.put("attributeId", attributeId);
+
+            List<String> values = new ArrayList<>();
+            List<Integer> valueIds = new ArrayList<>();
+            for (int j = 0; j < skuAttributeValueList.size(); j++)
+            {
                 Integer subId = skuAttributeValueList.get(j).getAttributeId();
                 String valueName = skuAttributeValueList.get(j).getValueName();
-                if (Objects.equals(subId, id)) {
-                    res.add(valueName);
+                if (Objects.equals(subId, attributeId))
+                {
+                    values.add(valueName);
+                    valueIds.add(skuAttributeValueList.get(j).getValueId());
                 }
             }
+            map.put("values", values);
+            map.put("valueIds", valueIds);
+            res.add(map);
         }
-        return Result.okResult(map);
+
+//        //建立一个哈希表
+//        HashMap<String, List<String>> map = new HashMap<>();
+//        //循环访问
+//        for (int i = 0; i < skuAttributeList.size(); i++) {
+//            String key = skuAttributeList.get(i).getAttributeName();
+//            Integer id = skuAttributeList.get(i).getAttributeId();
+//            List<String> res = new ArrayList<>();
+//            map.put(key, res);
+//            for (int j = 0; j < skuAttributeValueList.size(); j++) {
+//                Integer subId = skuAttributeValueList.get(j).getAttributeId();
+//                String valueName = skuAttributeValueList.get(j).getValueName();
+//                if (Objects.equals(subId, id)) {
+//                    res.add(valueName);
+//                }
+//            }
+//        }
+        return Result.okResult(res);
     }
 
     @Override
