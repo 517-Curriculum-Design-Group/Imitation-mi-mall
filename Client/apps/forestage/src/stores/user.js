@@ -6,12 +6,23 @@ export const userStore = defineStore('user', {
   // other options...
   state:()=>{
     return{
-      userid:null,
+      userInfo:{},
+    }
+  },
+  actions:{
+    getUserInfo(){
+      return this.userInfo || null
+    },
+    setUserInfo(user){
+      Object.assign(this.userInfo,user)
+    },
+    deleteUserInfo(){
+      this.userInfo = null
     }
   },
   persist:{
     key:'userStore',
     storage:window.sessionStorage,
-    path:['userid']
+    path:['userInfo']
   }
 })
