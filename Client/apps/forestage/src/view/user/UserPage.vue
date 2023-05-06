@@ -1,5 +1,6 @@
 <script setup>
-import { useRouter } from 'vue-router'
+import { ref } from 'vue'
+
 const menu = [
     {
         label: "订单中心",
@@ -9,7 +10,7 @@ const menu = [
         },
         {
             label: "晒单评价",
-            name: "commment"
+            name: "comment"
         }
         ]
     },
@@ -17,11 +18,15 @@ const menu = [
         label: "个人中心",
         children: [{
             label: "我的个人中心",
-            name: "me"
+            name: "main"
         },
         {
-            label: "消息中心",
+            label: "消息通知",
             name: "news"
+        },
+        {
+            label: "喜欢的商品",
+            name:"like",
         },
         {
             label: "收货地址",
@@ -46,29 +51,22 @@ const menu = [
     }
 ]
 
-const router = useRouter()
-
-function TurnTo(item) {
-    router.push({
-        name: item.name
-    })
-}
 </script>
 
 <template>
-    <div class="container bg-gray-100 flex justify-between">
+    <div class="container h-100% bg-gray-100 flex justify-between">
         <div class="flex justify-between w-80% h-full m-auto bg-transparent">
-            <nav class="w-15rem  h-auto bg-light-50">
-                <ul class="text-lg pb-5 leading-15" v-for="(items, index) in menu" :key="index">
+            <nav class="w-[234px] h-auto bg-light-50 pt-[36px] pb-[36px]">
+                <ul tabindex="1" class="text-xl ml-5 leading-15" v-for="(items, index) in menu" :key="index">
                     {{ items.label }}
-                    <li tabindex="1" class="text-base pb-3 cursor-pointer hover:text-gray-700"
-                        v-for="item in menu[index].children" :key="item" @click="TurnTo(item)">
-                        {{ item.label }}
+                   <li tabindex="1" class="text-lg pb-3 cursor-pointer hover:text-gray-700"
+                        v-for="item in menu[index].children" :key="item">
+                        <router-link :to="'/user/' + item.name">{{ item.label }}</router-link>
                     </li>
                 </ul>
             </nav>
 
-            <article class="flex-1 ml-1rem">
+            <article class="flex-1 ml-1rem bg-light-50">
                 <router-view></router-view>
             </article>
         </div>
@@ -86,5 +84,10 @@ li {
     &:focus {
         color: var(--button-background-color);
     }
+
+}
+
+article{
+    padding: 36px 48px;
 }
 </style>
