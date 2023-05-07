@@ -175,9 +175,12 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
 
         for (Sku sku:skuList)
         {
-            //TODO:
             List<String> skus = new ArrayList<>();
-            JSON.parseObject(sku.getSkuName(), LinkedHashMap.class, Feature.OrderedField);
+            Map<String, Object> map = JSON.parseObject(sku.getSkuName(), LinkedHashMap.class, Feature.OrderedField);
+            for (Map.Entry<String, Object> entry : map.entrySet())
+            {
+                skus.add((String) entry.getValue());
+            }
             skuVoList.add(new SkuVo(sku.getSkuId(), skus, sku.getSkuPrice(), sku.getSkuStock()));
         }
 
