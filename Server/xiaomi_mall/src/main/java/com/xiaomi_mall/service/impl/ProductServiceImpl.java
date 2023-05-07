@@ -65,11 +65,33 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         productVo.setCategoryId(product.getCategoryId());
         productVo.setProductName(product.getProductName());
         productVo.setProductPic(product.getProductPic());
-        productVo.setSkuList(JSON.parseObject(product.getSkuList(), LinkedHashMap.class, Feature.OrderedField));
+        Map<String, Object> map = JSON.parseObject(product.getSkuList(), LinkedHashMap.class, Feature.OrderedField);
+        List<Map<String, Object>> mapReses = new ArrayList<>();
+        for (Map.Entry<String, Object> entry : map.entrySet())
+        {
+            Map<String, Object> mapRes = new LinkedHashMap<>();
+            String mapKey = entry.getKey();
+            mapRes.put("attributeName", mapKey);
+            List<String> values = (List<String>) entry.getValue();
+            mapRes.put("attributeValues", values);
+            mapReses.add(mapRes);
+        }
+        productVo.setSkuList(mapReses);
+
         List<Sku> skuList = skuMapper.getSkuListByProductId(product_id);
         List<SkuVo> skuVoList = new ArrayList<>();
         for (Sku sku:skuList)
-            skuVoList.add(new SkuVo(JSON.parseObject(sku.getSkuName(), LinkedHashMap.class, Feature.OrderedField), sku.getSkuPrice(), sku.getSkuStock()));
+        {
+            List<String> skus = new ArrayList<>();
+            Map<String, Object> map1 = JSON.parseObject(sku.getSkuName(), LinkedHashMap.class, Feature.OrderedField);
+            for (Map.Entry<String, Object> entry : map1.entrySet())
+            {
+                String value = (String) entry.getValue();
+                skus.add(value);
+            }
+            skuVoList.add(new SkuVo(sku.getSkuId(), skus, sku.getSkuPrice(), sku.getSkuStock()));
+        }
+
         productVo.setSkuVoList(skuVoList);
         productVo.setProductDescription(product.getProductDescription());
 
@@ -153,7 +175,10 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
 
         for (Sku sku:skuList)
         {
-            skuVoList.add(new SkuVo(JSON.parseObject(sku.getSkuName(), LinkedHashMap.class, Feature.OrderedField), sku.getSkuPrice(), sku.getSkuStock()));
+            //TODO:
+            List<String> skus = new ArrayList<>();
+            JSON.parseObject(sku.getSkuName(), LinkedHashMap.class, Feature.OrderedField);
+            skuVoList.add(new SkuVo(sku.getSkuId(), skus, sku.getSkuPrice(), sku.getSkuStock()));
         }
 
         return Result.okResult(skuVoList);

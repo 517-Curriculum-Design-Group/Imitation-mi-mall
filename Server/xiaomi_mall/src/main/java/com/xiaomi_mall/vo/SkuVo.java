@@ -4,7 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 @Data
@@ -12,7 +14,8 @@ import java.util.Map;
 @AllArgsConstructor
 public class SkuVo {
 
-    private Map<String, String> skuName = new LinkedHashMap<>();
+    private Integer skuId;
+    private List<String> skus;
     private BigDecimal skuPrice;
     private Integer skuStock;
 }

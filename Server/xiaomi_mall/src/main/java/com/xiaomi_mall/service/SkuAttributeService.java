@@ -16,6 +16,8 @@ public interface SkuAttributeService extends IService<SkuAttribute> {
 
     Result modifySkuAttribute(SkuAttribute_ValueDto skuAttribute_valueDto);
 
+    Result createNewAttribute(String attributeName);
+
 //    Result deleteSkuAttribute(Integer sku_id);
 
 }

@@ -357,16 +357,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public Result getLeftCategories() {
-        Map<String, Object> leftCategories = new LinkedHashMap<>();
-        Map<String, Object> lowerProducts = new LinkedHashMap<>();
+        List<Map<String, Object>> leftCategories = new ArrayList<>();
         List<Category> categories = categoryService.list();
 
         for (int i = 0; i < categories.size(); i++) {
             long parentId = categories.get(i).getParentId();
             if (parentId != -1) continue;
 
+            Map<String, Object> map = new LinkedHashMap<>();
             List<Map<String, Object>> sameParentCategories = new ArrayList<>();
-            List<Map<String, Object>> eachCategoryProduct = new ArrayList<>();
             int cateId = categories.get(i).getCategoryId();
             List<Category> filterList = categories.stream()
                     .filter(category -> category.getParentId() == cateId)
@@ -393,11 +392,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                     tempProducts.add(product);
                 }
                 eachCategory.put("products", tempProducts);
-                eachCategoryProduct.add(eachCategory);
-
             }
-            leftCategories.put(categories.get(i).getCategoryName(), sameParentCategories);
-            lowerProducts.put(categories.get(i).getCategoryName(), eachCategoryProduct);
+            map.put("parentCategoryName", categories.get(i).getCategoryName());
+            map.put("categoryNames", sameParentCategories);
+            leftCategories.add(map);
         }
 
         return Result.okResult(leftCategories);
@@ -405,14 +403,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public Result getLowerProducts() {
-        Map<String, Object> leftCategories = new LinkedHashMap<>();
-        Map<String, Object> lowerProducts = new LinkedHashMap<>();
+        List<Map<String, Object>> lowerProducts = new ArrayList<>();
         List<Category> categories = categoryService.list();
 
         for (int i = 0; i < categories.size(); i++) {
             long parentId = categories.get(i).getParentId();
             if (parentId != -1) continue;
 
+            Map<String, Object> map = new LinkedHashMap<>();
             List<Map<String, Object>> sameParentCategories = new ArrayList<>();
             List<Map<String, Object>> eachCategoryProduct = new ArrayList<>();
             int cateId = categories.get(i).getCategoryId();
@@ -444,8 +442,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                 eachCategoryProduct.add(eachCategory);
 
             }
-            leftCategories.put(categories.get(i).getCategoryName(), sameParentCategories);
-            lowerProducts.put(categories.get(i).getCategoryName(), eachCategoryProduct);
+            map.put("categoryName", categories.get(i).getCategoryName());
+            map.put("eachCategoryProduct", eachCategoryProduct);
+            lowerProducts.add(map);
         }
 
         return Result.okResult(lowerProducts);

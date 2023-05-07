@@ -1,6 +1,7 @@
 package com.xiaomi_mall.controller;
 
 import com.xiaomi_mall.config.Result;
+import com.xiaomi_mall.dto.AttributeValueCommit;
 import com.xiaomi_mall.dto.SkuAttribute_ValueDto;
 import com.xiaomi_mall.enity.Category;
 import com.xiaomi_mall.enity.Product;
@@ -150,6 +151,20 @@ public class BackProductController {
     @GetMapping("/getSkuDetail/{attributeId}")
     public Result getSkuDetail(@PathVariable Integer attributeId) {
         return skuAttributeService.getSkuDetail(attributeId);
+    }
+
+    @PreAuthorize("hasAnyAuthority('普通管理员', '超级管理员')")
+    @ApiOperation("创建Attribute接口")
+    @PostMapping("/createNewAttribute")
+    public Result createNewAttribute(@RequestBody String attributeName) {
+        return skuAttributeService.createNewAttribute(attributeName);
+    }
+
+    @PreAuthorize("hasAnyAuthority('普通管理员', '超级管理员')")
+    @ApiOperation("创建AttributeValue接口")
+    @PostMapping("/createNewAttributeValue")
+    public Result createNewAttribute(@RequestBody AttributeValueCommit attributeValueCommit) {
+        return skuAttributeValueService.createNewAttributeValue(attributeValueCommit);
     }
 
 

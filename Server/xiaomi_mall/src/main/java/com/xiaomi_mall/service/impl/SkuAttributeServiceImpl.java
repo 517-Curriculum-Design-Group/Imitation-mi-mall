@@ -5,6 +5,7 @@ import com.xiaomi_mall.config.Result;
 import com.xiaomi_mall.dto.SkuAttribute_ValueDto;
 import com.xiaomi_mall.enity.SkuAttribute;
 import com.xiaomi_mall.enity.SkuAttributeValue;
+import com.xiaomi_mall.enums.AppHttpCodeEnum;
 import com.xiaomi_mall.mapper.SkuAttributeMapper;
 import com.xiaomi_mall.mapper.SkuAttributeValueMapper;
 import com.xiaomi_mall.mapper.SkuAttributeValueRelationMapper;
@@ -18,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
+import javax.management.Attribute;
 import java.util.*;
 
 @Service
@@ -206,8 +208,20 @@ public class SkuAttributeServiceImpl extends ServiceImpl<SkuAttributeMapper, Sku
         return Result.okResult(200, "修改成功");
     }
 
+    @Override
+    public Result createNewAttribute(String attributeName) {
 
+        List<SkuAttribute> skuAttributeList = skuAttributeService.list();
+        for (int i = 0; i < skuAttributeList.size(); i++)
+            if(skuAttributeList.get(i).getAttributeName().equals(attributeName))
+                return Result.errorResult(AppHttpCodeEnum.ATTRIBUTE_IS_EXIST);
 
+        SkuAttribute attribute = new SkuAttribute();
+        attribute.setAttributeName(attributeName);
+        attribute.setDelFlag(0);
+        skuAttributeService.save(attribute);
+        return Result.okResult(attribute);
+    }
 
 
 }
