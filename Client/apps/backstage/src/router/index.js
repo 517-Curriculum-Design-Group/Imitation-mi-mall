@@ -12,7 +12,7 @@ import Sku from '~/pages/sku.vue'
 import Order from '~/pages/order.vue'
 import Category from '~/pages/category.vue'
 import List from '~/pages/list.vue'
-import Common from '~/pages/Common.vue'
+import Common from '~/pages/common.vue'
 import AdminControl from '~/pages/admincontrol.vue'
 
 const routes = [{

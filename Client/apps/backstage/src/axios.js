@@ -29,7 +29,7 @@ service.interceptors.response.use(function (response) {
     return response.data.data;
   }, function (error) {
     // 超出 2xx 范围的状态码都会触发该函数。
-    toast(error.response.msg||"操作失败","error")
+    toast(error.response||"操作失败","error")
     // 对响应错误做点什么
     return Promise.reject(error);
   });

@@ -36,7 +36,7 @@ export function getadminlist(pageNum, pageSize) {
     })
 }
 
-export function findadmin(pageNum, pageSize,nickName) {
+export function findadmin(pageNum, pageSize, nickName) {
     return axios.get('/getAdminList', {
         params: {
             pageNum,
@@ -53,6 +53,20 @@ export function getskulist(pageNum, pagesize) {
 export function modifystatus(userId) {
     return axios.put(`/updateUserStatus/${userId}`)
 }
-export function addAdmin() {
-    return axios.post()
+export function addAdmin(user) {
+    return axios.post("/addadmin", user)
+}
+
+
+export function deleteAdmin(userIds) {
+    return axios.delete('/deleteAdmin', {
+        data: userIds
+    },
+
+        {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }
+    )
 }
