@@ -1,5 +1,7 @@
 <script setup>
 import navCard from "@/components/HomeIndex/navCard.vue";
+import { api } from "@/api";
+import { onMounted, ref } from "vue";
 
 const data = [
   {
@@ -42,6 +44,18 @@ const items = [
     icon: "i-mdi-cellphone-iphone",
   },
 ];
+
+const lowerData = ref([]);
+const getLowerProductsData = async () => {
+  const [e, r] = await api.getLowerProducts();
+  if (!e && r) {
+    lowerData.value = r.data;
+  }
+};
+
+onMounted(() => {
+  getLowerProductsData();
+});
 </script>
 
 <template>
@@ -54,10 +68,10 @@ const items = [
       >
         <span
           v-for="(item, index) in items"
-          class="things relative flex flex-col w-[78px] h-[85px] justify-center items-center hover:text-gray-200"
           :key="index"
+          class="things relative flex flex-col w-[78px] h-[85px] justify-center items-center hover:text-gray-200"
         >
-          <span :class="`${item.icon}`" class="h-24px w-24px" id="1"></span>
+          <span id="1" :class="`${item.icon}`" class="h-24px w-24px"></span>
           <span>{{ item.name }}</span>
         </span>
       </div>
@@ -73,6 +87,23 @@ const items = [
         alt="广告4"
       />
     </div>
+    <template v-for="itemss in lowerData" :key="itemss.categoryName">
+      <div class="flex flex-col h-[614px] w-[1226px]">
+        <div class="flex justify-between h-[58px] leading-[58px]">
+          <span class="text-[22px]">{{ itemss.categoryName }}</span>
+          <div class="flex text-[16px]">
+            <template
+              v-for="obj in itemss.eachCategoryProduct"
+              :key="obj.category_name"
+            >
+              <nav class="mx-[8px]">
+                {{ obj.category_name }}
+              </nav>
+            </template>
+          </div>
+        </div>
+      </div>
+    </template>
   </div>
 </template>
 
