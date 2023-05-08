@@ -45,7 +45,7 @@ const logout = async () => {
     <span class="space"></span>
     <a-button type="default" class="order" v-if="userid">我的订单</a-button>
     <span class="seq" v-if="userid"></span>
-    <a-button type="default" class="news">消息通知</a-button>
+    <router-link to="/user/news"> <a-button type="default" class="news">消息通知</a-button></router-link>
     <span class="seq" v-if="!userid"></span>
     <router-link to="/login"><a-button type="default" class="register" v-if="!userid">注册</a-button></router-link>
     <span class="seq" v-if="!userid"></span>
@@ -56,9 +56,9 @@ const logout = async () => {
       <span class="i-mdi-chevron-down ml-4px w-1.2rem h-1.2rem"></span>
     </div>
     <div class="user-name flex absolute text-xs w-[110px] shadow-lg z-300">
-      <span class="user-info w-full h-[30px] cursor-pointer">个人中心</span>
-      <span class="user-info w-full h-[30px] cursor-pointer">晒单评价</span>
-      <span class="user-info w-full h-[30px] cursor-pointer">我的喜欢</span>
+      <router-link to="/user/main"><span class="user-info w-full h-[30px] cursor-pointer">个人中心</span></router-link>
+      <router-link to="/user/comment"><span class="user-info w-full h-[30px] cursor-pointer">晒单评价</span></router-link>
+      <router-link to="/user/like"><span class="user-info w-full h-[30px] cursor-pointer">我的喜欢</span></router-link>
       <span class="user-info w-full h-[30px] cursor-pointer" @click="logout">退出登录</span>
     </div>
   </div>
