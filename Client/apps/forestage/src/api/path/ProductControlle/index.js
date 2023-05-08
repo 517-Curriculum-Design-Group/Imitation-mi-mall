@@ -4,6 +4,6 @@ export function postLogin(userobj) {
     return Get("/user/login", userobj);
 }
 
-export const userApi = {
+export const prodApi = {
     postLogin,
 };
