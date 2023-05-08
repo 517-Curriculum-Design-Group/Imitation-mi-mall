@@ -7,6 +7,6 @@ export function getProductDetail(id) {
     return Get(`/getProductDetail/${params.productId}`)
 }
 
-export const userApi = {
+export const prodApi = {
     postLogin,
 };
