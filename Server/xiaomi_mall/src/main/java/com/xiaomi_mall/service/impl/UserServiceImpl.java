@@ -15,6 +15,7 @@ import com.xiaomi_mall.service.CategoryService;
 import com.xiaomi_mall.service.OrderService;
 import com.xiaomi_mall.service.UserService;
 import com.xiaomi_mall.util.BeanCopyUtils;
+import com.xiaomi_mall.util.SecurityUtils;
 import com.xiaomi_mall.vo.UserListPageVo;
 import com.xiaomi_mall.vo.UserListVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,6 +77,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
         //对密码进行加密
         String encodePassword = passwordEncoder.encode(user.getPassword());
+        user.setCreateBy(-1);
+        user.setUpdateBy(-1);
         user.setPassword(encodePassword);
         //存入数据库
         save(user);
@@ -119,6 +122,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             String encodePassword = passwordEncoder.encode(user.getPassword());
             user.setPassword(encodePassword);
             user.setUserType("普通管理员");
+            user.setCreateBy(Math.toIntExact(SecurityUtils.getUserId()));
+            user.setUpdateBy(Math.toIntExact(SecurityUtils.getUserId()));
             save(user);
             return Result.okResult();
         }

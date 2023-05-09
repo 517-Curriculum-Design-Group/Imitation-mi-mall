@@ -20,9 +20,9 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
             userId = -1L;//表示是自己创建
         }
         this.setFieldValByName("createTime", new Date(), metaObject);
-        this.setFieldValByName("createBy",userId , metaObject);
+        //this.setFieldValByName("createBy",userId , metaObject);
         this.setFieldValByName("updateTime", new Date(), metaObject);
-        this.setFieldValByName("updateBy", userId, metaObject);
+        //this.setFieldValByName("updateBy", userId, metaObject);
     }
 
     @Override
