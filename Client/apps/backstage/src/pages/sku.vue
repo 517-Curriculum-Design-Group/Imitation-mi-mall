@@ -1,39 +1,7 @@
 <template>
   <el-card shadow="never" class="border-0">
-    <el-form
-          :model="searchForm"
-          label-width="80px"
-          class="mb-3"
-          size="small"
-        >
-          <el-row :gutter="20">
-            <el-col :span="8" :offset="0">
-              <el-form-item label="关键词">
-                <el-input
-                  v-model="searchForm.keyword"
-                  placeholder="用户昵称"
-                  clearable
-                ></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="8" :offset="8">
-              <el-form-item>
-                <div class="flex items-center justify-end">
-                  <el-button type="primary" @click="find(searchForm.keyword)"
-                    >搜索</el-button
-                  >
-                  <el-button @click="resetSearchForm">重置</el-button>
-                 
-                </div>
-              </el-form-item>
-            </el-col>
-          </el-row>
-        </el-form>
-
-        
-
         <div class="flex items-center justify-between mb-4">
-          <el-button type="primary" size="small" @click="flag = true"
+          <el-button type="primary" size="small" @click="addtype"
         >新增</el-button
       >
 
@@ -98,39 +66,9 @@
             </div>
 
 
-    <el-drawer
-      v-model="flag"
-      title="新增规格"
-      size="45%"
-      :direction="direction"
-      :before-close="handleClose"
-    >
-      <!-- <el-form :model="form" ref="formRef" :rules="rules" label-width="80px" :inline="false">
-        <el-form-item label="用户名" prop="username">
-          <el-input v-model="form.username" placeholder="用户名"></el-input>
-        </el-form-item>
-        <el-form-item label="密码" prop="password">
-          <el-input v-model="form.password" placeholder="密码"></el-input>
-        </el-form-item>
-        <el-form-item label="头像" prop="avatar">
-          <ChooseImage v-model="form.avatar"/>
-        </el-form-item>
-        <el-form-item label="所属角色" prop="role_id">
-          <el-select v-model="form.role_id" placeholder="选择所属角色">
-            <el-option v-for="item in roles"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="状态" prop="content">
-          <el-switch v-model="form.status" :active-value="1" :inactive-value="0">
-          </el-switch>
-        </el-form-item>
-      </el-form> -->
-    </el-drawer>
   </el-card>
+
+  
 </template>
 
 <script setup>
@@ -143,6 +81,18 @@ import { toast } from "~/composables/util";
 const currentPage = ref(1);
 const pageSize = ref(10);
 const total = ref(0);
+
+
+const addtype = () => {
+  ElMessageBox.prompt('请输入想要添加的类别名', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+  })
+    .then(({value}) => {
+      console.log(value)
+      .log
+    })
+}
 
 const getObjectKeyName = (obj) => {
   const unknoewThis = Object.keys(obj);
@@ -162,38 +112,9 @@ const getObjectKey = (obj) => {
 
 const arrData = ref([]);
 
-// getskulist(currentPage.value, pageSize.value).then((res) => {
-//   arrData.value = res;
-// });
 
-const list = ref([]);
 
-const flag = ref(false);
-const searchForm = reactive({
-  keyword: "",
-});
 
-const newman = reactive({});
-
-const handleClose = () => {
-  ElMessageBox.confirm("确定要离开吗？", "警告：离开页面数据将不进行保存", {
-    confirmButtonText: "确定",
-    cancelButtonText: "取消",
-    type: "warning",
-  })
-    .then(() => {
-      flag.value = false;
-      console.log(flag);
-    })
-    .catch(() => {
-      // catch error
-    });
-};
-
-const resetSearchForm = () => {
-  searchForm.keyword = "";
-  getData;
-};
 
 const loading = ref(false);
 
