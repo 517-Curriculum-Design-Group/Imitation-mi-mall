@@ -1,9 +1,12 @@
 import { Get } from "../../server";
 
-export function postLogin(userobj) {
-    return Get("/user/login", userobj);
+export function getProductDetail(id) {
+    let params = {
+        productId: id,
+    }
+    return Get(`/getProductDetail/${params.productId}`)
 }
 
-export const userApi = {
+export const prodApi = {
     postLogin,
 };

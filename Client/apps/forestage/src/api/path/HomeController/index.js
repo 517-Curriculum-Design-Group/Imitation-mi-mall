@@ -8,12 +8,22 @@ export function getCateProduct() {
   return Get("/getCateProduct");
 }
 
-export function getUserHome() {
-  return Get("/getUserHome");
+export function getHeaderProducts() {
+  return Get("/getHeaderProducts");
 }
 
-export const userApi = {
+export function getLeftCategories() {
+  return Get("/getLeftCategories");
+}
+
+export function getLowerProducts() {
+  return Get("/getLowerProducts");
+}
+
+export const homeApi = {
   getCategoryList,
   getCateProduct,
-  getUserHome,
+  getHeaderProducts,
+  getLeftCategories,
+  getLowerProducts,
 };
