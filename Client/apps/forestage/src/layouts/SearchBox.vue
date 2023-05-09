@@ -24,27 +24,39 @@ onMounted(() => {
       class="flex ml-[160px] gap-x-4 pl-[20px] text-[16px] justify-center items-center"
     >
       <template v-for="item in titles" :key="item">
-        <nav class="nav-titile w-[100px] h-[88px] cursor-pointer">
+        <nav class="nav-titile active w-[100px] h-[88px] cursor-pointer">
           {{ item.cateName }}
+          <div
+            class="activeBox absolute top-[100px] left-0 drop-shadow flex h-[0] opacity-0 w-[100%] z-0 bg-light-100"
+          >
+            <template
+              v-for="i in item.sameCategoryProducts"
+              :key="i.product_id"
+            >
+              <div
+                class="h-[201px] flex flex-col w-[204px] text-center items-center justify-center text-[12px] leading-[20px] cursor-pointer text-black"
+              >
+                <img
+                  :src="i.product_pic"
+                  :alt="i.product_name"
+                  class="object-cover w-[160px] h-[140px]"
+                />
+                <span class="mt-4">{{ i.product_name }}</span>
+                <span class="text-orange-500">{{ i.product_price }}</span>
+              </div>
+            </template>
+
+            <n-empty
+              class="absolute top-[20%] left-[50%]"
+              :class="{
+                'op-0': item.sameCategoryProducts.length !== 0 ? true : false,
+              }"
+              description="你什么也找不到"
+            >
+            </n-empty>
+          </div>
         </nav>
       </template>
-      <div
-        class="absolute top-[100px] left-0 flex h-[210px] w-[100%] z-200 bg-light-100"
-      >
-        <div
-          v-for="item in titles[0].sameCategoryProducts"
-          :key="item.product_id"
-          class="h-[201px] flex flex-col w-[204px] text-center items-center justify-center text-[12px] leading-[20px] cursor-pointer"
-        >
-          <img
-            :src="item.product_pic"
-            :alt="item.product_name"
-            class="object-cover w-[160px] h-[110px]"
-          />
-          <span class="mt-4">{{ item.product_name }}</span>
-          <span class="text-orange-500">{{ item.product_price }}</span>
-        </div>
-      </div>
       <div class="flex w-[296.6px] h-[49.6px] container ml-[120px]">
         <n-input
           v-model:value="value"
@@ -80,5 +92,16 @@ onMounted(() => {
 }
 .nav-titile:hover {
   color: var(--button-background-color);
+}
+
+.active > .activeBox {
+  transition: all 400ms cubic-bezier(0.4, 0.4, 0.25, 1.35);
+}
+
+.active:hover > .activeBox {
+  height: 210px;
+  opacity: 1;
+  transition: all 400ms cubic-bezier(0.4, 0.4, 0.25, 1.35);
+  z-index: 200;
 }
 </style>

@@ -1,26 +1,19 @@
-import { defineComponent } from 'vue';
+import { defineComponent, computed } from 'vue';
 <script setup>
-import { ref, defineProps, onMounted } from "vue";
-import { getSession } from "@/utils/session";
-// eslint-disable-next-line vue/require-prop-types
-const props = defineProps(["data"]);
+import { ref, onMounted } from "vue";
+import MapTitle from "./MapTitle.vue";
+import { api } from "@/api";
 
-const sessionData = getSession("usehomeStore");
 const titles = ref([]);
-
-const init = () => {
-  let obj = props?.data;
-  if (obj) {
-    titles.value = Object.keys(obj);
-  } else {
-    obj = sessionData?.leftCategories;
-    if (obj) {
-      titles.value = Object.keys(obj);
-    }
+const isShow = ref(true);
+const init = async () => {
+  console.log("开始请求");
+  const [e, r] = await api.getLeftCategories();
+  if (!e && r) {
+    titles.value = r.data;
+    isShow.value = true;
   }
 };
-
-console.log(props.data);
 
 onMounted(() => {
   init();
@@ -30,21 +23,17 @@ onMounted(() => {
 <template>
   <div class="flex ml-auto mr-auto w-[1226px] h-[460px] relative">
     <div
-      class="w-[226px] h-full absolute top-0 left-0 z-100"
+      class="w-[226px] h-full absolute top-0 left-0 z-100 flex justify-center items-center"
       style="background-color: rgba(105, 101, 101, 0.6)"
     >
-      {{ data }}
-      <div
-        class="flex flex-col w-[100%] h-[100%] px-[30px] py-[20px] text-light-500"
-      >
-        <nav
-          v-for="item in titles"
-          :key="item"
-          class="flex-1 hover:text-orange-500 cursor-pointer"
-        >
-          {{ item }}
-        </nav>
-      </div>
+      <Suspense>
+        <MapTitle />
+        <template #fallback>
+            <n-spin>
+              <template #description> 正在加载页面 </template>
+            </n-spin>
+        </template>
+      </Suspense>
     </div>
     <n-carousel
       show-arrow

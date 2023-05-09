@@ -1,12 +1,7 @@
 import axios from '~/axios';
 
-export function getuserlist(pageNum, pageSize) {
-    return axios.get('/getUserList', {
-        params: {
-            pageNum,
-            pageSize
-        }
-    })
+export function gettypelist(){
+    return axios.get('/getBackCategoryList')
 }
 
 export function finduser(pageNum, pageSize, nickName) {
@@ -34,4 +29,8 @@ export function deleteUser(userIds) {
             }
         }
     )
+}
+
+export function addtype(typename){
+    return axios.post('/',typename)
 }
