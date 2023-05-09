@@ -3,7 +3,7 @@ import { getSession } from "../utils/session";
 
 const inst = axios.create({
   baseURL: "/api",
-  timeout: 1000,
+  timeout: 10000,
 });
 
 inst.interceptors.request.use(
