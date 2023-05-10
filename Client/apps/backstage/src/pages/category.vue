@@ -9,7 +9,7 @@
       <el-table-column prop="categoryName" label="类别昵称" />
       <el-table-column prop="parentId" label="所属类别id" />
 
-      <el-table-column prop="status" label="状态">
+      <!-- <el-table-column prop="status" label="状态">
         <template #default="{ row }">
           <el-switch
             :modelValue="row.status"
@@ -20,15 +20,15 @@
           >
           </el-switch>
           {{ row.categoryName }}
-          {{ row.status }}
-        </template>
-      </el-table-column>
+          {{ row.status }} -->
+        <!-- </template>
+      </el-table-column> -->
 
       <el-table-column label="操作" width="180" align="center">
         <template #default="scope">
           <!-- <el-button type="primary" size="small" text>修改</el-button> -->
           <el-popconfirm
-            title="是否要删除该管理员？"
+            title="是否要删除该类别？"
             confirmButtonText="确认"
             cancelButtonText="取消"
             @confirm="handleDelete(scope.row.userId)"
@@ -138,20 +138,20 @@ function getData(p = null) {
     });
 }
 
-//更改状态
-const handelchange = (status1, row) => {
-  console.log(row.categoryName);
-  row.statusLoading = true;
-  const arr = {};
-  modifystatus(row.status)
-    .then((res) => {
-      toast("修改成功");
-      row.status = status1;
-    })
-    .finally(() => {
-      row.statusLoading = false;
-    });
-};
+// //更改状态
+// const handelchange = (status1, row) => {
+//   console.log(row.categoryName);
+//   row.statusLoading = true;
+//   const arr = {};
+//   modifystatus(row.status)
+//     .then((res) => {
+//       toast("修改成功");
+//       row.status = status1;
+//     })
+//     .finally(() => {
+//       row.statusLoading = false;
+//     });
+// };
 
 const userIds = [];
 
