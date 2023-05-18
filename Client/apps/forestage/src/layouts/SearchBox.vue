@@ -24,11 +24,11 @@ onMounted(() => {
       class="flex ml-[160px] gap-x-4 pl-[20px] text-[16px] justify-center items-center"
     >
       <template v-for="item in titles" :key="item">
-        <nav class="nav-titile w-[100px] h-[88px] cursor-pointer">
+        <nav class="nav-titile active w-[100px] h-[88px] cursor-pointer">
           {{ item.cateName }}
         </nav>
       </template>
-      <!-- <div
+      <div
         class="absolute top-[100px] left-0 flex h-[210px] w-[100%] z-200 bg-light-100"
       >
         <div
@@ -44,7 +44,7 @@ onMounted(() => {
           <span class="mt-4">{{ item.product_name }}</span>
           <span class="text-orange-500">{{ item.product_price }}</span>
         </div>
-      </div> -->
+      </div>
       <div class="flex w-[296.6px] h-[49.6px] container ml-[120px]">
         <n-input
           v-model:value="value"
@@ -80,5 +80,16 @@ onMounted(() => {
 }
 .nav-titile:hover {
   color: var(--button-background-color);
+}
+
+.active > .activeBox {
+  transition: all 400ms cubic-bezier(0.4, 0.4, 0.25, 1.35);
+}
+
+.active:hover > .activeBox {
+  height: 210px;
+  opacity: 1;
+  transition: all 400ms cubic-bezier(0.4, 0.4, 0.25, 1.35);
+  z-index: 200;
 }
 </style>

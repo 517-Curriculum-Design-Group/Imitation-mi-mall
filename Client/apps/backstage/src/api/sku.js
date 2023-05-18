@@ -9,6 +9,10 @@ export function getskulist(pageNum, pageSize) {
     })
 }
 
+export function addsku(typename) {
+    return axios.post('/createNewAttribute',typename)
+}
+
 export function modifystatus(userId) {
     return axios.put(`/updateUserStatus/${userId}`)
 }

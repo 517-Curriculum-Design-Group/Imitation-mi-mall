@@ -30,17 +30,6 @@ public class Category implements Serializable {
     @ApiModelProperty("分类名称")
     private String categoryName;
 
-    @TableField(exist = false)
-    private String productName;
-    @TableField(exist = false)
-    private int productId;
-    @TableField(exist = false)
-    private String productDescription;
-    @TableField(exist = false)
-    private String image;
-    @TableField(exist = false)
-    private BigDecimal skuPrice;
-
     @ApiModelProperty("逻辑删除符")
     private int delFlag;
 }
