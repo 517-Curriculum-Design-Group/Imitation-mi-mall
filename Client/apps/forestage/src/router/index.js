@@ -81,6 +81,11 @@ const routes = [
       }
     ],
   },
+  {
+    path:"/page",
+    name: "Page",
+    component: async () => await import("@/view/pagination/Pagination.vue")
+  }
 ];
 
 const router = createRouter({

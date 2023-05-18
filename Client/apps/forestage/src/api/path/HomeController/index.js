@@ -20,6 +20,9 @@ export function getLowerProducts() {
   return Get("/getLowerProducts");
 }
 
+export function getCategorybyName(){
+  return 
+}
 export const homeApi = {
   getCategoryList,
   getCateProduct,

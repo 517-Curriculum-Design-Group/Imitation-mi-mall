@@ -9,8 +9,7 @@ const detaildata = reactive({});
 
 const getDetail = async () => {
   const [e, r] = await api.getCategoryList();
-  console.log(e, r);
-  
+  // console.log(e, r);
 };
 
 console.log(detaildata.leftCategories);
