@@ -20,10 +20,20 @@ export function deleteCartProduct(data) {
   return Delete("/deleteCartProduct", data);
 }
 
+export function getPersonInfo(){
+  return Get("/getPersonInfo")
+}
+
+export function getAllAddresses(){
+  return Get("/getAllAddresses")
+}
+
 export const userApi = {
   postLogin,
   postRegister,
   postLogout,
   getCartList,
   deleteCartProduct,
+  getPersonInfo,
+  getAllAddresses
 };

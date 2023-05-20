@@ -134,6 +134,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         HashMap<String, Object> map1 = new LinkedHashMap<>();
         map1.put("orderId", order.getOrderId());
         map1.put("orderTime", order.getOrderTime());
+        map1.put("orderStatus", order.getStatus());
         res.put("orderDetail", map1);
 
         //商品相关

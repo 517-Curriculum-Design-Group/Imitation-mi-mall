@@ -30,17 +30,17 @@ const logout = async () => {
       @click="$router.push('/cart')"
     >
       <span
-        class="i-mdi-shopping-search w-1rem h-1rem mr-1"
         v-if="!goods.length"
+        class="i-mdi-shopping-search w-1rem h-1rem mr-1"
       ></span>
-      <span class="i-mdi-shopping w-1rem h-1rem mr-1" v-else></span>
+      <span v-else class="i-mdi-shopping w-1rem h-1rem mr-1"></span>
       购物车 ({{ goods.length }})
     </a-button>
-    <div class="cartdetail bg-light-50 text-xs" v-if="!goods.length">
+    <div v-if="!goods.length" class="cartdetail bg-light-50 text-xs">
       购物车中还没有商品，赶紧选购吧！
     </div>
-    <div class="cartdetail bg-light-50 text-xs" v-else>
-      <div class="goodslist" v-for="(items, index) in goods" :key="index">
+    <div v-else class="cartdetail bg-light-50 text-xs">
+      <div v-for="(items, index) in goods" :key="index" class="goodslist">
         {{ items.name }}
       </div>
       <div class="total">
@@ -48,33 +48,21 @@ const logout = async () => {
           <span class="text-xs">共{{ goods.length }}件商品</span>
           <span class="price text-lg">¥{{ totalprice }}</span>
         </span>
-        <a-button type="primary" size="large" class="cart-btn"
-          >去购物车结算</a-button
-        >
+        <a-button type="primary" size="large" class="cart-btn">去购物车结算</a-button>
       </div>
     </div>
     <span class="space"></span>
-    <a-button type="default" class="order" v-if="userid">我的订单</a-button>
-    <span class="seq" v-if="userid"></span>
+    <router-link to="/user/order"><a-button v-if="userid" type="default" class="order">我的订单</a-button></router-link>
+    <span v-if="userid" class="seq"></span>
     <router-link to="/user/news">
       <a-button type="default" class="news">消息通知</a-button></router-link
     >
-    <span class="seq" v-if="!userid"></span>
-    <router-link to="/login"
-      ><a-button type="default" class="register" v-if="!userid"
-        >注册</a-button
-      ></router-link
-    >
-    <span class="seq" v-if="!userid"></span>
-    <a-button
-      type="default"
-      class="login"
-      v-if="!userid"
-      @click="$router.push('/login')"
-      >登录</a-button
-    >
-    <span class="seq" v-if="userid"></span>
-    <div class="user flex relative w-auto h-full cursor-pointer" v-if="userid">
+    <span v-if="!userid" class="seq"></span>
+    <router-link to="/login"><a-button v-if="!userid" type="default" class="register">注册</a-button></router-link>
+    <span v-if="!userid" class="seq"></span>
+    <a-button v-if="!userid" type="default" class="login" @click="$router.push('/login')">登录</a-button>
+    <span v-if="userid" class="seq"></span>
+    <div v-if="userid" class="user flex relative w-auto h-full cursor-pointer">
       {{ userid }}
       <span class="i-mdi-chevron-down ml-4px w-1.2rem h-1.2rem"></span>
     </div>
@@ -195,7 +183,7 @@ const logout = async () => {
   transition: all 250ms linear;
 }
 
-.cart:hover + .cartdetail,
+.cart:hover+.cartdetail,
 .cartdetail:hover {
   min-height: 100px;
   height: fit-content;
@@ -242,7 +230,7 @@ const logout = async () => {
     background-color: white;
   }
 
-  &:hover + .user-name {
+  &:hover+.user-name {
     visibility: visible;
     height: 164px;
   }
