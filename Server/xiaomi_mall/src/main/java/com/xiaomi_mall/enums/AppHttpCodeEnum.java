@@ -24,7 +24,8 @@ public enum AppHttpCodeEnum {
     UPLOAD_ERROR(516, "上传错误"),
     ATTRIBUTE_IS_EXIST(517, "Attribute已存在"),
     ATTRIBUTEID_NOT_EXIST(518, "AttributeId不存在"),
-    ATTRIBUTEVALUE_IS_EXIST(519, "AttributeValue已存在");
+    ATTRIBUTEVALUE_IS_EXIST(519, "AttributeValue已存在"),
+    SKU_NOT_FIND(600, "SKU不存在");
 
     int code;
     String msg;
