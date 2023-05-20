@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
+import utils from "@/utils";
 
 const routes = [
   {
@@ -86,6 +87,15 @@ const routes = [
     path: "/cart",
     name: "Cart",
     component: async () => await import("@/view/cart/CartPage.vue"),
+    beforeEnter: (to, from, next) => {
+      console.log(utils.isLogin());
+      if (utils.isLogin()) {
+        return next();
+      } else {
+        alert("你还没有登录！！！");
+        return false;
+      }
+    },
   },
   
   {

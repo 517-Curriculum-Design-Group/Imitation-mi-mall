@@ -8,16 +8,10 @@ import Antd from "ant-design-vue";
 import router from "./router";
 import naive from "naive-ui";
 import "uno.css";
-import { createPinia } from "pinia";
-import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
-import "@/utils/rem"
+import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
+import "@/utils/rem";
+import pinia from "./stores/store";
 
-const pinia = createPinia()
-pinia.use(piniaPluginPersistedstate)
+pinia.use(piniaPluginPersistedstate);
 
-createApp(App)
-  .use(Antd)
-  .use(naive)
-  .use(router)
-  .use(pinia)
-  .mount("#app");
+createApp(App).use(Antd).use(naive).use(pinia).use(router).mount("#app");
