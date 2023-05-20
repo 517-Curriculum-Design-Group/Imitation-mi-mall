@@ -2,10 +2,8 @@ package com.xiaomi_mall.controller;
 
 
 import com.xiaomi_mall.config.Result;
-import com.xiaomi_mall.mapper.OrderMapper;
 import com.xiaomi_mall.service.CommentService;
 import com.xiaomi_mall.service.OrderService;
-import com.xiaomi_mall.service.ProductService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -71,9 +69,9 @@ public class BackOrderController
     @PreAuthorize("hasAnyAuthority('普通管理员', '超级管理员')")
     @ApiOperation("评论列表接口")
     @GetMapping("/getBackCommentList")
-    public Result getBackCommentList(Integer pageNum, Integer pageSize)
+    public Result getBackCommentList(Integer pageNum, Integer pageSize, String rate)
     {
-        return commentService.getBackCommentList(pageNum, pageSize);
+        return commentService.getBackCommentList(pageNum, pageSize, rate);
     }
 
     @PreAuthorize("hasAnyAuthority('普通管理员', '超级管理员')")
