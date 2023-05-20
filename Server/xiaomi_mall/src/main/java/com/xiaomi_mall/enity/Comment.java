@@ -8,7 +8,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
@@ -35,19 +34,20 @@ public class Comment implements Serializable {
     @ApiModelProperty("评论内容")
     private String content;
 
-    public enum CommentRate
-    {
-        好评, 一般, 差评
-    }
+
     @ApiModelProperty("评价等级")
-    private CommentRate rate;
+    private String rate;
+
+    private Long toCommentUserId;
+
+    private int toCommentId;
 
     @ApiModelProperty("评价时间")
     @TableField(fill = FieldFill.INSERT)
     private Date commentTime;
 
     @ApiModelProperty("父评论ID")
-    private String parentId;
+    private int parentId;
 
     @ApiModelProperty("逻辑删除符")
     private int delFlag;
