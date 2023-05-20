@@ -27,6 +27,11 @@
           >
             {{ tag.valueName }}
           </el-tag>
+
+          <el-button  class="button-new-tag ml-1" size="small" @click="addsmallskuvalue(row.attributeId)">
+            +新规格
+           </el-button>
+          
         </template>
       </el-table-column>
 
@@ -62,10 +67,9 @@
 
 <script setup>
 import { getskulist, deleteSku, deleteSkubig } from "~/api/sku";
-import { onMounted, reactive, ref, unref } from "vue";
+import { onMounted,  ref, unref } from "vue";
 import { ElMessageBox, ElMessage } from "element-plus";
-import { finduser, deleteUser } from "../api/commonadmin";
-import { addsku } from "../api/sku";
+import { addsku,addsmallsku } from "../api/sku";
 import { toast } from "~/composables/util";
 
 const currentPage = ref(1);
@@ -76,6 +80,35 @@ const total = ref(0);
 //   {effect:}
 // ])
 
+
+const addsmallskuvalue = (attributeId) =>{
+  ElMessageBox.prompt("请输入想要添加的规格名", {
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+  })
+  .then(({ value }) => {
+      console.log(value);
+      if(!value) toast("请勿输入空值",'error')
+      else{
+      addsmallsku(attributeId,value)
+        .then(() => {
+          toast("添加成功");
+          getData();
+        })
+        .catch(() => {
+          toast("操作失败", "error");
+        });}
+    })
+    .catch(() => {
+      ElMessage({
+        type: "info",
+        message: "输入取消",
+      });
+    });
+}
+
+
+//加大
 const addtypebutton = () => {
   ElMessageBox.prompt("请输入想要添加的类别名", {
     confirmButtonText: "确定",
@@ -83,8 +116,9 @@ const addtypebutton = () => {
   })
     .then(({ value }) => {
       console.log(value);
-      const attributeName = value;
-      addsku({ attributeName })
+      if(!value) toast("请勿输入空值",'error')
+      else{
+      addsku(value)
         .then(() => {
           toast("添加成功");
           getData();
@@ -92,6 +126,7 @@ const addtypebutton = () => {
         .catch(() => {
           toast("操作失败", "error");
         });
+      }
     })
     .catch(() => {
       ElMessage({

@@ -56,6 +56,15 @@ public class BackProductController {
         return productService.addNewProduct(map);
     }
 
+    //TODO:这个
+//    @PreAuthorize("hasAnyAuthority('普通管理员', '超级管理员')")
+//    @ApiOperation("给商品补货")
+//    @PostMapping("/addProductStock")
+//    public Result addProductStock(@RequestBody Map<String, Object> map) {
+//        return productService.addProductStock(map);
+//    }
+
+
 
     @PreAuthorize("hasAnyAuthority('普通管理员', '超级管理员')")
     @ApiOperation("查看商品SKU接口")
@@ -127,7 +136,7 @@ public class BackProductController {
     @PreAuthorize("hasAnyAuthority('普通管理员', '超级管理员')")
     @ApiOperation("删除Attribute接口")
     @DeleteMapping("/deleteAttribute")
-    public Result deleteAttribute(@RequestParam Integer attributeId) {
+    public Result deleteAttribute(@PathVariable Integer attributeId) {
         skuAttributeService.removeById(attributeId);
         List<Integer> attributeValueId = new ArrayList<>();
         for (SkuAttributeValue value: skuAttributeValueService.list()) {

@@ -22,9 +22,11 @@ public interface ProductService extends IService<Product> {
 
     Result getProductSku(Integer productId);
 
-    Result addSkuToCart(HttpServletRequest request, Integer sku_id);
+    Result addSkuToCart(HttpServletRequest request, Map<String, Object> map);
 
     Result getProductPrice(Map<String, Object> map);
+
+    Result addProductToFavorite(HttpServletRequest request, Integer product_id);
 }
 
 

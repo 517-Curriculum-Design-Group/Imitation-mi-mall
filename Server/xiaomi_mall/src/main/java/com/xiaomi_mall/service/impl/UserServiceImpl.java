@@ -300,6 +300,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             }
         }
 
+        //TODO:销售额
+
         //各类商品状态
         //正在销售的
         QueryWrapper<Product> onSaleProductCountWrapper = new QueryWrapper<>();

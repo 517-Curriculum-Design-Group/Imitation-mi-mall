@@ -45,9 +45,9 @@ public class ProductController {
      */
     @PreAuthorize("hasAnyAuthority('普通用户')")
     @ApiOperation("添加单个Sku到购物车")
-    @PostMapping("/addSkuToCart/{sku_id}")
-    public Result addSkuToCart(HttpServletRequest request, @PathVariable Integer sku_id) {
-        return productService.addSkuToCart(request, sku_id);
+    @PostMapping("/addSkuToCart")
+    public Result addSkuToCart(HttpServletRequest request, @RequestBody Map<String, Object> map) {
+        return productService.addSkuToCart(request, map);
     }
 
     @PreAuthorize("hasAnyAuthority('普通用户')")
@@ -91,6 +91,25 @@ public class ProductController {
     @GetMapping("/getOrderList")
     public Result getOrderList(HttpServletRequest request) {
         return orderService.getOrderList(request);
+    }
+
+    @PreAuthorize("hasAnyAuthority('普通用户')")
+    @ApiOperation("查看订单详情")
+    @GetMapping("/getUserOrderDetail/{orderId}")
+    public Result getUserOrderDetail(HttpServletRequest request, @PathVariable Integer orderId) {
+        return orderService.getUserOrderDetail(request, orderId);
+    }
+
+    /**
+     * 喜欢相关
+     *
+     * @return {@link Result}
+     */
+    @PreAuthorize("hasAnyAuthority('普通用户')")
+    @ApiOperation("添加商品到喜欢")
+    @PostMapping("/addProductToFavorite/{product_id}")
+    public Result addProductToFavorite(HttpServletRequest request, @PathVariable Integer product_id) {
+        return productService.addProductToFavorite(request, product_id);
     }
 
 
