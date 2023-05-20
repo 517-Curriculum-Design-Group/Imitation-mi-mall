@@ -411,7 +411,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         QueryWrapper<Cart> cartQueryWrapper = new QueryWrapper<>();
         cartQueryWrapper.eq("user_id", userId)
                 .eq("sku_id", sku_id)
-                .eq("de_flag", 0);
+                .eq("del_flag", 0);
 
         List<Cart> carts = cartMapper.selectList(cartQueryWrapper);
         if(!carts.isEmpty())

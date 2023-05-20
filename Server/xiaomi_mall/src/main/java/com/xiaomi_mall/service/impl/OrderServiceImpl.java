@@ -212,7 +212,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
             throw new RuntimeException(e);
         }
 
-        QueryWrapper<Order> orderQueryWrapper = new QueryWrapper<Order>();
+        QueryWrapper<Order> orderQueryWrapper = new QueryWrapper<>();
         orderQueryWrapper.eq("user_id", userId);
         List<Map<String, Object>> orderList = orderMapper.selectMaps(orderQueryWrapper);
 
