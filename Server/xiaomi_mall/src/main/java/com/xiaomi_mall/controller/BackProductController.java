@@ -156,7 +156,7 @@ public class BackProductController {
     @PreAuthorize("hasAnyAuthority('普通管理员', '超级管理员')")
     @ApiOperation("创建Attribute接口")
     @PostMapping("/createNewAttribute")
-    public Result createNewAttribute(@RequestBody String attributeName) {
+    public Result createNewAttribute(@RequestParam String attributeName) {
         return skuAttributeService.createNewAttribute(attributeName);
     }
 
