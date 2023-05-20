@@ -33,7 +33,7 @@ public class ProductController {
     }
 
     @ApiOperation("查询商品价格")
-    @GetMapping("/getProductPrice")
+    @PostMapping("/getProductPrice")
     public Result getProductPrice(@RequestBody Map<String, Object> map) {
         return productService.getProductPrice(map);
     }

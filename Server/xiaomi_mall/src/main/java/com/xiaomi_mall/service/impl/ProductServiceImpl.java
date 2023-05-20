@@ -203,13 +203,13 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
             return Result.errorResult(802,"attributeIdList不能为空，一个商品至少要一个SKU");
 
         if(valueIdList.size() < 1)
-            return Result.errorResult(802,"valueIdList不能为空，一个商品至少要一个SKU");
+            return Result.errorResult(803,"valueIdList不能为空，一个商品至少要一个SKU");
 
         if(skuList.size() < 1)
-            return Result.errorResult(802,"skuList不能为空，一个商品至少要一个SKU");
+            return Result.errorResult(804,"skuList不能为空，一个商品至少要一个SKU");
 
         if(skuDetailList.size() < 1)
-            return Result.errorResult(802,"skuDetailList不能为空，一个商品至少要一个SKU");
+            return Result.errorResult(805,"skuDetailList不能为空，一个商品至少要一个SKU");
 
         //对属性判断是否可操作
         List<SkuAttribute> attributeList = skuAttributeMapper.getAll();
@@ -225,7 +225,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
                 }
             }
             if(!remain)
-                return Result.errorResult(804, "id为" + id +"的attribute不存在");
+                return Result.errorResult(806, "id为" + id +"的attribute不存在");
         }
 
         //对属性值判断是否可操作

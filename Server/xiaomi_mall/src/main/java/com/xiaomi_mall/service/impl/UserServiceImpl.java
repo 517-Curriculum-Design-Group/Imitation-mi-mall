@@ -63,9 +63,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if(!StringUtils.hasText(user.getPassword())){
             throw new SystemException(AppHttpCodeEnum.PASSWORD_NOT_NULL);
         }
-        if(!StringUtils.hasText(user.getEmail())){
-            throw new SystemException(AppHttpCodeEnum.EMAIL_NOT_NULL);
-        }
+//        if(!StringUtils.hasText(user.getEmail())){
+//            throw new SystemException(AppHttpCodeEnum.EMAIL_NOT_NULL);
+//        }
         if(!StringUtils.hasText(user.getNickName())){
             throw new SystemException(AppHttpCodeEnum.NICKNAME_NOT_NULL);
         }
@@ -113,22 +113,30 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public Result addadmin(User user) {
         //防止注册的用户重名
-        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(User::getUserName, user.getUserName());
-        User user2 = getOne(queryWrapper);
+        try
+        {
+            LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+            queryWrapper.eq(User::getUserName, user.getUserName());
+            User user2 = getOne(queryWrapper);
 
-        if (Objects.isNull(user2)) {
-            //user2为空时，说明不重名，可以注册
-            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-            String encodePassword = passwordEncoder.encode(user.getPassword());
-            user.setPassword(encodePassword);
-            user.setUserType("普通管理员");
-            user.setCreateBy(Math.toIntExact(SecurityUtils.getUserId()));
-            user.setUpdateBy(Math.toIntExact(SecurityUtils.getUserId()));
-            save(user);
-            return Result.okResult();
+            if (Objects.isNull(user2)) {
+                //user2为空时，说明不重名，可以注册
+                BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+                String encodePassword = passwordEncoder.encode(user.getPassword());
+                user.setPassword(encodePassword);
+                user.setUserType("普通管理员");
+                user.setCreateBy(Math.toIntExact(SecurityUtils.getUserId()));
+                user.setUpdateBy(Math.toIntExact(SecurityUtils.getUserId()));
+                save(user);
+                return Result.okResult();
+            }
+            return Result.errorResult(AppHttpCodeEnum.USERNAME_EXIST);
         }
-        return Result.errorResult(AppHttpCodeEnum.USERNAME_EXIST);
+        catch (Exception e)
+        {
+            System.out.println(e);
+        }
+        return Result.errorResult(1000, "网络异常");
     }
 
     @Override
