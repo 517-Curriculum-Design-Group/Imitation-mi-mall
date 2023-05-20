@@ -1,9 +1,11 @@
 package com.xiaomi_mall.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xiaomi_mall.config.Result;
 import com.xiaomi_mall.dto.OrderCommit;
+import com.xiaomi_mall.dto.SeckillOrderDto;
 import com.xiaomi_mall.enity.*;
 import com.xiaomi_mall.mapper.*;
 import com.xiaomi_mall.service.OrderDetailService;
@@ -11,10 +13,10 @@ import com.xiaomi_mall.service.OrderService;
 import com.xiaomi_mall.service.SkuService;
 import com.xiaomi_mall.service.UserService;
 import com.xiaomi_mall.util.JwtUtil;
-import com.xiaomi_mall.vo.SkuValueDetailVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
@@ -52,18 +54,15 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         List<User> userList = userService.list();
         List<HashMap<String, Object>> res = new ArrayList<>();
 
-        for (Order order: orderList)
-        {
+        for (Order order : orderList) {
             HashMap<String, Object> map = new LinkedHashMap<>();
             map.put("orderId", order.getOrderId());
             map.put("orderTime", order.getOrderTime());
             map.put("totalPrice", order.getTotalPrice());
             map.put("userId", order.getUserId());
             String username = "";
-            for (User user: userList)
-            {
-                if(user.getUserId() == order.getUserId())
-                {
+            for (User user : userList) {
+                if (user.getUserId() == order.getUserId()) {
                     username += user.getUserName();
                     break;
                 }
@@ -91,8 +90,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         //商品相关
         HashMap<String, Object> map2 = new LinkedHashMap<>();
         List<HashMap<String, Object>> productList = new ArrayList<>();
-        for (OrderDetail orderDetail: orderDetailList)
-        {
+        for (OrderDetail orderDetail : orderDetailList) {
             HashMap<String, Object> map = new LinkedHashMap<>();
             map.put("productName", orderDetail.getProductName());
             map.put("skuName", orderDetail.getSkuName());
@@ -130,7 +128,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
                 .eq("del_flag", 0);
         List<Map<String, Object>> addresses = addressMapper.selectMaps(addressListWrapper);
 
-        for (Map<String, Object> address:addresses) {
+        for (Map<String, Object> address : addresses) {
             address.remove("user_id");
             address.remove("is_default");
             address.remove("del_flag");
@@ -139,8 +137,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     }
 
     @Override
-    public Result generateOrder(HttpServletRequest request, List<OrderCommit> commits, Integer addressId)
-    {
+    public Result generateOrder(HttpServletRequest request, List<OrderCommit> commits, Integer addressId) {
         //取userId
         long userId = -1;
         try {
@@ -152,7 +149,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
 
         //求单价*数量+总价 + //库存减少
         List<Integer> skuIds = new ArrayList<>();
-        for (OrderCommit commit:commits) {
+        for (OrderCommit commit : commits) {
             skuIds.add(commit.getSkuId());
         }
 
@@ -165,7 +162,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
             sum += eachPrice;
             //库存减少
             int restStock = skus.get(i).getSkuStock() - commits.get(i).getCommitCount();
-            if(restStock < 0)
+            if (restStock < 0)
                 return Result.errorResult(SKU_STOCK_LIMIT);
             skus.get(i).setSkuStock(restStock);
         }
@@ -189,8 +186,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
 
         //添订单详情
         List<OrderDetail> orderDetailList = new ArrayList<>();
-        for (int i = 0; i < commits.size(); i++)
-        {
+        for (int i = 0; i < commits.size(); i++) {
             OrderDetail orderDetail = new OrderDetail();
             orderDetail.setOrderId(order.getOrderId());
             orderDetail.setProductName(commits.get(i).getProductName());
@@ -221,8 +217,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         List<Map<String, Object>> orderList = orderMapper.selectMaps(orderQueryWrapper);
 
         List<HashMap<String, Object>> res = new ArrayList<>();
-        for (Map<String, Object> order: orderList)
-        {
+        for (Map<String, Object> order : orderList) {
             HashMap<String, Object> map = new LinkedHashMap<>();
             map.put("orderId", order.get("orderId"));
             map.put("orderTime", order.get("orderTime"));
@@ -237,15 +232,37 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     public Result orderDelivery(List<Integer> orderId) {
         List<Order> orders = orderMapper.selectBatchIds(orderId);
         for (Order order : orders) {
-            if(order.getStatus() == 1)
+            if (order.getStatus() == 1)
                 order.setStatus(2);
         }
         orderService.updateBatchById(orders);
         return Result.okResult("选中的已支付订单已通知发货！");
     }
 
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void createSeckillOrder(SeckillOrderDto seckillOrderDto) {
+        int skuId = seckillOrderDto.getSkuId();
+        String productName = seckillOrderDto.getProductName();
 
+        //创建订单
+        orderService.save(seckillOrderDto.getOrder());
 
+        LambdaQueryWrapper<Sku> skuWrapper = new LambdaQueryWrapper<>();
+        skuWrapper.eq(Sku::getSkuId, skuId);
+        String skuImage = skuMapper.selectOne(skuWrapper).getSkuImage();
+
+        //创建订单详情
+        OrderDetail orderDetail = new OrderDetail();
+        orderDetail.setOrderId(seckillOrderDto.getOrder().getOrderId());
+        orderDetail.setProductName(productName);
+        orderDetail.setSkuId(skuId);
+        orderDetail.setSkuImage(skuImage);
+        orderDetail.setSkuPrice(seckillOrderDto.getOrder().getTotalPrice());
+        orderDetail.setSkuQuantity(1);
+
+        orderDetailService.save(orderDetail);
+    }
 
 
 }

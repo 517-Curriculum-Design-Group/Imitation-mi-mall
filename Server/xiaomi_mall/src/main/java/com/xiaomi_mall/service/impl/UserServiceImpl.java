@@ -10,16 +10,17 @@ import com.xiaomi_mall.constants.SystemConstants;
 import com.xiaomi_mall.enity.*;
 import com.xiaomi_mall.enums.AppHttpCodeEnum;
 import com.xiaomi_mall.exception.SystemException;
-import com.xiaomi_mall.mapper.*;
+import com.xiaomi_mall.mapper.OrderMapper;
+import com.xiaomi_mall.mapper.ProductMapper;
+import com.xiaomi_mall.mapper.SkuMapper;
+import com.xiaomi_mall.mapper.UserMapper;
 import com.xiaomi_mall.service.CategoryService;
-import com.xiaomi_mall.service.OrderService;
 import com.xiaomi_mall.service.UserService;
 import com.xiaomi_mall.util.BeanCopyUtils;
 import com.xiaomi_mall.util.SecurityUtils;
 import com.xiaomi_mall.vo.UserListPageVo;
 import com.xiaomi_mall.vo.UserListVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -454,6 +455,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
         return Result.okResult(lowerProducts);
     }
+
+
+    @Override
+    public Result getPersonInfo() {
+        Long userId = SecurityUtils.getUserId();
+        User user = userMapper.selectById(userId);
+        return Result.okResult(user);
+    }
+
 
 
 }

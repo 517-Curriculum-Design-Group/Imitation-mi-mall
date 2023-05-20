@@ -24,6 +24,7 @@ public class HomeController {
         return userService.getHeaderProducts();
     }
 
+
     @ApiOperation("获取左侧数据")
     @GetMapping("/getLeftCategories")
     public Result getLeftCategories() {

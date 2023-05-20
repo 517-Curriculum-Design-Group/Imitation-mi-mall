@@ -4,8 +4,8 @@ package com.xiaomi_mall.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.xiaomi_mall.config.Result;
 import com.xiaomi_mall.dto.OrderCommit;
+import com.xiaomi_mall.dto.SeckillOrderDto;
 import com.xiaomi_mall.enity.Order;
-import com.xiaomi_mall.service.impl.OrderServiceImpl;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -25,7 +25,7 @@ public interface OrderService extends IService<Order> {
     Result orderDelivery(List<Integer> orderId);
 
 
-
+    void createSeckillOrder(SeckillOrderDto seckillOrderDto);
 }
 
 

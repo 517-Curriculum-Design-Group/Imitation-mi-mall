@@ -1,15 +1,126 @@
 package com.xiaomi_mall.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.xiaomi_mall.enity.Seckill;
+import com.xiaomi_mall.config.MyRabbitMQConfig;
+import com.xiaomi_mall.config.Result;
+import com.xiaomi_mall.constants.SystemConstants;
+import com.xiaomi_mall.dto.SeckillOrderDto;
+import com.xiaomi_mall.enity.*;
+import com.xiaomi_mall.mapper.ProductMapper;
 import com.xiaomi_mall.mapper.SeckillMapper;
+import com.xiaomi_mall.mapper.UserMapper;
+import com.xiaomi_mall.service.AddressService;
 import com.xiaomi_mall.service.SeckillService;
+import com.xiaomi_mall.util.RedisCache;
+import com.xiaomi_mall.util.SecurityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
+import java.util.Date;
 
 @Service
 public class SeckillServiceImpl extends ServiceImpl<SeckillMapper, Seckill> implements SeckillService {
     @Autowired
     private SeckillMapper seckillMapper;
+    @Autowired
+    private UserMapper userMapper;
+    @Autowired
+    private ProductMapper productMapper;
+    @Autowired
+    private RedisCache redisCache;
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
+    @Autowired
+    private AddressService addressService;
 
+    private static final Logger logger = LoggerFactory.getLogger(SeckillServiceImpl.class);
+    @Override
+    public Result seckill(Integer productId) {
+        Long userId = SecurityUtils.getUserId();
+        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+        LambdaQueryWrapper<Product> wrapper = new LambdaQueryWrapper<>();
+        LambdaQueryWrapper<Seckill> seckillWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(User::getUserId, userId);
+        wrapper.eq(Product::getProductId, productId);
+        seckillWrapper.eq(Seckill::getProductId, productId);
+        User user = userMapper.selectOne(queryWrapper);
+        Product product = productMapper.selectOne(wrapper);
+        Seckill seckill = seckillMapper.selectOne(seckillWrapper);
+
+        int skuId = seckill.getSeckillId();
+        BigDecimal seckillPrice = seckill.getSeckillPrice();
+
+        logger.info("参加秒杀的用户是: {}, 秒杀的商品时: {}", user.getUserName(), product.getProductName());
+
+        String message = null;
+        Long decrByResult = redisCache.decrBy(productId+"");
+        //调用redis给相应商品库存量减一
+        if (decrByResult >= 0) {
+            /**
+             * 说明该商品的库存量有剩余，可以进行下订单操作
+             */
+            logger.info("用户：{}秒杀该商品：{}库存有余，可以进行下订单操作", user.getUserName(), product.getProductName());
+            //发消息给库存消息队列，将库存数据减一
+            rabbitTemplate.convertAndSend(MyRabbitMQConfig.STORY_EXCHANGE, MyRabbitMQConfig.STORY_ROUTING_KEY, productId);
+            addressService.getDefaultAddress(userId);
+            //发消息给订单消息队列，创建订单
+            Order order = new Order();
+            order.setUserId(userId);
+            order.setTotalPrice(seckillPrice);
+            order.setOrderTime(new Date());
+            order.setStatus(1);//已支付未发货
+            order.setAddress(getDefaultAddress1(userId));
+            order.setName(getDefaultAddress2(userId).getRecipientName());
+            order.setPhone(getDefaultAddress2(userId).getRecipientPhone());
+
+            SeckillOrderDto seckillOrderDto = new SeckillOrderDto();
+            seckillOrderDto.setProductName(product.getProductName());
+            seckillOrderDto.setOrder(order);
+            seckillOrderDto.setSkuId(skuId);
+
+            rabbitTemplate.convertAndSend(MyRabbitMQConfig.ORDER_EXCHANGE, MyRabbitMQConfig.ORDER_ROUTING_KEY, seckillOrderDto);
+            message = "秒杀商品" + productId + "成功";
+        } else {
+            /**
+             * 说明该商品的库存量没有剩余，直接返回秒杀失败的消息给用户
+             */
+           // logger.info("用户：{}秒杀时商品的库存量没有剩余,秒杀结束", userName);
+            message = "商品"+ productId +"的库存量没有剩余,秒杀结束";
+        }
+
+        return Result.okResult(message);
+    }
+
+    @Override
+    public void decrByStock(Integer productId) {
+        //校验库存
+        LambdaQueryWrapper<Seckill> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Seckill::getProductId, productId);
+        int store = seckillMapper.selectOne(queryWrapper).getStockCount();
+        if(store >= 1) {
+            seckillMapper.decraystore(productId);
+        }
+    }
+
+    private String getDefaultAddress1(Long userId) {
+        LambdaQueryWrapper<Address> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Address::getUserId, userId)
+                .eq(Address::getIsDefault, SystemConstants.DEFAULT_ADDRESS);
+        Address address = addressService.getOne(wrapper);
+        return address.getProvince() + address.getCity() + address.getDistrict() +
+                address.getZhen() + address.getDetail();
+    }
+
+    private Address getDefaultAddress2(Long userId) {
+        LambdaQueryWrapper<Address> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Address::getUserId, userId)
+                .eq(Address::getIsDefault, SystemConstants.DEFAULT_ADDRESS);
+        Address address = addressService.getOne(wrapper);
+        return address;
+    }
 }
