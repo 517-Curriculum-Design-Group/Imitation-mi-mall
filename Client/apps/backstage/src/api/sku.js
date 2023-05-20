@@ -9,8 +9,23 @@ export function getskulist(pageNum, pageSize) {
     })
 }
 
-export function addsku(typename) {
-    return axios.post('/createNewAttribute',typename)
+export function addsku(attributeName) {
+    return axios.post('/createNewAttribute',null,{ params: {
+        attributeName
+      }})
+}
+
+export function addsmallsku(
+    attributeId,
+    attributeValueName) {
+    return axios.post('/createNewAttributeValue',
+        {
+        attributeId,
+        attributeValueName
+        },{
+        headers: {
+            "Content-Type": "application/json"
+        }})
 }
 
 export function modifystatus(userId) {

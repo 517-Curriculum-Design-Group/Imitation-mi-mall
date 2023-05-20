@@ -16,7 +16,27 @@ export function login({
         }
     }
     )
+}
 
+export function addadmin({
+    userName,
+    password,
+    nickName,
+    email
+}) {
+    return axios.post(
+        '/addadmin',
+        {
+            userName,
+            password,
+            nickName,
+            email
+        }, {
+        headers: {
+            "Content-Type": "application/json"
+        }
+    }
+    )
 }
 
 export function home() {
