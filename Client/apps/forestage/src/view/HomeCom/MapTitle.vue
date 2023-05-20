@@ -19,6 +19,10 @@ if (!e && r) {
       {{ item.parentCategoryName }}
       <div class="i-ic-round-keyboard-arrow-right w-[24px] h-[24px]" />
       <div
+        :class="{
+          'justify-center items-center':
+            item.categoryNames.length !== 0 ? false : true,
+        }"
         class="activeBox absolute top-0 left-[226px] flex flex-col flex-wrap h-full bg-light-50 drop-shadow w-[400px] text-black leading-[76px] pl-[25px]"
       >
         <div
@@ -29,10 +33,8 @@ if (!e && r) {
           {{ i.category_name }}
         </div>
         <n-empty
-          class="absolute top-[40%] left-[40%] z-0"
-          :class="{
-            'op-0': item.categoryNames.length !== 0 ? true : false,
-          }"
+          class="emptyTitle absolute my-auto"
+          v-if="item.categoryNames.length !== 0 ? false : true"
           description="你什么也找不到"
         >
         </n-empty>
@@ -45,7 +47,7 @@ if (!e && r) {
 .active .activeBox {
   width: 0;
   opacity: 0;
-  z-index: 0;
+  z-index: -1;
   transition: all 400ms cubic-bezier(0.4, 0.4, 0.25, 1.35);
 }
 .active:hover .activeBox {
@@ -53,5 +55,8 @@ if (!e && r) {
   opacity: 1;
   z-index: 200;
   transition: all 400ms cubic-bezier(0.4, 0.4, 0.25, 1.35);
+}
+.emptyTitle {
+  z-index: -100;
 }
 </style>
