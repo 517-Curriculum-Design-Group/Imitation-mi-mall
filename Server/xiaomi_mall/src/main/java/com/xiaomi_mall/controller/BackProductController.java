@@ -56,7 +56,13 @@ public class BackProductController {
         return productService.addNewProduct(map);
     }
 
-    //TODO:补货还没写sku_id + stock
+    //TODO:这个
+//    @PreAuthorize("hasAnyAuthority('普通管理员', '超级管理员')")
+//    @ApiOperation("给商品补货")
+//    @PostMapping("/addProductStock")
+//    public Result addProductStock(@RequestBody Map<String, Object> map) {
+//        return productService.addProductStock(map);
+//    }
 
 
 

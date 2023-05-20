@@ -113,7 +113,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     }
 
     @Override
-    public Result getOrderDetail(HttpServletRequest request, Integer orderId) {
+    public Result getUserOrderDetail(HttpServletRequest request, Integer orderId) {
         long userId = -1;
         try {
             userId = JwtUtil.getUserId(request);
