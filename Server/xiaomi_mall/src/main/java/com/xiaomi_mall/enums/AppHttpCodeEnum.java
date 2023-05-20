@@ -20,8 +20,8 @@ public enum AppHttpCodeEnum {
     NICKNAME_EXIST(512, "昵称已存在"),
     PRODUCT_EXIST(513, "当前分类关联的商品存在，不能删除"),
     CHILDREN_CATEGORY_EXIST(514, "当前分类关联的子分类，不能删除"),
-    SKU_STOCK_LIMIT(515, "库存不足");
-
+    SKU_STOCK_LIMIT(515, "库存不足"),
+    UPLOAD_ERROR(516, "上传错误");
     int code;
     String msg;
 

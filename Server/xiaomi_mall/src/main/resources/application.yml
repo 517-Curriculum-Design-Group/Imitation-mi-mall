@@ -17,6 +17,22 @@ spring:
         min-idle: 0
     lettuce:
       shutdown-timeout: 0
+  rabbitmq:
+    port: 5672
+    host: 8.134.87.155
+    username: admin
+    password: admin
+    #这个配置是保证提供者确保消息推送到交换机中，不管成不成功，都会回调
+    publisher-confirm-type: correlated
+    #保证交换机能把消息推送到队列中
+    publisher-returns: true
+    virtual-host: /xiaomi
+    #这个配置是保证消费者会消费消息，手动确认
+    listener:
+      simple:
+        acknowledge-mode: manual
+    template:
+      mandatory: true
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
@@ -29,3 +45,8 @@ mybatis-plus:
       logic-delete-value: 1
       logic-not-delete-value: 0
       id-type: auto
+minio:
+  endpoint: http://8.134.87.155:9090
+  accessKey: admin
+  secretKey: 12345678
+  bucketName: myblog

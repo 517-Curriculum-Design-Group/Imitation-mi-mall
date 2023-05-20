@@ -235,4 +235,13 @@ public class RedisCache
     {
         return redisTemplate.keys(pattern);
     }
+
+    /**
+     * 对指定key的键值减一
+     * @param key
+     * @return
+     */
+    public Long decrBy(String key) {
+        return redisTemplate.opsForValue().decrement(key);
+    }
 }

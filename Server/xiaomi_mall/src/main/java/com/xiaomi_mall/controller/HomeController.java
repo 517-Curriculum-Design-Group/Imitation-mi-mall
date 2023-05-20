@@ -23,6 +23,7 @@ public class HomeController {
     public Result getUserHome() {
         return userService.getUserHome();
     }
+
     @ApiOperation("查询分类接口")
     @GetMapping("/getCategoryList")
     public Result getCategoryList() {

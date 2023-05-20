@@ -46,6 +46,4 @@ public class OrderDetail implements Serializable {
 
     @ApiModelProperty("逻辑删除符")
     private int delFlag;
-
-
 }
