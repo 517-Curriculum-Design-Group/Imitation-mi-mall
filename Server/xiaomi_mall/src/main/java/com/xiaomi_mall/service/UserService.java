@@ -22,9 +22,12 @@ public interface UserService extends IService<User> {
     Result getPersonInfo();
 
 
+
     Result getHeaderProducts();
 
     Result getLeftCategories();
+
+    Result getLowerProducts();
 
 
 }
