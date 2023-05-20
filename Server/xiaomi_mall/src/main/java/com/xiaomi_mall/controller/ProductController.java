@@ -93,6 +93,12 @@ public class ProductController {
         return orderService.getOrderList(request);
     }
 
+    @PreAuthorize("hasAnyAuthority('普通用户')")
+    @ApiOperation("查看订单详情")
+    @GetMapping("/getOrderDetail/{orderId}")
+    public Result getOrderList(HttpServletRequest request, @PathVariable Integer orderId) {
+        return orderService.getOrderDetail(request, orderId);
+    }
 
     /**
      * 喜欢相关

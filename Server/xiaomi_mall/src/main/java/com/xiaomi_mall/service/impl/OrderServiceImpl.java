@@ -112,6 +112,55 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         return Result.okResult(res);
     }
 
+    @Override
+    public Result getOrderDetail(HttpServletRequest request, Integer orderId) {
+        long userId = -1;
+        try {
+            userId = JwtUtil.getUserId(request);
+            if (userId == -1) throw new RuntimeException();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        Order order = orderMapper.getOrderByOrderId(orderId);
+        if(order.getUserId() != userId)
+            return Result.errorResult(900, "非此用户的订单ID");
+
+        List<OrderDetail> orderDetailList = orderDetailMapper.getDetailListByOrderId(orderId);
+
+        HashMap<String, HashMap<String, Object>> res = new LinkedHashMap<>();
+
+        //订单相关
+        HashMap<String, Object> map1 = new LinkedHashMap<>();
+        map1.put("orderId", order.getOrderId());
+        map1.put("orderTime", order.getOrderTime());
+        res.put("orderDetail", map1);
+
+        //商品相关
+        HashMap<String, Object> map2 = new LinkedHashMap<>();
+        List<HashMap<String, Object>> productList = new ArrayList<>();
+        for (OrderDetail orderDetail : orderDetailList) {
+            HashMap<String, Object> map = new LinkedHashMap<>();
+            map.put("productName", orderDetail.getProductName());
+            map.put("skuName", orderDetail.getSkuName());
+            map.put("skuImage", orderDetail.getSkuImage());
+            map.put("skuPrice", orderDetail.getSkuPrice());
+            map.put("skuQuantity", orderDetail.getSkuQuantity());
+            productList.add(map);
+        }
+        map2.put("productList", productList);
+        map2.put("totalPrice", order.getTotalPrice());
+        res.put("productDetail", map2);
+
+        //收货相关
+        HashMap<String, Object> map3 = new LinkedHashMap<>();
+        map3.put("address", order.getAddress());
+        map3.put("name", order.getName());
+        map3.put("phone", order.getPhone());
+        res.put("addressDetail", map3);
+        return Result.okResult(res);
+    }
+
 
     @Override
     public Result checkOrder(HttpServletRequest request) {

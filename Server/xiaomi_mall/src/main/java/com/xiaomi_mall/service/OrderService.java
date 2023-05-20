@@ -16,6 +16,8 @@ public interface OrderService extends IService<Order> {
 
     Result getOrderDetail(Integer orderId);
 
+    Result getOrderDetail(HttpServletRequest request, Integer orderId);
+
     Result checkOrder(HttpServletRequest request);
 
     Result generateOrder(HttpServletRequest request, List<OrderCommit> skuIds, Integer addressId);

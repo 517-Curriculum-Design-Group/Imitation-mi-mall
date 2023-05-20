@@ -56,6 +56,9 @@ public class BackProductController {
         return productService.addNewProduct(map);
     }
 
+    //TODO:补货还没写sku_id + stock
+
+
 
     @PreAuthorize("hasAnyAuthority('普通管理员', '超级管理员')")
     @ApiOperation("查看商品SKU接口")
