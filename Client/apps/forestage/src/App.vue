@@ -19,5 +19,17 @@ const themeOverrides = {
     barColor: "#ff6700FF",
     tabBorderColor: "#FFFFFF00",
   },
+  Radio: {
+    dotColorActive: "#ff6700FF",
+    buttonBorderColorActive: "#ff6700FF",
+    buttonTextColorActive: "#ff6700FF",
+    buttonTextColorHover: "#ff6700FF",
+    buttonColorActive: "#FFF",
+    buttonBoxShadowFocus: "inset 0 0 0 1px #FF6700FF, 0 0 0 1px #FF6700FF",
+    fontSizeLarge: "16px",
+    fontSizeMedium: "16px",
+    buttonHeightLarge: "42px",
+    buttonHeightMedium: "42px",
+  },
 };
 </script>

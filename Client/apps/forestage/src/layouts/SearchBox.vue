@@ -9,7 +9,6 @@ const getHeaderProductsData = async () => {
   const [e, r] = await api.getHeaderProducts();
   if (!e && r) {
     titles.value = r.data;
-    console.log(titles.value);
   }
 };
 
@@ -27,25 +26,37 @@ onMounted(() => {
       <template v-for="item in titles" :key="item">
         <nav class="nav-titile active w-[100px] h-[88px] cursor-pointer">
           {{ item.cateName }}
+          <div
+            class="activeBox absolute top-[100px] left-0 drop-shadow flex h-[0] opacity-0 w-[100%] z-0 bg-light-100"
+          >
+            <template
+              v-for="i in item.sameCategoryProducts"
+              :key="i.product_id"
+            >
+              <div
+                class="h-[201px] flex flex-col w-[204px] text-center items-center justify-center text-[12px] leading-[20px] cursor-pointer text-black"
+              >
+                <img
+                  :src="i.product_pic"
+                  :alt="i.product_name"
+                  class="object-cover w-[160px] h-[140px]"
+                />
+                <span class="mt-4">{{ i.product_name }}</span>
+                <span class="text-orange-500">{{ i.product_price }}</span>
+              </div>
+            </template>
+
+            <n-empty
+              class="absolute top-[20%] left-[50%]"
+              :class="{
+                'op-0': item.sameCategoryProducts.length !== 0 ? true : false,
+              }"
+              description="你什么也找不到"
+            >
+            </n-empty>
+          </div>
         </nav>
       </template>
-      <!-- <div
-        class="absolute top-[100px] left-0 flex h-[210px] w-[100%] z-200 bg-light-100"
-      >
-        <div
-          v-for="item in titles.sameCategoryProducts"
-          :key="item.product_id"
-          class="h-[201px] flex flex-col w-[204px] text-center items-center justify-center text-[12px] leading-[20px] cursor-pointer"
-        >
-          <img
-            :src="item.product_pic"
-            :alt="item.product_name"
-            class="object-cover w-[160px] h-[110px]"
-          />
-          <span class="mt-4">{{ item.product_name }}</span>
-          <span class="text-orange-500">{{ item.product_price }}</span>
-        </div>
-      </div> -->
       <div class="flex w-[296.6px] h-[49.6px] container ml-[120px]">
         <n-input
           v-model:value="value"
@@ -84,6 +95,7 @@ onMounted(() => {
 }
 
 .active > .activeBox {
+  z-index: -1;
   transition: all 400ms cubic-bezier(0.4, 0.4, 0.25, 1.35);
 }
 
