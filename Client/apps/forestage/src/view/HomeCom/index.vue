@@ -80,30 +80,67 @@ onMounted(() => {
         <navCard :src="item.src" :alt="item.alt" />
       </template>
     </div>
-    <div class="mt-[24px]">
-      <img
-        class="w-[1226px]"
-        src="//cdn.cnbj1.fds.api.mi-img.com/mi-mall/864aa0927000c3d717eca08955589d62.jpg?thumb=1&w=1533&h=150&f=webp&q=90"
-        alt="广告4"
-      />
-    </div>
-    <template v-for="itemss in lowerData" :key="itemss.categoryName">
-      <div class="flex flex-col h-[614px] w-[1226px]">
-        <div class="flex justify-between h-[58px] leading-[58px]">
-          <span class="text-[22px]">{{ itemss.categoryName }}</span>
-          <div class="flex text-[16px]">
-            <template
+    <div class="flex flex-col items-center bg-[#f5f5f5] w-100% mt-24px">
+      <div class="mt-[24px]">
+        <img
+          class="w-[1226px]"
+          src="//cdn.cnbj1.fds.api.mi-img.com/mi-mall/864aa0927000c3d717eca08955589d62.jpg?thumb=1&w=1533&h=150&f=webp&q=90"
+          alt="广告4"
+        />
+      </div>
+      <template v-for="itemss in lowerData" :key="itemss.categoryName">
+        <div class="flex h-[684px] w-[1246px] relative">
+          <n-tabs type="line" animated trigger="hover" justify-content="end">
+            <template #prefix>
+              <span class="text-[22px]">{{ itemss.categoryName }}</span>
+            </template>
+            <n-tab-pane
               v-for="obj in itemss.eachCategoryProduct"
               :key="obj.category_name"
+              class="flex flex-wrap gap-14px min-h-[400px]"
+              :name="obj.category_name"
+              :tab="obj.category_name"
             >
-              <nav class="mx-[8px]">
-                {{ obj.category_name }}
-              </nav>
-            </template>
-          </div>
+              <template v-for="item in obj.products" :key="item.productId">
+                <n-card
+                  class="w-234px h-300px m-2px text-14px flex flex-col text-center justify-center items-center text-black cursor-pointer"
+                  hoverable
+                >
+                  <img
+                    class="aspect-square w-160px"
+                    :src="item.productPic"
+                    :alt="item.productName"
+                  />
+                  <div>{{ item.productName }}</div>
+                  <div class="truncate h-18px w-209px text-gray-400 text-12px">
+                    {{ item.productDescription }}
+                  </div>
+                  <span class="text-orange-500 inline-block mt-10px">{{
+                    item.leastPrice
+                  }}</span>
+                </n-card>
+              </template>
+              <n-empty
+                class="absolute top-[50%] left-[50%] z-0"
+                :class="{
+                  'op-0': obj.products.length !== 0 ? true : false,
+                }"
+                description="你什么也找不到"
+              >
+              </n-empty>
+            </n-tab-pane>
+          </n-tabs>
+          <n-empty
+            class="absolute top-[50%] left-[50%] z-0"
+            :class="{
+              'op-0': itemss.eachCategoryProduct.length !== 0 ? true : false,
+            }"
+            description="你什么也找不到"
+          >
+          </n-empty>
         </div>
-      </div>
-    </template>
+      </template>
+    </div>
   </div>
 </template>
 
