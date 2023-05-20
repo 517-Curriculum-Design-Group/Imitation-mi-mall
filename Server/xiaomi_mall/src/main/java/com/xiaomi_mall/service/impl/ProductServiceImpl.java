@@ -203,13 +203,13 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
             return Result.errorResult(802,"attributeIdList不能为空，一个商品至少要一个SKU");
 
         if(valueIdList.size() < 1)
-            return Result.errorResult(802,"valueIdList不能为空，一个商品至少要一个SKU");
+            return Result.errorResult(803,"valueIdList不能为空，一个商品至少要一个SKU");
 
         if(skuList.size() < 1)
-            return Result.errorResult(802,"skuList不能为空，一个商品至少要一个SKU");
+            return Result.errorResult(804,"skuList不能为空，一个商品至少要一个SKU");
 
         if(skuDetailList.size() < 1)
-            return Result.errorResult(802,"skuDetailList不能为空，一个商品至少要一个SKU");
+            return Result.errorResult(805,"skuDetailList不能为空，一个商品至少要一个SKU");
 
         //对属性判断是否可操作
         List<SkuAttribute> attributeList = skuAttributeMapper.getAll();
@@ -225,7 +225,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
                 }
             }
             if(!remain)
-                return Result.errorResult(804, "id为" + id +"的attribute不存在");
+                return Result.errorResult(806, "id为" + id +"的attribute不存在");
         }
 
         //对属性值判断是否可操作
@@ -422,7 +422,56 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         return Result.okResult("加入购物车成功");
     }
 
+    @Override
+    public Result getProductPrice(Map<String, Object> map) {
+        List<String> attributeValues = (List<String>) map.get("attributeValues");
+        int product_id = (int) map.get("product_id");
+        Map<String, Object> res = new LinkedHashMap<>();
 
+        List<Sku> skuList = skuMapper.getSkuListByProductId(product_id);
+        List<SkuVo> skuVoList = new ArrayList<>();
+        for (Sku sku:skuList)
+        {
+            List<String> skus = new ArrayList<>();
+            Map<String, Object> map1 = JSON.parseObject(sku.getSkuName(), LinkedHashMap.class, Feature.OrderedField);
+            for (Map.Entry<String, Object> entry : map1.entrySet())
+            {
+                String value = (String) entry.getValue();
+                skus.add(value);
+            }
+            skuVoList.add(new SkuVo(sku.getSkuId(), skus, sku.getSkuPrice(), sku.getSkuStock()));
+        }
+
+        for (int i = 0 ; i < attributeValues.size() ; i++)
+        {
+            for (SkuVo skuVo:skuVoList)
+            {
+                List<String> values = skuVo.getSkus();
+                boolean find_flag = false;
+                for (int j = 0 ; j < values.size() ; j++)
+                {
+                    if(!attributeValues.get(j).equals(values.get(j)))
+                    {
+                        find_flag = false;
+                        break;
+                    }
+                    else
+                    {
+                        find_flag = true;
+                    }
+                }
+
+                if(find_flag)
+                {
+                    res.put("price", skuVo.getSkuPrice());
+                    res.put("stock", skuVo.getSkuStock());
+                    return Result.okResult(res);
+                }
+            }
+        }
+
+        return Result.errorResult(AppHttpCodeEnum.SKU_NOT_FIND);
+    }
 
 
 }

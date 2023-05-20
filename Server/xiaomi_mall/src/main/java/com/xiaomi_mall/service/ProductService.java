@@ -24,6 +24,7 @@ public interface ProductService extends IService<Product> {
 
     Result addSkuToCart(HttpServletRequest request, Integer sku_id);
 
+    Result getProductPrice(Map<String, Object> map);
 }
 
 

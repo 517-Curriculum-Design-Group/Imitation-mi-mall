@@ -13,6 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @Slf4j
@@ -29,6 +30,12 @@ public class ProductController {
     @GetMapping("/getProductDetail/{product_id}")
     public Result getProductDetail(@PathVariable Integer product_id) {
         return productService.getProductDetail(product_id);
+    }
+
+    @ApiOperation("查询商品价格")
+    @PostMapping("/getProductPrice")
+    public Result getProductPrice(@RequestBody Map<String, Object> map) {
+        return productService.getProductPrice(map);
     }
 
     /**
