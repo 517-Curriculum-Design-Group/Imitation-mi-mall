@@ -15,6 +15,7 @@ import com.xiaomi_mall.service.CartService;
 import com.xiaomi_mall.service.OrderDetailService;
 import com.xiaomi_mall.service.OrderService;
 import com.xiaomi_mall.util.JwtUtil;
+import com.xiaomi_mall.vo.SkuVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -51,10 +52,18 @@ public class CartServiceImpl extends ServiceImpl<CartMapper, Cart> implements Ca
         for (Map<String, Object> m:maps)
         {
             String skuName = m.get("sku_name").toString();
-            LinkedHashMap skuJsonMap = JSON.parseObject(skuName, LinkedHashMap.class, Feature.OrderedField);
-            m.put("sku_name", skuJsonMap);
-
+            Map<String, Object> skuJsonMap = JSON.parseObject(skuName, LinkedHashMap.class, Feature.OrderedField);
+            List<Map<String, Object>> attributeValueList = new ArrayList<>();
+            for (Map.Entry<String, Object> entry : skuJsonMap.entrySet())
+            {
+                LinkedHashMap single = new LinkedHashMap();
+                single.put("name", entry.getKey());
+                single.put("value", entry.getValue());
+                attributeValueList.add(single);
+            }
+            m.put("attributeValueList", attributeValueList);
             m.remove("user_id");
+            m.remove("sku_name");
             m.remove("del_flag");
         }
 
