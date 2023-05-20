@@ -105,6 +105,7 @@ onMounted(() => {
                 <n-card
                   class="w-234px h-300px m-2px text-14px flex flex-col text-center justify-center items-center text-black cursor-pointer"
                   hoverable
+                  @click="$router.push(`${item.productId}`)"
                 >
                   <img
                     class="aspect-square w-160px"
