@@ -9,6 +9,7 @@ const getHeaderProductsData = async () => {
   const [e, r] = await api.getHeaderProducts();
   if (!e && r) {
     titles.value = r.data;
+    console.log(titles.value);
   }
 };
 
@@ -28,11 +29,11 @@ onMounted(() => {
           {{ item.cateName }}
         </nav>
       </template>
-      <div
+      <!-- <div
         class="absolute top-[100px] left-0 flex h-[210px] w-[100%] z-200 bg-light-100"
       >
         <div
-          v-for="item in titles[0].sameCategoryProducts"
+          v-for="item in titles.sameCategoryProducts"
           :key="item.product_id"
           class="h-[201px] flex flex-col w-[204px] text-center items-center justify-center text-[12px] leading-[20px] cursor-pointer"
         >
@@ -44,7 +45,7 @@ onMounted(() => {
           <span class="mt-4">{{ item.product_name }}</span>
           <span class="text-orange-500">{{ item.product_price }}</span>
         </div>
-      </div>
+      </div> -->
       <div class="flex w-[296.6px] h-[49.6px] container ml-[120px]">
         <n-input
           v-model:value="value"

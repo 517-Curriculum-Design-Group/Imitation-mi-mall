@@ -1,10 +1,13 @@
 <script setup>
 import { useDetailStore } from '@/stores/searchAnddetail.js';
 import { userStore } from '@/stores/user.js';
-import { ProductHeader } from './ProductHead.vue'
+import { api } from "@/api";
+import  ProductHead  from './ProductHead.vue'
+import { onBeforeMount, onMounted } from 'vue';
 
 const store = useDetailStore();
-const product = store.getCurrentProduct()
+// const product = store.getCurrentProduct()
+let product = {}
 
 const UserStore = userStore();
 const address = UserStore.getUserInfo().address
@@ -13,16 +16,26 @@ const CurrentSku = {
     attr:'',
     color:'',
 }
+
+const init =async ()=>{
+   const [e,r] = await api.getProductDetail(9)
+   product = r.data
+   console.log(product)
+}
+
+onBeforeMount(()=>{
+    init()
+})
 </script>
 
 <template>
     <div>
-        <Productdetail></Productdetail>
+        <ProductHead></ProductHead>
 
         <article class="flex w-[1226px] h-[1226px] ml-[147px] mr-[147px]">
             <div class="w-[560px] h-[560px]" :img="product.productPic"></div>
 
-            <form class="flex flex-col items-center justify-center flex-1 ml-4">
+            <form class="flex flex-col justify-center flex-1 ml-4">
                 <h2 class="w-full h-[36px]">{{ product.productName }}</h2>
                 <p class="text-gray-400 w-full h-[36px]">{{ product.productDescription }}</p>
                 <span class="w-full h-[60px] text-orange-500 text-xl mt-[14px]">{{ "eee" || product.skuVoList[0].skuPrice

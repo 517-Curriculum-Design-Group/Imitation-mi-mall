@@ -85,6 +85,11 @@ const routes = [
     path:"/page",
     name: "Page",
     component: async () => await import("@/view/pagination/Pagination.vue")
+  },
+  {
+    path:"/product",
+    name: "Product",
+    component: async () => await import("@/view/productDetail/ProductDetail.vue")
   }
 ];
 
