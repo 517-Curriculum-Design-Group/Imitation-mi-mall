@@ -397,8 +397,10 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
 
 
     @Override
-    public Result addSkuToCart(HttpServletRequest request, Integer sku_id)
+    public Result addSkuToCart(HttpServletRequest request, Map<String, Object> map)
     {
+        int sku_id = (int) map.get("sku_id");
+
         long userId = -1;
         try {
             userId = JwtUtil.getUserId(request);
@@ -472,6 +474,15 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         }
 
         return Result.errorResult(AppHttpCodeEnum.SKU_NOT_FIND);
+    }
+
+    @Override
+    public Result addProductToFavorite(HttpServletRequest request, Integer product_id) {
+
+
+
+
+        return Result.okResult();
     }
 
 
