@@ -1,6 +1,7 @@
 package com.xiaomi_mall.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.parser.Feature;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -17,6 +18,7 @@ import com.xiaomi_mall.mapper.*;
 import com.xiaomi_mall.service.CartService;
 import com.xiaomi_mall.service.CategoryService;
 import com.xiaomi_mall.service.ProductService;
+import com.xiaomi_mall.service.SkuService;
 import com.xiaomi_mall.util.BeanCopyUtils;
 import com.xiaomi_mall.util.JwtUtil;
 import com.xiaomi_mall.vo.ProductListVo;
@@ -49,6 +51,8 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     private CartMapper cartMapper;
     @Autowired
     private SkuMapper skuMapper;
+    @Autowired
+    private SkuService skuService;
     @Autowired
     private SkuAttributeMapper skuAttributeMapper;
     @Autowired
@@ -194,7 +198,55 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     public Result modifyProductSku(Map<String, Object> map)
     {
         int productId = Integer.parseInt(map.get("productId").toString());
+        List<Map<String, Object>> skuDetailList = (List<Map<String, Object>>) map.get("skuDetailList");
 
+        //先删除或覆盖旧的
+
+
+        //覆盖Product表中的旧SkuList
+//        int row = productMapper.modifySkuList(productId, skuListJson);
+//        if(row == 0)
+//            return Result.errorResult(806, "覆盖Product表中的旧SkuList失败，没有任意一行被修改");
+//
+//        //覆盖Product表中的旧least_price
+//        double leastPrice = 0;
+//        for(Map<String, Object> skuDetail : skuDetailList)
+//        {
+//            BigDecimal price = (BigDecimal)skuDetail.get("skuPrice");
+//            leastPrice = Math.min(leastPrice, price.doubleValue());
+//        }
+//        if(leastPrice != 0)
+//            productMapper.modifySkuList(productId, leastPrice + "元起");
+//        else
+//            productMapper.modifySkuList(productId, "");
+
+        //再加新的
+        for (Map<String, Object> skuDetail:skuDetailList)
+        {
+            List<String> attributeNames = (List<String>) skuDetail.get("skuNames");
+            List<String> attributeValues = (List<String>) skuDetail.get("skuValues");
+            Map<String, Object> skuJsonMap = new LinkedHashMap<>();
+            List<Sku> skus = new ArrayList<>();
+            for (int i = 0; i < attributeNames.size(); i++)
+            {
+                //数据库里就是这种结构转Json，这波属于是设计不足的代价
+                skuJsonMap.put(attributeNames.get(i), attributeValues.get(i));
+                String skuListJson = String.valueOf(new JSONObject(skuJsonMap));
+                System.out.println(skuListJson);
+                if(skuListJson == null)
+                {
+                    return Result.errorResult(801, "Map转JsonString失败，请检查skuList格式");
+                }
+                Sku sku = new Sku();
+                sku.setProductId(productId);
+                sku.setSkuName(skuListJson);
+                sku.setSkuPrice((new BigDecimal((Double) skuDetail.get("skuPrice"))));
+                sku.setSkuStock((Integer) skuDetail.get("skuStock"));
+                sku.setCreateTime(new Date());
+                skus.add(sku);
+            }
+            skuService.saveBatch(skus);
+        }
 
 //        List<Integer> attributeIdList = (List<Integer>)map.get("attributeIdList");
 //        List<List<Integer>> valueIdList = (List<List<Integer>>)map.get("valueIdList");
