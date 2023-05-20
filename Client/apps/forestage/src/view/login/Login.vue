@@ -69,7 +69,7 @@
 
 <script setup>
 import { ref, reactive, watch } from "vue";
-import { postLogin } from "@/api/path/UserController/index";
+import { api } from "@/api";
 import { useRouter } from "vue-router";
 import utils from "@/utils";
 import { useNotification } from "naive-ui";
@@ -116,10 +116,10 @@ function ChangeType() {
 
 const login = async () => {
   loading.value = !loading.value;
-  const [e, r] = await postLogin(formState);
+  const [e, r] = await api.postLogin(formState);
   if (!e && r) {
     utils.setSession("token", r.data.token);
-    store.userid = r.data.userInfo.userId;
+    store.setUserInfo(r.data.userInfo);
     router.replace("/home");
     notify("success", "通知", "登录成功");
   }

@@ -18,10 +18,23 @@ public class HomeController {
     private CategoryService categoryService;
     @Autowired
     private UserService userService;
-    @ApiOperation("获取主页信息")
-    @GetMapping("/getUserHome")
-    public Result getUserHome() {
-        return userService.getUserHome();
+    @ApiOperation("获取顶部数据")
+    @GetMapping("/getHeaderProducts")
+    public Result getHeaderProducts() {
+        return userService.getHeaderProducts();
+    }
+
+
+    @ApiOperation("获取左侧数据")
+    @GetMapping("/getLeftCategories")
+    public Result getLeftCategories() {
+        return userService.getLeftCategories();
+    }
+
+    @ApiOperation("获取底部数据")
+    @GetMapping("/getLowerProducts")
+    public Result getLowerProducts() {
+        return userService.getLowerProducts();
     }
 
     @ApiOperation("查询分类接口")

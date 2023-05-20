@@ -5,6 +5,7 @@ import com.xiaomi_mall.config.Result;
 import com.xiaomi_mall.dto.SkuAttribute_ValueDto;
 import com.xiaomi_mall.enity.SkuAttribute;
 import com.xiaomi_mall.enity.SkuAttributeValue;
+import com.xiaomi_mall.enums.AppHttpCodeEnum;
 import com.xiaomi_mall.mapper.SkuAttributeMapper;
 import com.xiaomi_mall.mapper.SkuAttributeValueMapper;
 import com.xiaomi_mall.mapper.SkuAttributeValueRelationMapper;
@@ -18,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
+import javax.management.Attribute;
 import java.util.*;
 
 @Service
@@ -42,24 +44,50 @@ public class SkuAttributeServiceImpl extends ServiceImpl<SkuAttributeMapper, Sku
         List<SkuAttribute> skuAttributeList = skuAttributeService.list();
         //获取规格对应的值表的所有数据
         List<SkuAttributeValue> skuAttributeValueList = skuAttributeValueService.list();
-        //建立一个哈希表
-        HashMap<String, List<String>> map = new HashMap<>();
 
-        //循环访问
+        List<Map<String, Object>> res = new ArrayList<>();
         for (int i = 0; i < skuAttributeList.size(); i++) {
-            String key = skuAttributeList.get(i).getAttributeName();
-            Integer id = skuAttributeList.get(i).getAttributeId();
-            List<String> res = new ArrayList<>();
-            map.put(key, res);
-            for (int j = 0; j < skuAttributeValueList.size(); j++) {
+            Map<String, Object> map = new LinkedHashMap<>();
+            String attributeName = skuAttributeList.get(i).getAttributeName();
+            Integer attributeId = skuAttributeList.get(i).getAttributeId();
+            map.put("attributeName", attributeName);
+            map.put("attributeId", attributeId);
+
+
+            List<Map<String, Object>> values = new ArrayList<>();
+            for (int j = 0; j < skuAttributeValueList.size(); j++)
+            {
+                Map<String, Object> map1 = new LinkedHashMap<>();
                 Integer subId = skuAttributeValueList.get(j).getAttributeId();
                 String valueName = skuAttributeValueList.get(j).getValueName();
-                if (Objects.equals(subId, id)) {
-                    res.add(valueName);
+                if (Objects.equals(subId, attributeId))
+                {
+                    map1.put("valueName", valueName);
+                    map1.put("valueIds", skuAttributeValueList.get(j).getValueId());
+                    values.add(map1);
                 }
             }
+            map.put("values", values);
+            res.add(map);
         }
-        return Result.okResult(map);
+
+//        //建立一个哈希表
+//        HashMap<String, List<String>> map = new HashMap<>();
+//        //循环访问
+//        for (int i = 0; i < skuAttributeList.size(); i++) {
+//            String key = skuAttributeList.get(i).getAttributeName();
+//            Integer id = skuAttributeList.get(i).getAttributeId();
+//            List<String> res = new ArrayList<>();
+//            map.put(key, res);
+//            for (int j = 0; j < skuAttributeValueList.size(); j++) {
+//                Integer subId = skuAttributeValueList.get(j).getAttributeId();
+//                String valueName = skuAttributeValueList.get(j).getValueName();
+//                if (Objects.equals(subId, id)) {
+//                    res.add(valueName);
+//                }
+//            }
+//        }
+        return Result.okResult(res);
     }
 
     @Override
@@ -180,8 +208,20 @@ public class SkuAttributeServiceImpl extends ServiceImpl<SkuAttributeMapper, Sku
         return Result.okResult(200, "修改成功");
     }
 
+    @Override
+    public Result createNewAttribute(String attributeName) {
 
+        List<SkuAttribute> skuAttributeList = skuAttributeService.list();
+        for (int i = 0; i < skuAttributeList.size(); i++)
+            if(skuAttributeList.get(i).getAttributeName().equals(attributeName))
+                return Result.errorResult(AppHttpCodeEnum.ATTRIBUTE_IS_EXIST);
 
+        SkuAttribute attribute = new SkuAttribute();
+        attribute.setAttributeName(attributeName);
+        attribute.setDelFlag(0);
+        skuAttributeService.save(attribute);
+        return Result.okResult(attribute);
+    }
 
 
 }

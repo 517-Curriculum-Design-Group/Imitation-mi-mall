@@ -1,11 +1,47 @@
+import { defineComponent, computed } from 'vue';
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
+import MapTitle from "./MapTitle.vue";
+import { api } from "@/api";
+
+const titles = ref([]);
+const isShow = ref(true);
+const init = async () => {
+  console.log("开始请求");
+  const [e, r] = await api.getLeftCategories();
+  if (!e && r) {
+    titles.value = r.data;
+    isShow.value = true;
+  }
+};
+
+onMounted(() => {
+  init();
+});
 </script>
 
 <template>
   <div class="flex ml-auto mr-auto w-[1226px] h-[460px] relative">
-    <div class="w-[226px] h-full absolute top-0 left-0 z-100" style="background-color: rgba(105,101,101,.6);">123</div>
-    <n-carousel show-arrow dot-type="dot" class="w-[1226px] flex relative" autoplay dot-placement="right">
+    <div
+      class="w-[226px] h-full absolute top-0 left-0 z-100 flex justify-center items-center"
+      style="background-color: rgba(105, 101, 101, 0.6)"
+    >
+      <Suspense>
+        <MapTitle />
+        <template #fallback>
+            <n-spin>
+              <template #description> 正在加载页面 </template>
+            </n-spin>
+        </template>
+      </Suspense>
+    </div>
+    <n-carousel
+      show-arrow
+      dot-type="dot"
+      class="w-[1226px] flex relative"
+      autoplay
+      dot-placement="right"
+    >
       <img
         class="carousel-img"
         src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/f9b7e85d4159deccc3f00c3aa96cc5f3.jpg?w=2452&h=920"
@@ -36,15 +72,4 @@ import { ref } from "vue";
   height: 100%;
   object-fit: cover;
 }
-
-/* .n-carousel :deep(.n-carousel__dots) {
-  background-color: red;
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-}
-
-.n-carousel :deep(.n-carousel__arrow-group) > .n-carousel__arrow:nth-child(1){
-  background-color: red;
-} */
 </style>

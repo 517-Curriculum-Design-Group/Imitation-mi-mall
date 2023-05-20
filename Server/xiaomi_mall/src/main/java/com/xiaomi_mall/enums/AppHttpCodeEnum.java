@@ -21,7 +21,11 @@ public enum AppHttpCodeEnum {
     PRODUCT_EXIST(513, "当前分类关联的商品存在，不能删除"),
     CHILDREN_CATEGORY_EXIST(514, "当前分类关联的子分类，不能删除"),
     SKU_STOCK_LIMIT(515, "库存不足"),
-    UPLOAD_ERROR(516, "上传错误");
+    UPLOAD_ERROR(516, "上传错误"),
+    ATTRIBUTE_IS_EXIST(517, "Attribute已存在"),
+    ATTRIBUTEID_NOT_EXIST(518, "AttributeId不存在"),
+    ATTRIBUTEVALUE_IS_EXIST(519, "AttributeValue已存在");
+
     int code;
     String msg;
 

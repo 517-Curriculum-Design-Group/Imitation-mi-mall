@@ -78,6 +78,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
         //对密码进行加密
         String encodePassword = passwordEncoder.encode(user.getPassword());
+        user.setCreateBy(-1);
+        user.setUpdateBy(-1);
         user.setPassword(encodePassword);
         //存入数据库
         save(user);
@@ -121,6 +123,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             String encodePassword = passwordEncoder.encode(user.getPassword());
             user.setPassword(encodePassword);
             user.setUserType("普通管理员");
+            user.setCreateBy(Math.toIntExact(SecurityUtils.getUserId()));
+            user.setUpdateBy(Math.toIntExact(SecurityUtils.getUserId()));
             save(user);
             return Result.okResult();
         }
@@ -316,9 +320,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public Result getUserHome() {
-        Map<String, Object> res = new LinkedHashMap<>();
-
+    public Result getHeaderProducts() {
         //小米手机
         //红米手机
         //小米平板
@@ -339,9 +341,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         List<Product> products = productMapper.selectList(productQueryWrapper);
         //System.out.println(products.size());
 
-        Map<String, Object> headerProducts = new LinkedHashMap<>();
+        List<Map<String, Object>> headerProducts = new ArrayList<>();
         for (int i = 0; i < cates.length; i++) {
-            List<Map<String, Object>> sameCategoryProducts = new ArrayList<Map<String, Object>>();
+            Map<String, Object> map = new LinkedHashMap<>();
+            List<Map<String, Object>> sameCategoryProducts = new ArrayList<>();
             for (int j = 0; j < products.size(); j++) {
                 if(products.get(j).getCategoryId() != cates[i]) continue;
                 Map<String, Object> singleProduct = new LinkedHashMap<>();
@@ -349,22 +352,71 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                 singleProduct.put("product_name", products.get(j).getProductName());
                 singleProduct.put("product_pic", products.get(j).getProductPic());
                 singleProduct.put("product_price", products.get(j).getLeastPrice());
-                //singleProduct.put("product_price", products.get(j).getProductPic());
                 sameCategoryProducts.add(singleProduct);
             }
-            headerProducts.put(cateNames[i], sameCategoryProducts);
+            map.put("cateName", cateNames[i]);
+            map.put("sameCategoryProducts", sameCategoryProducts);
+            headerProducts.add(map);
         }
-        res.put("headerProducts", headerProducts);
+        return Result.okResult(headerProducts);
+    }
 
-
-        Map<String, Object> leftCategories = new LinkedHashMap<>();
-        Map<String, Object> lowerProducts = new LinkedHashMap<>();
+    @Override
+    public Result getLeftCategories() {
+        List<Map<String, Object>> leftCategories = new ArrayList<>();
         List<Category> categories = categoryService.list();
 
         for (int i = 0; i < categories.size(); i++) {
             long parentId = categories.get(i).getParentId();
             if (parentId != -1) continue;
 
+            Map<String, Object> map = new LinkedHashMap<>();
+            List<Map<String, Object>> sameParentCategories = new ArrayList<>();
+            int cateId = categories.get(i).getCategoryId();
+            List<Category> filterList = categories.stream()
+                    .filter(category -> category.getParentId() == cateId)
+                    .collect(Collectors.toList());
+            //System.out.println(filterList.size());
+            //每一子种类入列
+            for (Category category : filterList) {
+                Map<String, Object> singleCategory = new LinkedHashMap<>();
+                singleCategory.put("category_id", category.getCategoryId());
+                singleCategory.put("category_name", category.getCategoryName());
+                //singleCategory.put("category_pic", category.getCategoryId());
+                sameParentCategories.add(singleCategory);
+
+                Map<String, Object> eachCategory = new LinkedHashMap<>();
+                eachCategory.put("category_name", category.getCategoryName());
+                List<Product> tempProducts = new ArrayList<>();
+
+                //找子类下的所有商品，最多填满八个
+                QueryWrapper<Product> productQueryWrapper1 = new QueryWrapper<>();
+                productQueryWrapper1.eq("category_id", category.getCategoryId());
+                List<Product> tempProductList = productMapper.selectList(productQueryWrapper1);
+                for (Product product:tempProductList) {
+                    if(tempProducts.size() >= 8) break;
+                    tempProducts.add(product);
+                }
+                eachCategory.put("products", tempProducts);
+            }
+            map.put("parentCategoryName", categories.get(i).getCategoryName());
+            map.put("categoryNames", sameParentCategories);
+            leftCategories.add(map);
+        }
+
+        return Result.okResult(leftCategories);
+    }
+
+    @Override
+    public Result getLowerProducts() {
+        List<Map<String, Object>> lowerProducts = new ArrayList<>();
+        List<Category> categories = categoryService.list();
+
+        for (int i = 0; i < categories.size(); i++) {
+            long parentId = categories.get(i).getParentId();
+            if (parentId != -1) continue;
+
+            Map<String, Object> map = new LinkedHashMap<>();
             List<Map<String, Object>> sameParentCategories = new ArrayList<>();
             List<Map<String, Object>> eachCategoryProduct = new ArrayList<>();
             int cateId = categories.get(i).getCategoryId();
@@ -396,14 +448,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                 eachCategoryProduct.add(eachCategory);
 
             }
-            leftCategories.put(categories.get(i).getCategoryName(), sameParentCategories);
-            lowerProducts.put(categories.get(i).getCategoryName(), eachCategoryProduct);
+            map.put("categoryName", categories.get(i).getCategoryName());
+            map.put("eachCategoryProduct", eachCategoryProduct);
+            lowerProducts.add(map);
         }
-        res.put("leftCategories", leftCategories);
-        res.put("lowerProducts", lowerProducts);
 
-        return Result.okResult(res);
+        return Result.okResult(lowerProducts);
     }
+
 
     @Override
     public Result getPersonInfo() {
@@ -411,4 +463,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         User user = userMapper.selectById(userId);
         return Result.okResult(user);
     }
+
+
+
 }

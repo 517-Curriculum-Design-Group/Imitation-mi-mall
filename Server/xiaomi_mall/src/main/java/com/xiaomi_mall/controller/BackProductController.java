@@ -1,12 +1,15 @@
 package com.xiaomi_mall.controller;
 
 import com.xiaomi_mall.config.Result;
+import com.xiaomi_mall.dto.AttributeValueCommit;
 import com.xiaomi_mall.dto.SkuAttribute_ValueDto;
 import com.xiaomi_mall.enity.Category;
 import com.xiaomi_mall.enity.Product;
+import com.xiaomi_mall.enity.SkuAttributeValue;
 import com.xiaomi_mall.service.CategoryService;
 import com.xiaomi_mall.service.ProductService;
 import com.xiaomi_mall.service.SkuAttributeService;
+import com.xiaomi_mall.service.SkuAttributeValueService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -27,6 +31,8 @@ public class BackProductController {
     private CategoryService categoryService;
     @Autowired
     private SkuAttributeService skuAttributeService;
+    @Autowired
+    private SkuAttributeValueService skuAttributeValueService;
 
     /**
      * 后台商品管理
@@ -119,10 +125,24 @@ public class BackProductController {
     }
 
     @PreAuthorize("hasAnyAuthority('普通管理员', '超级管理员')")
-    @ApiOperation("删除规格列表接口")
-    @DeleteMapping("/deleteSkuList")
-    public Result deleteSkuList(@RequestBody List<Integer> attributeId) {
-        skuAttributeService.removeByIds(attributeId);
+    @ApiOperation("删除Attribute接口")
+    @DeleteMapping("/deleteAttribute")
+    public Result deleteAttribute(@RequestParam Integer attributeId) {
+        skuAttributeService.removeById(attributeId);
+        List<Integer> attributeValueId = new ArrayList<>();
+        for (SkuAttributeValue value: skuAttributeValueService.list()) {
+            if (value.getAttributeId() == attributeId)
+                attributeValueId.add(value.getValueId());
+        }
+        skuAttributeValueService.removeByIds(attributeValueId);
+        return Result.okResult();
+    }
+
+    @PreAuthorize("hasAnyAuthority('普通管理员', '超级管理员')")
+    @ApiOperation("删除AttributeValue列表接口")
+    @DeleteMapping("/deleteAttributeValueList")
+    public Result deleteSkuList(@RequestBody List<Integer> attributeValueId) {
+        skuAttributeValueService.removeByIds(attributeValueId);
         return Result.okResult();
     }
 
@@ -131,6 +151,20 @@ public class BackProductController {
     @GetMapping("/getSkuDetail/{attributeId}")
     public Result getSkuDetail(@PathVariable Integer attributeId) {
         return skuAttributeService.getSkuDetail(attributeId);
+    }
+
+    @PreAuthorize("hasAnyAuthority('普通管理员', '超级管理员')")
+    @ApiOperation("创建Attribute接口")
+    @PostMapping("/createNewAttribute")
+    public Result createNewAttribute(@RequestParam String attributeName) {
+        return skuAttributeService.createNewAttribute(attributeName);
+    }
+
+    @PreAuthorize("hasAnyAuthority('普通管理员', '超级管理员')")
+    @ApiOperation("创建AttributeValue接口")
+    @PostMapping("/createNewAttributeValue")
+    public Result createNewAttribute(@RequestBody AttributeValueCommit attributeValueCommit) {
+        return skuAttributeValueService.createNewAttributeValue(attributeValueCommit);
     }
 
 
