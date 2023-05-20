@@ -8,5 +8,5 @@ export function getProductDetail(id) {
 }
 
 export const prodApi = {
-    postLogin,
+    getProductDetail,
 };
