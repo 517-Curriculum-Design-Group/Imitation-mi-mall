@@ -19,7 +19,7 @@ onMounted(() => {
 
 <template>
   <div class="flex items-center w-[1226px] h-[100px] m-auto relative">
-    <img class="w-[56px] h-[56px]" src="../assets/xiaomilogo.svg" />
+    <img class="w-[56px] h-[56px]" src="../../public/vite.svg" />
     <div
       class="flex ml-[160px] gap-x-4 pl-[20px] text-[16px] justify-center items-center"
     >
