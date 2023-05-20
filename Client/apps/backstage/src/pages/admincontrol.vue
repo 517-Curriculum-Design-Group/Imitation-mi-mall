@@ -88,30 +88,30 @@
       :direction="direction"
       :before-close="handleClose"
     >
-    <!-- <el-form :model="form" ref="formRef" :rules="rules" label-width="80px" :inline="false">
-        <el-form-item label="用户名" prop="username">
-          <el-input v-model="form.username" placeholder="用户名"></el-input>
+      <el-form :model="form" ref="formRef" :rules="rules" label-width="80px" :inline="false" size="normal">
+        
+        <el-form-item prop="userName" label="用户名：">
+          <el-input v-model="form.userName"></el-input>
         </el-form-item>
-        <el-form-item label="密码" prop="password">
-          <el-input v-model="form.password" placeholder="密码"></el-input>
+
+        <el-form-item prop="password" label="密码：">
+          <el-input v-model="form.password"></el-input>
         </el-form-item>
-        <el-form-item label="头像" prop="avatar">
-          <ChooseImage v-model="form.avatar"/>
+
+        <el-form-item prop="nickName" label="昵称：">
+          <el-input v-model="form.nickName"></el-input>
         </el-form-item>
-        <el-form-item label="所属角色" prop="role_id">
-          <el-select v-model="form.role_id" placeholder="选择所属角色">
-            <el-option v-for="item in roles"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id">
-            </el-option>
-          </el-select>
+
+        <el-form-item prop="email" label="邮箱：">
+          <el-input v-model="form.email"></el-input>
         </el-form-item>
-        <el-form-item label="状态" prop="content">
-          <el-switch v-model="form.status" :active-value="1" :inactive-value="0">
-          </el-switch>
+
+        <el-form-item>
+          <el-button type="primary" @click="newman">提交</el-button>
+          <el-button>取消</el-button>
         </el-form-item>
-      </el-form> -->
+      </el-form>
+      
     </el-drawer>
   
   </el-card>
@@ -121,21 +121,96 @@
 import { getadminlist } from "~/api/manager";
 import { reactive, ref } from "vue";
 import { ElMessageBox } from 'element-plus'
-import { findadmin, modifystatus, addAdmin, deleteAdmin } from "../api/manager";
+import { findadmin, modifystatus, addadmin, deleteAdmin } from "../api/manager";
 import { toast } from "~/composables/util";
 
 
 const list = ref([]);
+const formRef = ref(null)
 
 const flag = ref(false)
 const searchForm = reactive({
   keyword: "",
 });
 
-const newman = reactive({
+const form = reactive({
+    userName:"",
+    password:"",
+    nickName:"",
+    email:""
 
-});
+})
 
+const rules ={
+    userName:[
+        { 
+            required: true, 
+            message: '用户名不能为空', 
+            trigger: 'blur' 
+        },
+        {
+            validator: function(rule, value, callback) {
+              if (/^[A-Za-z0-9]+$/.test(value) == false) {
+                callback(new Error("请输入字母和数字"));
+              } else {
+                //校验通过
+                callback();
+              }
+            },
+            trigger: "blur"
+          }
+    ],
+    password:[
+        { 
+            required: true, 
+            message: '密码不能为空', 
+            trigger: 'blur' 
+        },
+        {
+            validator: function(rule, value, callback) {
+              if (/^[A-Za-z0-9]+$/.test(value) == false) {
+                callback(new Error("请输入字母和数字"));
+              } else {
+                //校验通过
+                callback();
+              }
+            },
+            trigger: "blur"
+          }
+    ],
+    nickName:[
+        { 
+            required: true, 
+            message: '昵称不能为空', 
+            trigger: 'blur' 
+        },
+        
+    ],
+
+}
+
+var reg = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
+
+
+const newman =() =>{
+  if(!reg.test(form.email)) {toast("邮箱格式不对",'error')
+   return false}
+  if(!/^[A-Za-z0-9]+$/.test(form.userName)||!/^[A-Za-z0-9]+$/.test(form.password)){
+    toast("输入有误",'error')
+    return false
+  }
+
+  addadmin(form)
+  .then((res)=>{
+    
+
+    getData()
+  }).finally(()=>{
+    flag.value = false;
+  })
+
+
+}
 
 //关闭抽屉
 const handleClose = () => {
