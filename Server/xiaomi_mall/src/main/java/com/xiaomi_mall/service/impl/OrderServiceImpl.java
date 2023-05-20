@@ -219,9 +219,9 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         List<HashMap<String, Object>> res = new ArrayList<>();
         for (Map<String, Object> order : orderList) {
             HashMap<String, Object> map = new LinkedHashMap<>();
-            map.put("orderId", order.get("orderId"));
-            map.put("orderTime", order.get("orderTime"));
-            map.put("totalPrice", order.get("totalPrice"));
+            map.put("order_id", order.get("order_id"));
+            map.put("order_time", order.get("order_time"));
+            map.put("total_price", order.get("total_price"));
             map.put("status", order.get("status"));
             res.add(map);
         }
