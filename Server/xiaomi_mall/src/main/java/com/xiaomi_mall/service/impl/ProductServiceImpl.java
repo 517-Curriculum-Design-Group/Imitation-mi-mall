@@ -408,6 +408,19 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
             throw new RuntimeException(e);
         }
 
+        QueryWrapper<Cart> cartQueryWrapper = new QueryWrapper<>();
+        cartQueryWrapper.eq("user_id", userId)
+                .eq("sku_id", sku_id)
+                .eq("de_flag", 0);
+
+        List<Cart> carts = cartMapper.selectList(cartQueryWrapper);
+        if(!carts.isEmpty())
+        {
+            carts.get(0).setSkuQuantity(carts.get(0).getSkuQuantity() + 1);
+            cartMapper.updateById(carts.get(0));
+            return Result.okResult("加入购物车成功");
+        }
+
         Sku sku = skuMapper.selectById(sku_id);
         Product product = productMapper.selectById(sku.getProductId());
 
