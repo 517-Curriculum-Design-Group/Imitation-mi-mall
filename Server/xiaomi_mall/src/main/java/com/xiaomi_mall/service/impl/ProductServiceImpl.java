@@ -465,6 +465,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
                 {
                     res.put("price", skuVo.getSkuPrice());
                     res.put("stock", skuVo.getSkuStock());
+                    res.put("sku_id", skuVo.getSkuId());
                     return Result.okResult(res);
                 }
             }
