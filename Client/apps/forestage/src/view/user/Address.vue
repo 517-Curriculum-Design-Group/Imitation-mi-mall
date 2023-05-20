@@ -1,5 +1,6 @@
 <script setup>
-import { ref, reactive } from 'vue'
+import { ref, reactive,onMounted } from 'vue'
+import { api } from '@/api'
 
 const isShow = ref(false)
 
@@ -25,6 +26,12 @@ const options = [
         ]
     }
 ]
+
+let allAddresses = ref(null)
+onMounted(async ()=>{
+    const [e,r] = await api.getAllAddresses()
+    allAddresses.value = r.data
+})
 </script>
 
 <template>
