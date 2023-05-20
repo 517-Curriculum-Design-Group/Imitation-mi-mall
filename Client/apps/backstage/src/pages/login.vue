@@ -63,7 +63,7 @@ const rules ={
     password:[
         { 
             required: true, 
-            message: '用户名不能为空', 
+            message: '密码不能为空', 
             trigger: 'blur' 
         },
     ]
