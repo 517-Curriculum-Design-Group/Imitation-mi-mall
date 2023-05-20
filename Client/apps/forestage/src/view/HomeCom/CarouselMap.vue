@@ -7,7 +7,6 @@ import { api } from "@/api";
 const titles = ref([]);
 const isShow = ref(true);
 const init = async () => {
-  console.log("开始请求");
   const [e, r] = await api.getLeftCategories();
   if (!e && r) {
     titles.value = r.data;
