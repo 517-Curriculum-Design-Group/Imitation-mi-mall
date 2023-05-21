@@ -99,7 +99,7 @@ const routes = [
   },
   {
     path: "/checkout",
-    name: "Checkout",
+    name: "OrderCheck",
     component: async () => await import("@/view/checkout/OrderCheck.vue"),
   },
   {
