@@ -153,25 +153,11 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     public Result addNewProduct(Map<String, Object> map)
     {
         Map<String, List<String>> skuList = (Map<String, List<String>>)map.get("skuName");
-        String skuListJson = null;
-        try
-        {
-            ObjectMapper objectMapper = new ObjectMapper();
-            skuListJson = objectMapper.writeValueAsString(skuList);
-        }
-        catch (JsonProcessingException e)
-        {
-            e.printStackTrace();
-            return Result.errorResult(801, "Json转String失败");
-        }
-        System.out.println(skuListJson);
-
         Product product = new Product();
 
         product.setCategoryId(Integer.parseInt(map.get("categoryId").toString()));
         product.setProductName(map.get("productName").toString());
         product.setProductPic(map.get("productPic").toString());
-        product.setSkuList(skuListJson);
         product.setProductDescription(map.get("productDescription").toString());
         save(product);
         return Result.okResult(200, "添加商品成功");
