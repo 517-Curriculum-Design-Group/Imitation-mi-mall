@@ -23,6 +23,7 @@ import com.xiaomi_mall.vo.FavoriteVo;
 import com.xiaomi_mall.vo.ProductListVo;
 import com.xiaomi_mall.vo.ProductVo;
 import com.xiaomi_mall.vo.SkuVo;
+import io.swagger.models.auth.In;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -516,16 +517,21 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         }
 
         QueryWrapper<Favorite> favoriteQueryWrapper = new QueryWrapper<>();
-        favoriteQueryWrapper.select("product_id")
+        favoriteQueryWrapper
                 .eq("user_id", userId)
                 .eq("del_flag", 0);
 
-        List<Favorite> favoriteProductIds = favoriteMapper.selectList(favoriteQueryWrapper);
-//        List<FavoriteVo> favoriteVos = BeanCopyUtils.copyBeanList(favorites, FavoriteVo.class);
-//
-//        QueryWrapper
+        List<Favorite> favoriteProducts = favoriteMapper.selectList(favoriteQueryWrapper);
+        List<Integer> productIds = new ArrayList<>();
+        for (Favorite favoriteProduct:favoriteProducts)
+        {
+            productIds.add(favoriteProduct.getProductId());
+        }
 
-        return Result.okResult();
+        List<Product> productList = productMapper.selectBatchIds(productIds);
+        List<ProductListVo> productListVos = toProductListVo(productList);
+        return Result.okResult(productListVos);
+
     }
 
 

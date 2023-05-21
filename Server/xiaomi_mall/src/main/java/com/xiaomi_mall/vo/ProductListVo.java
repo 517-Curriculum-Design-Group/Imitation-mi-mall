@@ -22,6 +22,10 @@ public class ProductListVo {
 
     private String productName;
 
+    private String productPic;
+
+    private String leastPrice;
+
     private String productDescription;
 
     private Date createTime;
