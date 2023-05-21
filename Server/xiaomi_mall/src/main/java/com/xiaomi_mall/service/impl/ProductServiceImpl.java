@@ -12,6 +12,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.xiaomi_mall.config.Result;
 import com.xiaomi_mall.constants.SystemConstants;
+import com.xiaomi_mall.dto.ModifyProductStatusDto;
 import com.xiaomi_mall.dto.ModifySku;
 import com.xiaomi_mall.dto.ModifySkuDetail;
 import com.xiaomi_mall.dto.ModifySkuDetailDto;
@@ -28,6 +29,7 @@ import com.xiaomi_mall.util.JwtUtil;
 import com.xiaomi_mall.vo.ProductListVo;
 import com.xiaomi_mall.vo.ProductVo;
 import com.xiaomi_mall.vo.SkuVo;
+import org.apache.ibatis.annotations.Update;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -146,7 +148,6 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
             }
             return Result.okResult();
         }
-
     }
 
     @Override
@@ -414,10 +415,24 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     @Override
     public Result addProductToFavorite(HttpServletRequest request, Integer product_id) {
 
+        return Result.okResult("还没写完");
+    }
 
+    @Override
+    public Result ModifyProductStatus(ModifyProductStatusDto modifyProductStatusDto)
+    {
+        if(modifyProductStatusDto.getStatus() != 0 || modifyProductStatusDto.getStatus() != 1)
+            return Result.errorResult(902, "状态码不在范围内");
 
+        Product product = productMapper.selectById(modifyProductStatusDto.getProductId());
+        product.setStatus(modifyProductStatusDto.getStatus());
+        productMapper.updateById(product);
 
-        return Result.okResult();
+        if(modifyProductStatusDto.getStatus() == 0)
+            return Result.okResult("成功");
+        else if (modifyProductStatusDto.getStatus() == 1)
+            return Result.okResult("上架成功");
+        return Result.errorResult(901, "无此ID对应商品");
     }
 
 

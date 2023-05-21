@@ -61,34 +61,6 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         }
 
         return Result.okResult(backCommentVos);
-
-
-//        List<Comment> commentList = commentService.list();
-//        List<Product> productList = productService.list();
-//        List<HashMap<String, Object>> res = new ArrayList<>();
-//
-//        for (Comment comment: commentList)
-//        {
-//            HashMap<String, Object> map = new HashMap<>();
-//            map.put("commentId", comment.getCommentId());
-//            String productName = "";
-//            String productPic = "";
-//            for (Product product : productList)
-//            {
-//                if(product.getProductId() == comment.getProductId())
-//                {
-//                    productName = product.getProductName();
-//                    productPic = product.getProductPic();
-//                    break;
-//                }
-//            }
-//            map.put("productName", productName);
-//            map.put("productPic", productPic);
-//            map.put("content", comment.getContent());
-//            map.put("commentTime", comment.getCommentTime());
-//            res.add(map);
-//        }
-//        return Result.okResult(res);
     }
 
     @Override

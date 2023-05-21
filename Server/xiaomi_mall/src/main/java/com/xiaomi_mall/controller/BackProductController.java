@@ -2,6 +2,7 @@ package com.xiaomi_mall.controller;
 
 import com.xiaomi_mall.config.Result;
 import com.xiaomi_mall.dto.AttributeValueCommit;
+import com.xiaomi_mall.dto.ModifyProductStatusDto;
 import com.xiaomi_mall.dto.ModifySkuDetailDto;
 import com.xiaomi_mall.dto.SkuAttribute_ValueDto;
 import com.xiaomi_mall.enity.Category;
@@ -56,6 +57,15 @@ public class BackProductController {
     public Result addNewProduct(@RequestBody Map<String, Object> map) {
         return productService.addNewProduct(map);
     }
+
+    @PreAuthorize("hasAnyAuthority('普通管理员', '超级管理员')")
+    @ApiOperation("商品上下架")
+    @PostMapping("/ModifyProductStatus")
+    public Result ModifyProductStatus(@RequestBody ModifyProductStatusDto modifyProductStatusDto) {
+        return productService.ModifyProductStatus(modifyProductStatusDto);
+    }
+
+
 
     //TODO:这个
 //    @PreAuthorize("hasAnyAuthority('普通管理员', '超级管理员')")
