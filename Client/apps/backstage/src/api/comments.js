@@ -1,7 +1,22 @@
 import axios from '~/axios';
 
-export function getcommentlist(){
-    return axios.get('/getBackCommentList')
+export function getcommentlist(pageNum, pageSize) {
+    return axios.get('/getBackCommentList', {
+        params: {
+            pageNum,
+            pageSize
+        }
+    })
+}
+
+export function getcommentlevel(pageNum, pageSize, rate) {
+    return axios.get('/getBackCommentList', {
+        params: {
+            pageNum,
+            pageSize,
+            rate
+        }
+    })
 }
 
 export function deletecommentlist(commentId){
