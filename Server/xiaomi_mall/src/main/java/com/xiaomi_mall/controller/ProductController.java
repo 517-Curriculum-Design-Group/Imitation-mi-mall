@@ -60,7 +60,7 @@ public class ProductController {
     @PreAuthorize("hasAnyAuthority('普通用户')")
     @ApiOperation("删除购物车中商品")
     @DeleteMapping("/deleteCartProduct")
-    public Result deleteCartProduct(HttpServletRequest request, Integer cartId) {
+    public Result deleteCartProduct(HttpServletRequest request, int cartId) {
         cartService.removeById(cartId);
         return cartService.getCartList(request);
     }
