@@ -2,8 +2,10 @@
 import { reactive, watch, computed, onMounted } from "vue";
 import CartTop from "./CartTop.vue";
 import { api } from "@/api";
+import { useDialog } from "naive-ui";
 
 const goods = reactive([]);
+const dialogWarning = useDialog();
 
 const checkStatus = computed(() => {
   return goods.every((item) => item.checked == true);
@@ -45,10 +47,29 @@ function ChangeChecked(index) {
   goods[index].checked = !goods[index].checked;
 }
 
+async function DeleteCartPro(cart_id) {
+  let data = {
+    cartId: Number(cart_id),
+  };
+  dialogWarning.warning({
+    title: "请确认",
+    content: "确认删除所选商品吗？",
+    negativeText: "取消",
+    positiveText: "确定",
+    onPositiveClick: async () => {
+      const [e, r] = await api.deleteCartProduct(data);
+      if (!e && r) {
+        goods.length = 0;
+        r.data.forEach((item) => goods.push(item));
+        goods.map((item) => (item.checked = true));
+      }
+    },
+  });
+}
+
 async function init() {
   const [e, r] = await api.getCartList();
   if (!e && r) {
-    console.log(r.data);
     r.data.forEach((item) => goods.push(item));
     goods.map((item) => (item.checked = true));
   }
@@ -61,7 +82,6 @@ onMounted(() => {
 
 <template>
   <CartTop></CartTop>
-
   <div class="containers w-100% h-100%">
     <div class="cart grid w-80% bg-light-50 m-auto h-116px">
       <div class="flex flex-row-reverse" :row-span="2">
@@ -137,7 +157,7 @@ onMounted(() => {
       <div class="goodstotalprice text-lg" :row-span="2">
         {{ items.sku_quantity * items.sku_price }}元
       </div>
-      <div class="relative" :row-span="2">
+      <div class="relative" :row-span="2" @click="DeleteCartPro(items.cart_id)">
         <div
           class="delete i-mdi-window-close relative text-gray-500 cursor-pointer z-100"
         ></div>
@@ -151,7 +171,11 @@ onMounted(() => {
       class="sticky flex justify-between w-[80%] h-70px mx-auto leading-70px mt-5 bg-light-50 text-center"
     >
       <div class="text-gray-400 leading-70px space-x-12">
-        <span class="ml-3rem cursor-pointer goShoppingBut" @click="$router.push('/home')">继续购物</span>
+        <span
+          class="ml-3rem cursor-pointer goShoppingBut"
+          @click="$router.push('/home')"
+          >继续购物</span
+        >
         <span
           >已选择 <span class="all">{{ goodsLength }}</span
           >件</span

@@ -1,5 +1,4 @@
 import { defineStore } from "pinia";
-import utils from "@/utils";
 
 // useStore 可以是 useUser、useCart 之类的任何东西
 // 第一个参数是应用程序中 store 的唯一 id
@@ -12,10 +11,10 @@ export const userStore = defineStore("user", {
   },
   actions: {
     getUserInfo() {
-      return this.userInfo || null;
+      return this.userInfo;
     },
     setUserInfo(user) {
-      Object.assign(this.userInfo, user);
+      this.userInfo = user;
     },
     deleteUserInfo() {
       this.userInfo = null;
