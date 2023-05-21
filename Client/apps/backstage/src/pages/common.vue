@@ -79,41 +79,6 @@
         @current-change="getData"
       />
     </div>
-
-
-
-    <el-drawer
-      v-model="flag"
-      title="新增管理员"
-      size="45%"
-      :direction="direction"
-      :before-close="handleClose"
-    >
-    <!-- <el-form :model="form" ref="formRef" :rules="rules" label-width="80px" :inline="false">
-        <el-form-item label="用户名" prop="username">
-          <el-input v-model="form.username" placeholder="用户名"></el-input>
-        </el-form-item>
-        <el-form-item label="密码" prop="password">
-          <el-input v-model="form.password" placeholder="密码"></el-input>
-        </el-form-item>
-        <el-form-item label="头像" prop="avatar">
-          <ChooseImage v-model="form.avatar"/>
-        </el-form-item>
-        <el-form-item label="所属角色" prop="role_id">
-          <el-select v-model="form.role_id" placeholder="选择所属角色">
-            <el-option v-for="item in roles"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="状态" prop="content">
-          <el-switch v-model="form.status" :active-value="1" :inactive-value="0">
-          </el-switch>
-        </el-form-item>
-      </el-form> -->
-    </el-drawer>
   
   </el-card>
 </template>
