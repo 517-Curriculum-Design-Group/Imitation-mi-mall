@@ -19,6 +19,7 @@ import com.xiaomi_mall.vo.CommentVo;
 import com.xiaomi_mall.vo.PageVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.security.task.DelegatingSecurityContextAsyncTaskExecutor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -46,7 +47,10 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
 
         String rateStr[] = {"好评", "一般", "差评"};
 
-        queryWrapper.like(Objects.nonNull(rateStr[rate]), Comment::getRate, rateStr[rate]);
+        if(rate == -1)
+            queryWrapper.like(Objects.nonNull(""), Comment::getRate, "");
+        else
+            queryWrapper.like(Objects.nonNull(rateStr[rate]), Comment::getRate, rateStr[rate]);
 
         Page<Comment> pageInfo = new Page<>(pageNum, pageSize);
 
