@@ -32,14 +32,14 @@ public class BackOrderController
     @PreAuthorize("hasAnyAuthority('普通管理员', '超级管理员')")
     @ApiOperation("订单列表接口")
     @GetMapping("/getBackOrderList")
-    public Result getBackOrderList(Integer pageNum, Integer pageSize)
+    public Result getBackOrderList(Integer pageNum, Integer pageSize, Integer status)
     {
-        return orderService.getBackOrderList(pageNum, pageSize);
+        return orderService.getBackOrderList(pageNum, pageSize, status);
     }
 
     @PreAuthorize("hasAnyAuthority('普通管理员', '超级管理员')")
     @ApiOperation("订单发货")
-    @GetMapping("/orderDelivery")
+    @PostMapping("/orderDelivery")
     public Result orderDelivery(@RequestBody List<Integer> orderId)
     {
         return orderService.orderDelivery(orderId);
