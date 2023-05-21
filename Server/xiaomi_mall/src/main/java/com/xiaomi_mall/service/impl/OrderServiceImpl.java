@@ -50,11 +50,18 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
 
     @Override
     public Result getBackOrderList(Integer pageNum, Integer pageSize, Integer status) {
-
         List<Order> orderList = orderMapper.getOrderList();
-        List<Order> filterList = orderList.stream()
-                .filter(order -> order.getStatus() == status)
-                .collect(Collectors.toList());
+        List<Order> filterList;
+        if(status != -1)
+        {
+            filterList = orderList.stream()
+                    .filter(order -> order.getStatus() == status)
+                    .collect(Collectors.toList());
+        }
+        else
+        {
+            filterList = orderList;
+        }
 
         List<User> userList = userService.list();
         List<HashMap<String, Object>> res = new ArrayList<>();
