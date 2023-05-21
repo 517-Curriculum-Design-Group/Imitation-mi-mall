@@ -458,8 +458,18 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
 
     @Override
     public Result addProductToFavorite(HttpServletRequest request, Integer product_id) {
+        long userId = -1;
+        try {
+            userId = JwtUtil.getUserId(request);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
-        return Result.okResult("还没写完");
+        Favorite favorite = new Favorite();
+        favorite.setUserId(userId);
+        favorite.setProductId(product_id);
+
+        return Result.okResult("添加喜欢成功");
     }
 
 
