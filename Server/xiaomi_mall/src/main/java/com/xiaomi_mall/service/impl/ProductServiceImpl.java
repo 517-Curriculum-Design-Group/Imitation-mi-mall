@@ -2,7 +2,6 @@ package com.xiaomi_mall.service.impl;
 
 import com.alibaba.druid.support.json.JSONUtils;
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.parser.Feature;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -17,28 +16,21 @@ import com.xiaomi_mall.enity.*;
 import com.xiaomi_mall.enums.AppHttpCodeEnum;
 import com.xiaomi_mall.exception.SystemException;
 import com.xiaomi_mall.mapper.*;
-import com.xiaomi_mall.service.CartService;
-import com.xiaomi_mall.service.CategoryService;
-import com.xiaomi_mall.service.ProductService;
-import com.xiaomi_mall.service.SkuService;
+import com.xiaomi_mall.service.*;
 import com.xiaomi_mall.util.BeanCopyUtils;
 import com.xiaomi_mall.util.JwtUtil;
+import com.xiaomi_mall.vo.FavoriteVo;
 import com.xiaomi_mall.vo.ProductListVo;
 import com.xiaomi_mall.vo.ProductVo;
 import com.xiaomi_mall.vo.SkuVo;
-import org.apache.ibatis.annotations.Update;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import springfox.documentation.spring.web.json.Json;
-
 import javax.servlet.http.HttpServletRequest;
-import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.util.*;
-import java.util.stream.Collectors;
 
 
 @Service
@@ -63,8 +55,13 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     @Autowired
     private SkuAttributeValueMapper skuAttributeValueMapper;
 
+    @Autowired
+    private FavoriteService favoriteService;
+    @Autowired
+    private FavoriteMapper favoriteMapper;
+
     @Override
-    public Result getProductDetail(Integer product_id) {
+    public Result getProductDetail(HttpServletRequest request, Integer product_id) {
         LambdaQueryWrapper<Product> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(Product::getProductId, product_id);
         Product product = getOne(queryWrapper);
@@ -100,9 +97,22 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
             }
             skuVoList.add(new SkuVo(sku.getSkuId(), skus, sku.getSkuPrice(), sku.getSkuStock()));
         }
-
         productVo.setSkuVoList(skuVoList);
         productVo.setProductDescription(product.getProductDescription());
+
+        long userId = -1;
+        try {
+            userId = JwtUtil.getUserId(request);
+        } catch (Exception e) {
+            productVo.setFavorite(false);
+            return Result.okResult(productVo);
+        }
+        QueryWrapper<Favorite> favoriteQueryWrapper = new QueryWrapper<>();
+        favoriteQueryWrapper.eq("user_id", userId)
+                .eq("product_id", product_id)
+                .eq("del_flag", 0);
+        int cnt = favoriteService.count(favoriteQueryWrapper);
+        productVo.setFavorite(cnt != 0);
 
         return Result.okResult(productVo);
     }
@@ -410,12 +420,6 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     }
 
     @Override
-    public Result addProductToFavorite(HttpServletRequest request, Integer product_id) {
-
-        return Result.okResult("还没写完");
-    }
-
-    @Override
     public Result ModifyProductStatus(ModifyProductStatusDto modifyProductStatusDto)
     {
         if(modifyProductStatusDto.getStatus() != 0 || modifyProductStatusDto.getStatus() != 1)
@@ -449,6 +453,32 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         skuService.updateBatchById(skus);
 
         return Result.okResult("补货成功");
+    }
+
+
+    @Override
+    public Result addProductToFavorite(HttpServletRequest request, Integer product_id) {
+
+        return Result.okResult("还没写完");
+    }
+
+
+    @Override
+    public Result getFavoriteList(HttpServletRequest request)
+    {
+        long userId = -1;
+        try {
+            userId = JwtUtil.getUserId(request);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        QueryWrapper<Favorite> favoriteQueryWrapper = new QueryWrapper<>();
+        favoriteQueryWrapper.eq("user_id", userId);
+        List<Favorite> favorites = favoriteMapper.selectList(favoriteQueryWrapper);
+
+        List<FavoriteVo> favoritesVo = new ArrayList<>();
+        return Result.okResult(favoritesVo);
     }
 
 

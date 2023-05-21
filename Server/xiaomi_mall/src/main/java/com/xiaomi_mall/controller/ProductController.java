@@ -28,8 +28,8 @@ public class ProductController {
 
     @ApiOperation("查询商品详情")
     @GetMapping("/getProductDetail/{product_id}")
-    public Result getProductDetail(@PathVariable Integer product_id) {
-        return productService.getProductDetail(product_id);
+    public Result getProductDetail(HttpServletRequest request, @PathVariable Integer product_id) {
+        return productService.getProductDetail(request, product_id);
     }
 
     @ApiOperation("查询商品价格")
@@ -105,12 +105,18 @@ public class ProductController {
      *
      * @return {@link Result}
      */
-    //TODO:喜欢
     @PreAuthorize("hasAnyAuthority('普通用户')")
     @ApiOperation("添加商品到喜欢")
     @PostMapping("/addProductToFavorite/{product_id}")
     public Result addProductToFavorite(HttpServletRequest request, @PathVariable Integer product_id) {
         return productService.addProductToFavorite(request, product_id);
+    }
+
+    @PreAuthorize("hasAnyAuthority('普通用户')")
+    @ApiOperation("查看喜欢列表")
+    @GetMapping("/getFavoriteList")
+    public Result getFavoriteList(HttpServletRequest request) {
+        return productService.getFavoriteList(request);
     }
 
 

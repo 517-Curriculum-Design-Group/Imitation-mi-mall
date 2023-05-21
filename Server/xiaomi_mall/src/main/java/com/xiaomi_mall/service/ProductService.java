@@ -14,7 +14,7 @@ import java.util.Map;
 
 public interface ProductService extends IService<Product> {
 
-    Result getProductDetail(Integer product_id);
+    Result getProductDetail(HttpServletRequest request, Integer product_id);
 
     Result getProductList(Integer pageNum, Integer pageSize, String productName);
 
@@ -35,6 +35,8 @@ public interface ProductService extends IService<Product> {
     Result ModifyProductStatus(ModifyProductStatusDto modifyProductStatusDto);
 
     Result addProductStock(AddProductStockDto addProductStockDto);
+
+    Result getFavoriteList(HttpServletRequest request);
 }
 
 
