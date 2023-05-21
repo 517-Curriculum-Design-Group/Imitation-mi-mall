@@ -97,7 +97,11 @@ const routes = [
       }
     },
   },
-  
+  {
+    path: "/checkout",
+    name: "Checkout",
+    component: async () => await import("@/view/checkout/OrderCheck.vue"),
+  },
   {
     path: "/page",
     name: "Page",
