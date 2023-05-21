@@ -40,11 +40,13 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     private ProductService productService;
 
     @Override
-    public Result getBackCommentList(Integer pageNum, Integer pageSize, String rate) {
+    public Result getBackCommentList(Integer pageNum, Integer pageSize, Integer rate) {
 
         LambdaQueryWrapper<Comment> queryWrapper = new LambdaQueryWrapper<>();
 
-        queryWrapper.like(Objects.nonNull(rate), Comment::getRate, rate);
+        String rateStr[] = {"好评", "一般", "差评"};
+
+        queryWrapper.like(Objects.nonNull(rateStr[rate]), Comment::getRate, rateStr[rate]);
 
         Page<Comment> pageInfo = new Page<>(pageNum, pageSize);
 
