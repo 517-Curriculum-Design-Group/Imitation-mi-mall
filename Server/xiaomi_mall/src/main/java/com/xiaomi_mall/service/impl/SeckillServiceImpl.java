@@ -9,8 +9,10 @@ import com.xiaomi_mall.dto.SeckillOrderDto;
 import com.xiaomi_mall.enity.*;
 import com.xiaomi_mall.mapper.ProductMapper;
 import com.xiaomi_mall.mapper.SeckillMapper;
+import com.xiaomi_mall.mapper.SkuMapper;
 import com.xiaomi_mall.mapper.UserMapper;
 import com.xiaomi_mall.service.AddressService;
+import com.xiaomi_mall.service.ProductService;
 import com.xiaomi_mall.service.SeckillService;
 import com.xiaomi_mall.util.RedisCache;
 import com.xiaomi_mall.util.SecurityUtils;
@@ -22,6 +24,8 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
+import java.util.Objects;
 
 @Service
 public class SeckillServiceImpl extends ServiceImpl<SeckillMapper, Seckill> implements SeckillService {
@@ -31,6 +35,10 @@ public class SeckillServiceImpl extends ServiceImpl<SeckillMapper, Seckill> impl
     private UserMapper userMapper;
     @Autowired
     private ProductMapper productMapper;
+    @Autowired
+    private ProductService productService;
+    @Autowired
+    private SkuMapper skuMapper;
     @Autowired
     private RedisCache redisCache;
     @Autowired
@@ -105,6 +113,47 @@ public class SeckillServiceImpl extends ServiceImpl<SeckillMapper, Seckill> impl
         if(store >= 1) {
             seckillMapper.decraystore(productId);
         }
+    }
+
+    @Override
+    public Result addSeckill(Seckill seckill) {
+        LambdaQueryWrapper<Seckill> queryWrapper  = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Seckill::getProductId, seckill.getProductId());
+        Seckill seckill1 = seckillMapper.selectOne(queryWrapper);
+
+        if (Objects.isNull(seckill1)) {
+            save(seckill);
+            redisCache.setCacheObject("productId+" + seckill.getProductId(),seckill.getStockCount());
+            return Result.okResult("添加秒杀商品成功");
+        } else {
+            return Result.errorResult(601, "秒杀商品已经存在，不能添加");
+        }
+    }
+
+    @Override
+    public Result getSeckillProd() {
+        List<Product> list = productService.list();
+        return Result.okResult(list);
+    }
+
+    @Override
+    public Result getSelectProd(Product product) {
+        int productId = product.getProductId();
+        return Result.okResult(productId);
+    }
+
+    @Override
+    public Result getSeckillSku(int productId) {
+        LambdaQueryWrapper<Sku> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Sku::getProductId, productId);
+        List<Sku> skus = skuMapper.selectList(queryWrapper);
+        return Result.okResult(skus);
+    }
+
+    @Override
+    public Result getSelectSku(Sku sku) {
+        Integer skuId = sku.getSkuId();
+        return Result.okResult(skuId);
     }
 
     private String getDefaultAddress1(Long userId) {

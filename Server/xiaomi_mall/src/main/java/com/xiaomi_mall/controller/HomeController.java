@@ -43,10 +43,10 @@ public class HomeController {
         return categoryService.getCategoryList();
     }
 
-    @ApiOperation("查询分类对应的商品接口")
+    @ApiOperation("首页搜索商品接口")
     @GetMapping("/getCateProduct")
-    public Result getCateProduct(Integer categoryId) {
-        return categoryService.getCateProduct(categoryId);
+    public Result getCateProduct(String search) {
+        return categoryService.getCateProduct(search);
     }
 
 
