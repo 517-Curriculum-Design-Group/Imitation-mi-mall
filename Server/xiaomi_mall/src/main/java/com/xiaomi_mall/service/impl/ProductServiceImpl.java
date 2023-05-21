@@ -152,9 +152,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     @Override
     public Result addNewProduct(Map<String, Object> map)
     {
-        Map<String, List<String>> skuList = (Map<String, List<String>>)map.get("skuName");
         Product product = new Product();
-
         product.setCategoryId(Integer.parseInt(map.get("categoryId").toString()));
         product.setProductName(map.get("productName").toString());
         product.setProductPic(map.get("productPic").toString());
