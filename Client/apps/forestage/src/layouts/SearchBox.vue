@@ -35,6 +35,7 @@ onMounted(() => {
             >
               <div
                 class="h-[201px] flex flex-col w-[204px] text-center items-center justify-center text-[12px] leading-[20px] cursor-pointer text-black"
+                @click="$router.push(`/${i.product_id}`)"
               >
                 <img
                   :src="i.product_pic"

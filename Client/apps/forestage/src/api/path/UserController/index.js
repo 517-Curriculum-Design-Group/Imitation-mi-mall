@@ -16,16 +16,16 @@ export function getCartList() {
   return Get("/getCartList");
 }
 
-export function deleteCartProduct(data) {
-  return Delete("/deleteCartProduct", data);
+export function deleteCartProduct(params) {
+  return Delete("/deleteCartProduct", undefined, params);
 }
 
-export function getPersonInfo(){
-  return Get("/getPersonInfo")
+export function getPersonInfo() {
+  return Get("/getPersonInfo");
 }
 
-export function getAllAddresses(){
-  return Get("/getAllAddresses")
+export function getAllAddresses() {
+  return Get("/getAllAddresses");
 }
 
 export const userApi = {
@@ -35,5 +35,5 @@ export const userApi = {
   getCartList,
   deleteCartProduct,
   getPersonInfo,
-  getAllAddresses
+  getAllAddresses,
 };

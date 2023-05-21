@@ -12,7 +12,7 @@ import java.util.List;
 
 public interface OrderService extends IService<Order> {
 
-    Result getBackOrderList(Integer pageNum, Integer pageSize);
+    Result getBackOrderList(Integer pageNum, Integer pageSize, Integer status);
 
     Result getOrderDetail(Integer orderId);
 

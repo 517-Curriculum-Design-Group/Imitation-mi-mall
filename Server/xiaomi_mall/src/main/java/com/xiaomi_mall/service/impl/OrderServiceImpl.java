@@ -2,6 +2,7 @@ package com.xiaomi_mall.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xiaomi_mall.config.Result;
 import com.xiaomi_mall.dto.OrderCommit;
@@ -12,7 +13,10 @@ import com.xiaomi_mall.service.OrderDetailService;
 import com.xiaomi_mall.service.OrderService;
 import com.xiaomi_mall.service.SkuService;
 import com.xiaomi_mall.service.UserService;
+import com.xiaomi_mall.util.BeanCopyUtils;
 import com.xiaomi_mall.util.JwtUtil;
+import com.xiaomi_mall.vo.BackOrderListVo;
+import com.xiaomi_mall.vo.GetBackOrderListVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -36,6 +40,8 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     @Autowired
     private UserService userService;
     @Autowired
+    private UserMapper userMapper;
+    @Autowired
     @Lazy
     private OrderService orderService;
     @Autowired
@@ -48,30 +54,31 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     private OrderDetailService orderDetailService;
 
     @Override
-    public Result getBackOrderList(Integer pageNum, Integer pageSize) {
+    public Result getBackOrderList(Integer pageNum, Integer pageSize, Integer status) {
+        LambdaQueryWrapper<Order> queryWrapper = new LambdaQueryWrapper<>();
+        List<Order> filterList;
 
-        List<Order> orderList = orderMapper.getOrderList();
-        List<User> userList = userService.list();
-        List<HashMap<String, Object>> res = new ArrayList<>();
-
-        for (Order order : orderList) {
-            HashMap<String, Object> map = new LinkedHashMap<>();
-            map.put("orderId", order.getOrderId());
-            map.put("orderTime", order.getOrderTime());
-            map.put("totalPrice", order.getTotalPrice());
-            map.put("userId", order.getUserId());
-            String username = "";
-            for (User user : userList) {
-                if (user.getUserId() == order.getUserId()) {
-                    username += user.getUserName();
-                    break;
-                }
-            }
-            map.put("userName", username);
-            map.put("status", order.getStatus());
-            res.add(map);
+        if(status != -1)
+        {
+            queryWrapper.eq(Order::getStatus, status);
         }
-        return Result.okResult(res);
+        Page<Order> pageInfo = new Page<>(pageNum, pageSize);
+        page(pageInfo, queryWrapper);
+        filterList = pageInfo.getRecords();
+        long total = pageInfo.getTotal();
+        List<BackOrderListVo> backOrderListVos = toBackOrderListVo(filterList);
+        GetBackOrderListVo getBackOrderListVo = new GetBackOrderListVo(total, backOrderListVos);
+        return Result.okResult(getBackOrderListVo);
+    }
+
+    private List<BackOrderListVo> toBackOrderListVo(List<Order> orderList)
+    {
+        List<BackOrderListVo> backOrderListVos = BeanCopyUtils.copyBeanList(orderList, BackOrderListVo.class);
+        for (int i = 0; i < orderList.size(); i++) {
+            String categoryName = userMapper.selectById(orderList.get(i).getUserId()).getUserName();
+            backOrderListVos.get(i).setUserName(categoryName);
+        }
+        return backOrderListVos;
     }
 
     @Override

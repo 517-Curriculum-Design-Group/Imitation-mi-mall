@@ -15,8 +15,13 @@ export function addSkuToCart(body) {
   return Post("/addSkuToCart", body);
 }
 
+export function addProductToFavorite(body) {
+  return Post("/addProductToFavorite", body);
+}
+
 export const prodApi = {
   getProductDetail,
   getProductPrice,
   addSkuToCart,
+  addProductToFavorite,
 };

@@ -2,6 +2,7 @@ package com.xiaomi_mall.controller;
 
 import com.xiaomi_mall.config.Result;
 import com.xiaomi_mall.dto.OrderCommit;
+import com.xiaomi_mall.dto.SearchProductDto;
 import com.xiaomi_mall.service.CartService;
 import com.xiaomi_mall.service.OrderService;
 import com.xiaomi_mall.service.ProductService;
@@ -36,6 +37,14 @@ public class ProductController {
     @PostMapping("/getProductPrice")
     public Result getProductPrice(@RequestBody Map<String, Object> map) {
         return productService.getProductPrice(map);
+    }
+
+    //TODO:
+    @ApiOperation("搜索商品")
+    @PostMapping("/searchProduct")
+    public Result searchProduct(SearchProductDto searchProductDto) {
+        //return productService.searchProduct(searchProductDto);
+        return Result.okResult("没写完");
     }
 
     /**
