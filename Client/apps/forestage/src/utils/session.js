@@ -20,7 +20,7 @@ export const clearSession = () => {
 };
 
 export const isLogin = () => {
-  return store.getUserInfo() && getSession("token");
+  return Boolean(store.getUserInfo() && getSession("token"));
 };
 
 export const session = {

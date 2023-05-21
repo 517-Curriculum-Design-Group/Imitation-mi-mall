@@ -1,19 +1,21 @@
 <script setup>
 import { api } from "@/api";
 import ProductHead from "./ProductHead.vue";
-import { ref, onMounted, reactive, watchEffect } from "vue";
-import { useRoute, useRouter } from "vue-router";
+import { ref, onMounted, reactive, watchEffect, nextTick } from "vue";
+import { useRoute, useRouter, onBeforeRouteUpdate } from "vue-router";
 import { useDialog } from "naive-ui";
 import utils from "@/utils";
 
 let product = ref({});
-const values = reactive({});
-const objKeys = reactive([]);
 const productPrice = ref("");
 const productStock = ref("");
-const route = useRoute();
-const router = useRouter();
 const skuId = ref("");
+
+const values = reactive({});
+const objKeys = reactive([]);
+
+const router = useRouter();
+const route = useRoute();
 const dialogSuccess = useDialog();
 const dialogWarning = useDialog();
 
@@ -21,6 +23,7 @@ watchEffect(async () => {
   let params = { product_id: 0, attributeValues: [] };
   params["product_id"] = product.value["productId"];
   objKeys.forEach((key) => params.attributeValues.push(values[key]));
+
   const [e, r] = await api.getProductPrice(params);
   if (!e && r) {
     productPrice.value = r.data.price;
@@ -40,7 +43,7 @@ async function shoppingClick() {
         positiveText: "跳转",
         negativeText: "继续浏览",
         onPositiveClick: () => {
-          message.success("耶！");
+          router.push("/cart");
         },
       });
     }
@@ -56,19 +59,34 @@ async function shoppingClick() {
   }
 }
 
-const init = async () => {
-  const [e, r] = await api.getProductDetail(
-    Number(route.params.productDetailID)
-  );
+function addFavorite(product_id) {
+  console.log(product_id);
+  // const [e, r] = api.addProductToFavorite(product_id);
+  // if (!e && r) {
+  //   console.log(r.data);
+  // }
+}
+
+const init = async (ID) => {
+  const [e, r] = await api.getProductDetail(ID);
   product.value = r.data;
+  objKeys.length = 0;
   product.value.skuList.forEach((element) => {
     values[element.attributeName] = element.attributeValues[0];
-    objKeys.push(element.attributeName);
+    if (!objKeys.includes(element.attributeName)) {
+      objKeys.push(element.attributeName);
+    }
   });
 };
 
+onBeforeRouteUpdate(async (to, from) => {
+  const Rex = /\d+/;
+  let n = to.path.match(Rex);
+  init(Number(n[0]));
+});
+
 onMounted(() => {
-  init();
+  init(Number(route.params.productDetailID));
 });
 </script>
 
@@ -104,7 +122,6 @@ onMounted(() => {
         </div>
         <n-card embedded class="mb-16px">
           <p class="flex">
-            {{ product.productName }}
             <span v-for="key in objKeys" :key="key" class="px-1"
               >{{ values[key] }}
             </span>
@@ -116,7 +133,7 @@ onMounted(() => {
           </p>
           <p class="text-gray-500 text-15px">库存：{{ productStock }}</p>
         </n-card>
-        <div class="flex gap-x-12px">
+        <div class="flex gap-x-12px my-12px text-16px">
           <n-button
             type="primary"
             class="w-300px h-54px"
@@ -125,7 +142,13 @@ onMounted(() => {
           >
             加入购物车
           </n-button>
-          <n-button type="info" class="w-142px h-54px"> 喜欢 </n-button>
+          <n-button
+            type="info"
+            class="w-142px h-54px"
+            @click="addFavorite(product.productId)"
+          >
+            喜欢
+          </n-button>
         </div>
       </article>
     </main>

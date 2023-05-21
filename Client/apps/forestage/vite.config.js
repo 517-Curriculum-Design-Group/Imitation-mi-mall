@@ -11,7 +11,7 @@ function _resolve(dir) {
 }
 
 // https://vitejs.dev/config/
-export default defineConfig(({ command, mode, ssrBuild }) => {
+export default defineConfig(({ command, mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
   console.log(`当前开发的环境为${env.VITE_API_ENV}`)
   const alias = {
