@@ -3,6 +3,7 @@ package com.xiaomi_mall.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.xiaomi_mall.config.Result;
+import com.xiaomi_mall.dto.AddProductStockDto;
 import com.xiaomi_mall.dto.ModifyProductStatusDto;
 import com.xiaomi_mall.dto.ModifySkuDetailDto;
 import com.xiaomi_mall.enity.Product;
@@ -32,6 +33,8 @@ public interface ProductService extends IService<Product> {
     Result addProductToFavorite(HttpServletRequest request, Integer product_id);
 
     Result ModifyProductStatus(ModifyProductStatusDto modifyProductStatusDto);
+
+    Result addProductStock(AddProductStockDto addProductStockDto);
 }
 
 

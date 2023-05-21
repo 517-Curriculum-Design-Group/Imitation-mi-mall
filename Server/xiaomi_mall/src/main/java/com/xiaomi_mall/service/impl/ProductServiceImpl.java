@@ -12,10 +12,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.xiaomi_mall.config.Result;
 import com.xiaomi_mall.constants.SystemConstants;
-import com.xiaomi_mall.dto.ModifyProductStatusDto;
-import com.xiaomi_mall.dto.ModifySku;
-import com.xiaomi_mall.dto.ModifySkuDetail;
-import com.xiaomi_mall.dto.ModifySkuDetailDto;
+import com.xiaomi_mall.dto.*;
 import com.xiaomi_mall.enity.*;
 import com.xiaomi_mall.enums.AppHttpCodeEnum;
 import com.xiaomi_mall.exception.SystemException;
@@ -433,6 +430,25 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         else if (modifyProductStatusDto.getStatus() == 1)
             return Result.okResult("上架成功");
         return Result.errorResult(901, "无此ID对应商品");
+    }
+
+    @Override
+    public Result addProductStock(AddProductStockDto addProductStockDto)
+    {
+        List<Integer> skuIds = addProductStockDto.getSkuIds();
+        List<Integer> stocks = addProductStockDto.getStocks();
+
+        if(skuIds.isEmpty() || stocks.isEmpty())
+            return Result.errorResult(904, "sku和库存不能为空");
+        if(skuIds.size() != stocks.size())
+            return Result.errorResult(905, "sku和库存数组不等长");
+
+        List<Sku> skus = skuService.listByIds(skuIds);
+        for (int i = 0; i < skus.size(); i++)
+            skus.get(i).setSkuStock(stocks.get(i));
+        skuService.updateBatchById(skus);
+
+        return Result.okResult("补货成功");
     }
 
 
