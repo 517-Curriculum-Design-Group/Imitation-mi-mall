@@ -3,9 +3,11 @@ package com.xiaomi_mall.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.xiaomi_mall.config.Result;
+import com.xiaomi_mall.dto.ModifySkuDetailDto;
 import com.xiaomi_mall.enity.Product;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
 public interface ProductService extends IService<Product> {
@@ -18,7 +20,7 @@ public interface ProductService extends IService<Product> {
 
     Result addNewProduct(Map<String, Object> map);
 
-    Result modifyProductSku(Map<String, Object> map);
+    Result modifyProductSku(ModifySkuDetailDto modifySkuDetailDto) throws UnsupportedEncodingException;
 
     Result getProductSku(Integer productId);
 

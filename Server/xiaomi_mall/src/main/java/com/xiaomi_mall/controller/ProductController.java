@@ -105,6 +105,7 @@ public class ProductController {
      *
      * @return {@link Result}
      */
+    //TODO:喜欢
     @PreAuthorize("hasAnyAuthority('普通用户')")
     @ApiOperation("添加商品到喜欢")
     @PostMapping("/addProductToFavorite/{product_id}")

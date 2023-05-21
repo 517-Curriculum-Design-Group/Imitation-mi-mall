@@ -1,5 +1,6 @@
 package com.xiaomi_mall.service.impl;
 
+import com.alibaba.druid.support.json.JSONUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.parser.Feature;
@@ -11,6 +12,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.xiaomi_mall.config.Result;
 import com.xiaomi_mall.constants.SystemConstants;
+import com.xiaomi_mall.dto.ModifySku;
+import com.xiaomi_mall.dto.ModifySkuDetail;
+import com.xiaomi_mall.dto.ModifySkuDetailDto;
 import com.xiaomi_mall.enity.*;
 import com.xiaomi_mall.enums.AppHttpCodeEnum;
 import com.xiaomi_mall.exception.SystemException;
@@ -29,8 +33,10 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import springfox.documentation.spring.web.json.Json;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -195,226 +201,104 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     @Autowired
     private SqlSessionFactory sqlSessionFactory;
     @Override
-    public Result modifyProductSku(Map<String, Object> map)
-    {
-        int productId = Integer.parseInt(map.get("productId").toString());
-        List<Map<String, Object>> skuDetailList = (List<Map<String, Object>>) map.get("skuDetailList");
+    public Result modifyProductSku(ModifySkuDetailDto modifySkuDetailDto){
+        // region 传参格式
+        //{
+        //    "productId" : 12,
+        //    "skuList":
+        //    [
+        //        {
+        //            "skuName":"颜色",
+        //            "skuValues":["白色","黑色"]
+        //        },
+        //        {
+        //            "skuName":"尺寸",
+        //            "skuValues":["14寸"]
+        //        }
+        //    ],
+        //    "skuDetailList":
+        //    [
+        //        {
+        //            "skuNames":["颜色","尺寸"],
+        //            "skuValues":["白色","14寸"],
+        //            "skuPrice":790,
+        //            "skuStock":22
+        //        },
+        //        {
+        //            "skuNames":["颜色","尺寸"],
+        //            "skuValues":["黑色","14寸"],
+        //            "skuPrice":790,
+        //            "skuStock":12
+        //        }
+        //    ]
+        //}
+        //endregion
 
-        //先删除或覆盖旧的
-
-
-        //覆盖Product表中的旧SkuList
-//        int row = productMapper.modifySkuList(productId, skuListJson);
-//        if(row == 0)
-//            return Result.errorResult(806, "覆盖Product表中的旧SkuList失败，没有任意一行被修改");
-//
-//        //覆盖Product表中的旧least_price
-//        double leastPrice = 0;
-//        for(Map<String, Object> skuDetail : skuDetailList)
-//        {
-//            BigDecimal price = (BigDecimal)skuDetail.get("skuPrice");
-//            leastPrice = Math.min(leastPrice, price.doubleValue());
-//        }
-//        if(leastPrice != 0)
-//            productMapper.modifySkuList(productId, leastPrice + "元起");
-//        else
-//            productMapper.modifySkuList(productId, "");
-
-        //再加新的
-        for (Map<String, Object> skuDetail:skuDetailList)
+        //region 先覆盖Product中的旧的sku_list
+        Map<String, Object> skuMapToJson = new LinkedHashMap<>();
+        for (int i = 0; i < modifySkuDetailDto.getSkuList().size(); i++)
         {
-            List<String> attributeNames = (List<String>) skuDetail.get("skuNames");
-            List<String> attributeValues = (List<String>) skuDetail.get("skuValues");
-            Map<String, Object> skuJsonMap = new LinkedHashMap<>();
+            ModifySku modifySku = modifySkuDetailDto.getSkuList().get(i);
+            skuMapToJson.put(modifySku.skuName, modifySku.skuValues);
+        }
+        String skuListJson = JSONUtils.toJSONString(skuMapToJson);
+        //System.out.println(skuListJson);
+        int row = productMapper.modifySkuList(modifySkuDetailDto.getProductId(), skuListJson);
+        if(row == 0)
+            return Result.errorResult(806, "覆盖Product表中的旧sku_list失败，没有任意一行被修改");
+        //endregion
+
+        //region 覆盖Product表中的旧least_price
+        double leastPrice = Double.MAX_VALUE;
+        for(ModifySkuDetail modifySkuDetail : modifySkuDetailDto.getSkuDetailList())
+        {
+            //BigDecimal price = new BigDecimal(modifySkuDetail.skuPrice);
+            leastPrice = Math.min(leastPrice, modifySkuDetail.skuPrice);
+        }
+        if(leastPrice != 0)
+            productMapper.modifyLeastPrice(modifySkuDetailDto.getProductId(), leastPrice + "元起");
+        else
+            productMapper.modifyLeastPrice(modifySkuDetailDto.getProductId(), "0元起");
+        //endregion
+
+        //region 删除sku表中旧的行
+        QueryWrapper<Sku> skuQueryWrapper = new QueryWrapper<>();
+        skuQueryWrapper
+                .eq("product_id", modifySkuDetailDto.getProductId())
+                .eq("del_flag", 0);
+        List<Sku> deleteSkuList = skuMapper.selectList(skuQueryWrapper);
+        SqlSession sqlSession = sqlSessionFactory.openSession(ExecutorType.BATCH,false);
+        SkuMapper skuMapperInSession = sqlSession.getMapper(SkuMapper.class);
+        deleteSkuList.stream().forEach(deleteSku -> skuMapperInSession.modifySkuStatus(deleteSku.getSkuId(), 1));
+        sqlSession.commit();
+        sqlSession.clearCache();
+        //endregion
+
+        //region 插入新的sku值
+        String product_img = productMapper.selectById(modifySkuDetailDto.getProductId()).getProductPic();
+
+        for (ModifySkuDetail skuDetail : modifySkuDetailDto.getSkuDetailList())
+        {
+            List<String> attributeNames =  skuDetail.getSkuNames();
+            List<String> attributeValues = skuDetail.getSkuValues();
             List<Sku> skus = new ArrayList<>();
+            Map<String, Object> skuJsonMap = new LinkedHashMap<>();
             for (int i = 0; i < attributeNames.size(); i++)
             {
                 //数据库里就是这种结构转Json，这波属于是设计不足的代价
                 skuJsonMap.put(attributeNames.get(i), attributeValues.get(i));
-                String skuListJson = String.valueOf(new JSONObject(skuJsonMap));
-                System.out.println(skuListJson);
-                if(skuListJson == null)
-                {
-                    return Result.errorResult(801, "Map转JsonString失败，请检查skuList格式");
-                }
-                Sku sku = new Sku();
-                sku.setProductId(productId);
-                sku.setSkuName(skuListJson);
-                sku.setSkuPrice((new BigDecimal((Double) skuDetail.get("skuPrice"))));
-                sku.setSkuStock((Integer) skuDetail.get("skuStock"));
-                sku.setCreateTime(new Date());
-                skus.add(sku);
             }
+            Sku sku = new Sku();
+            sku.setProductId(modifySkuDetailDto.getProductId());
+            String skuJson = JSONUtils.toJSONString(skuJsonMap);
+            sku.setSkuName(skuJson);
+            sku.setSkuImage(product_img);
+            sku.setSkuPrice((new BigDecimal(skuDetail.getSkuPrice())));
+            sku.setSkuStock(skuDetail.getSkuStock());
+            sku.setCreateTime(new Date());
+            skus.add(sku);
             skuService.saveBatch(skus);
         }
-
-//        List<Integer> attributeIdList = (List<Integer>)map.get("attributeIdList");
-//        List<List<Integer>> valueIdList = (List<List<Integer>>)map.get("valueIdList");
-//        Map<String, List<String>> skuList = (Map<String, List<String>>)map.get("skuList");
-//        List<Map<String, Object>> skuDetailList = (List<Map<String, Object>>)map.get("skuDetailList");
-//
-//        if(attributeIdList.size() < 1)
-//            return Result.errorResult(802,"attributeIdList不能为空，一个商品至少要一个SKU");
-//
-//        if(valueIdList.size() < 1)
-//            return Result.errorResult(803,"valueIdList不能为空，一个商品至少要一个SKU");
-//
-//        if(skuList.size() < 1)
-//            return Result.errorResult(804,"skuList不能为空，一个商品至少要一个SKU");
-//
-//        if(skuDetailList.size() < 1)
-//            return Result.errorResult(805,"skuDetailList不能为空，一个商品至少要一个SKU");
-//
-//        //对属性判断是否可操作
-//        List<SkuAttribute> attributeList = skuAttributeMapper.getAll();
-//        for (int id: attributeIdList)
-//        {
-//            boolean remain = false;
-//            for (SkuAttribute attribute: attributeList)
-//            {
-//                if(attribute.getAttributeId() == id)
-//                {
-//                    remain = true;
-//                    break;
-//                }
-//            }
-//            if(!remain)
-//                return Result.errorResult(806, "id为" + id +"的attribute不存在");
-//        }
-//
-//        //对属性值判断是否可操作
-//        List<SkuAttributeValue> attributeValueList = skuAttributeValueMapper.getAll();
-//        for (int i = 0 ; i < valueIdList.size() ; i++)
-//        {
-//            for (int j = 0; j < valueIdList.get(i).size() ; j++)
-//            {
-//                int target = valueIdList.get(i).get(j);
-//                List<SkuAttributeValue> res = attributeValueList.stream().filter(v->v.getValueId() == target).collect(Collectors.toList());
-//                if(res.isEmpty())
-//                    return Result.errorResult(805, "id为"+target+"的attributeValue不存在");
-//            }
-//        }
-//
-//        //json转字符串
-//        String skuListJson = JsonToString(skuList);
-//        if(skuListJson == null)
-//        {
-//            return Result.errorResult(801, "Json转String失败，请检查skuList格式");
-//        }
-//
-//        //覆盖Product表中的旧SkuList
-//        int row = productMapper.modifySkuList(productId, skuListJson);
-//        if(row == 0)
-//            return Result.errorResult(806, "覆盖Product表中的旧SkuList失败，没有任意一行被修改");
-//
-//        //覆盖Product表中的旧least_price
-//        double leastPrice = 0;
-//        for(Map<String, Object> skuDetail : skuDetailList)
-//        {
-//            BigDecimal price = (BigDecimal)skuDetail.get("skuPrice");
-//            leastPrice = Math.min(leastPrice, price.doubleValue());
-//        }
-//        if(leastPrice != 0)
-//            productMapper.modifySkuList(productId, leastPrice + "元起");
-//        else
-//            productMapper.modifySkuList(productId, "");
-//
-//        //修改/新增SKU，SKU即售卖的最小单元
-//        SqlSession sqlSession = sqlSessionFactory.openSession(ExecutorType.BATCH,false);
-//        SkuMapper skuMapperInSession = sqlSession.getMapper(SkuMapper.class);
-//
-//        List<Sku> oldSkuDetailList =  skuMapper.getSkuListByProductId(productId);
-//        List<Integer> oldRemainSkuId = new ArrayList<>();
-//
-//        if(!oldSkuDetailList.isEmpty())
-//        {
-//            List<Sku> modifySkuList = new ArrayList();
-//
-//            for(int i = 0; i < skuDetailList.size() ; i++)
-//            {
-//                String skuName = JsonToString(skuDetailList.get(i).get("skuName"));
-//                if(skuName == null)
-//                {
-//                    return Result.errorResult(801, "Json转String失败，请检查skuList格式");
-//                }
-//
-//                for(Sku oldSkuDetail : oldSkuDetailList)
-//                {
-//                    System.out.println("old" + oldSkuDetail.getSkuName());
-//                    System.out.println("new" + skuName);
-//                    if(oldSkuDetail.getSkuName().equals(skuName))
-//                    {
-//                        Sku modifySku = new Sku();
-//                        modifySku.setSkuId(oldSkuDetail.getSkuId());
-//                        modifySku.setProductId(productId);
-//                        modifySku.setSkuName(skuName);
-//                        modifySku.setSkuPrice(new BigDecimal(skuDetailList.get(i).get("skuPrice").toString()));
-//                        modifySku.setSkuStock(Integer.parseInt(skuDetailList.get(i).get("skuStock").toString()));
-//                        modifySku.setSkuImage(null);
-//                        modifySku.setCreateTime(new Date());
-//
-//                        modifySkuList.add(modifySku);
-//                        oldRemainSkuId.add(i);
-//                        oldSkuDetailList.remove(oldSkuDetail);
-//                        break;
-//                    }
-//                }
-//
-//                //覆盖要被保留的旧值
-//                if(!modifySkuList.isEmpty())
-//                {
-//                    //System.out.println("覆盖要被保留的旧值");
-//                    modifySkuList.stream().forEach(modifySku -> skuMapper.updateById(modifySku));
-//                    sqlSession.commit();
-//                    sqlSession.clearCache();
-//                }
-//            }
-//
-//            List<Integer> deleteSkuList = new ArrayList();
-//            for(Sku oldSkuDetail : oldSkuDetailList)
-//                deleteSkuList.add(oldSkuDetail.getSkuId());
-//
-//            //删除不需要的旧值
-//            if(!deleteSkuList.isEmpty())
-//            {
-//                //System.out.println("删除不需要的旧值");
-//                deleteSkuList.stream().forEach(sku_id -> skuMapperInSession.modifySkuStatus(sku_id, 1));
-//                sqlSession.commit();
-//                sqlSession.clearCache();
-//            }
-//        }
-//
-//        //插入新值
-//        List<Sku> newSkuDetailList = new ArrayList<>();
-//        for (int i = 0; i < skuDetailList.size(); i++)
-//        {
-//            if(!oldRemainSkuId.contains(i))
-//            {
-//                String skuName = JsonToString(skuDetailList.get(i).get("skuName"));
-//                if(skuName == null)
-//                {
-//                    return Result.errorResult(801, "Json转String失败，请检查skuList格式");
-//                }
-//
-//                Sku newSku = new Sku();
-//                newSku.setProductId(productId);
-//                newSku.setSkuName(skuName);
-//                newSku.setSkuImage(null);
-//                newSku.setSkuPrice(new BigDecimal(skuDetailList.get(i).get("skuPrice").toString()));
-//                newSku.setSkuStock(Integer.parseInt(skuDetailList.get(i).get("skuStock").toString()));
-//                newSku.setCreateTime(new Date());
-//
-//                newSkuDetailList.add(newSku);
-//            }
-//        }
-//
-//        if(!newSkuDetailList.isEmpty())
-//        {
-//            //System.out.println("插入新值");
-//            newSkuDetailList.forEach(skuMapperInSession::insert);
-//            sqlSession.commit();
-//            sqlSession.clearCache();
-//        }
 
         return Result.okResult(200, "修改Sku成功");
     }
