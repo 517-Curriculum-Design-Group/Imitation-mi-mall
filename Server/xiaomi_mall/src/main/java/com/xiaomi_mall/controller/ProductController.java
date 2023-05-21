@@ -28,8 +28,8 @@ public class ProductController {
 
     @ApiOperation("查询商品详情")
     @GetMapping("/getProductDetail/{product_id}")
-    public Result getProductDetail(@PathVariable Integer product_id) {
-        return productService.getProductDetail(product_id);
+    public Result getProductDetail(HttpServletRequest request, @PathVariable Integer product_id) {
+        return productService.getProductDetail(request, product_id);
     }
 
     @ApiOperation("查询商品价格")
@@ -60,9 +60,9 @@ public class ProductController {
     @PreAuthorize("hasAnyAuthority('普通用户')")
     @ApiOperation("删除购物车中商品")
     @DeleteMapping("/deleteCartProduct")
-    public Result deleteCartProduct(@RequestBody List<Integer> cartIds) {
-        cartService.removeByIds(cartIds);
-        return Result.okResult();
+    public Result deleteCartProduct(HttpServletRequest request, int cartId) {
+        cartService.removeById(cartId);
+        return cartService.getCartList(request);
     }
 
 
@@ -107,9 +107,23 @@ public class ProductController {
      */
     @PreAuthorize("hasAnyAuthority('普通用户')")
     @ApiOperation("添加商品到喜欢")
-    @PostMapping("/addProductToFavorite/{product_id}")
-    public Result addProductToFavorite(HttpServletRequest request, @PathVariable Integer product_id) {
+    @PostMapping("/addProductToFavorite")
+    public Result addProductToFavorite(HttpServletRequest request, @RequestBody Integer product_id) {
         return productService.addProductToFavorite(request, product_id);
+    }
+
+    @PreAuthorize("hasAnyAuthority('普通用户')")
+    @ApiOperation("删除喜欢")
+    @DeleteMapping("/deleteProductToFavorite")
+    public Result deleteProductToFavorite(HttpServletRequest request, @RequestBody Integer product_id) {
+        return productService.deleteProductToFavorite(request, product_id);
+    }
+
+    @PreAuthorize("hasAnyAuthority('普通用户')")
+    @ApiOperation("查看喜欢列表")
+    @GetMapping("/getFavoriteList")
+    public Result getFavoriteList(HttpServletRequest request) {
+        return productService.getFavoriteList(request);
     }
 
 

@@ -69,7 +69,7 @@ public class BackOrderController
     @PreAuthorize("hasAnyAuthority('普通管理员', '超级管理员')")
     @ApiOperation("评论列表接口")
     @GetMapping("/getBackCommentList")
-    public Result getBackCommentList(Integer pageNum, Integer pageSize, String rate)
+    public Result getBackCommentList(Integer pageNum, Integer pageSize, Integer rate)
     {
         return commentService.getBackCommentList(pageNum, pageSize, rate);
     }

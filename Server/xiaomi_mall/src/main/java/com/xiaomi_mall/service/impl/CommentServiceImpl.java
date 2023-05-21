@@ -40,11 +40,16 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     private ProductService productService;
 
     @Override
-    public Result getBackCommentList(Integer pageNum, Integer pageSize, String rate) {
+    public Result getBackCommentList(Integer pageNum, Integer pageSize, Integer rate) {
 
         LambdaQueryWrapper<Comment> queryWrapper = new LambdaQueryWrapper<>();
 
-        queryWrapper.like(Objects.nonNull(rate), Comment::getRate, rate);
+        String rateStr[] = {"好评", "一般", "差评"};
+
+        if(rate == -1)
+            queryWrapper.like(Objects.nonNull(""), Comment::getRate, "");
+        else
+            queryWrapper.like(Objects.nonNull(rateStr[rate]), Comment::getRate, rateStr[rate]);
 
         Page<Comment> pageInfo = new Page<>(pageNum, pageSize);
 
@@ -61,34 +66,6 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         }
 
         return Result.okResult(backCommentVos);
-
-
-//        List<Comment> commentList = commentService.list();
-//        List<Product> productList = productService.list();
-//        List<HashMap<String, Object>> res = new ArrayList<>();
-//
-//        for (Comment comment: commentList)
-//        {
-//            HashMap<String, Object> map = new HashMap<>();
-//            map.put("commentId", comment.getCommentId());
-//            String productName = "";
-//            String productPic = "";
-//            for (Product product : productList)
-//            {
-//                if(product.getProductId() == comment.getProductId())
-//                {
-//                    productName = product.getProductName();
-//                    productPic = product.getProductPic();
-//                    break;
-//                }
-//            }
-//            map.put("productName", productName);
-//            map.put("productPic", productPic);
-//            map.put("content", comment.getContent());
-//            map.put("commentTime", comment.getCommentTime());
-//            res.add(map);
-//        }
-//        return Result.okResult(res);
     }
 
     @Override

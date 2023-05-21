@@ -1,10 +1,8 @@
 package com.xiaomi_mall.controller;
 
 import com.xiaomi_mall.config.Result;
-import com.xiaomi_mall.dto.AttributeValueCommit;
-import com.xiaomi_mall.dto.SkuAttribute_ValueDto;
+import com.xiaomi_mall.dto.*;
 import com.xiaomi_mall.enity.Category;
-import com.xiaomi_mall.enity.Product;
 import com.xiaomi_mall.enity.SkuAttributeValue;
 import com.xiaomi_mall.service.CategoryService;
 import com.xiaomi_mall.service.ProductService;
@@ -17,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -56,15 +55,19 @@ public class BackProductController {
         return productService.addNewProduct(map);
     }
 
-    //TODO:这个
-//    @PreAuthorize("hasAnyAuthority('普通管理员', '超级管理员')")
-//    @ApiOperation("给商品补货")
-//    @PostMapping("/addProductStock")
-//    public Result addProductStock(@RequestBody Map<String, Object> map) {
-//        return productService.addProductStock(map);
-//    }
+    @PreAuthorize("hasAnyAuthority('普通管理员', '超级管理员')")
+    @ApiOperation("商品上下架")
+    @PostMapping("/ModifyProductStatus")
+    public Result ModifyProductStatus(@RequestBody ModifyProductStatusDto modifyProductStatusDto) {
+        return productService.ModifyProductStatus(modifyProductStatusDto);
+    }
 
-
+    @PreAuthorize("hasAnyAuthority('普通管理员', '超级管理员')")
+    @ApiOperation("给商品补货")
+    @PostMapping("/addProductStock")
+    public Result addProductStock(@RequestBody AddProductStockDto addProductStockDto) {
+        return productService.addProductStock(addProductStockDto);
+    }
 
     @PreAuthorize("hasAnyAuthority('普通管理员', '超级管理员')")
     @ApiOperation("查看商品SKU接口")
@@ -76,8 +79,8 @@ public class BackProductController {
     @PreAuthorize("hasAnyAuthority('普通管理员', '超级管理员')")
     @ApiOperation("修改商品SKU接口")
     @PostMapping("/modifyProductSku")
-    public Result modifyProductSku(@RequestBody Map<String, Object> map) {
-        return productService.modifyProductSku(map);
+    public Result modifyProductSku(@RequestBody ModifySkuDetailDto modifySkuDetailDto) throws UnsupportedEncodingException {
+        return productService.modifyProductSku(modifySkuDetailDto);
     }
 
     @PreAuthorize("hasAnyAuthority('普通管理员', '超级管理员')")

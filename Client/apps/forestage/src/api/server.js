@@ -64,3 +64,19 @@ export const Post = (url, data, params) => {
       });
   });
 };
+
+export const Delete = (url, data, params) => {
+  return new Promise((resolve) => {
+    inst
+      .delete(url, {
+        data,
+        params,
+      })
+      .then((result) => {
+        resolve([null, result.data]);
+      })
+      .catch((err) => {
+        resolve([err, undefined]);
+      });
+  });
+};

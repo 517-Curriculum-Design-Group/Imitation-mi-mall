@@ -2,7 +2,9 @@
 import { api } from "@/api";
 import ProductHead from "./ProductHead.vue";
 import { ref, onMounted, reactive, watchEffect } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
+import { useDialog } from "naive-ui";
+import utils from "@/utils";
 
 let product = ref({});
 const values = reactive({});
@@ -10,6 +12,10 @@ const objKeys = reactive([]);
 const productPrice = ref("");
 const productStock = ref("");
 const route = useRoute();
+const router = useRouter();
+const skuId = ref("");
+const dialogSuccess = useDialog();
+const dialogWarning = useDialog();
 
 watchEffect(async () => {
   let params = { product_id: 0, attributeValues: [] };
@@ -19,11 +25,38 @@ watchEffect(async () => {
   if (!e && r) {
     productPrice.value = r.data.price;
     productStock.value = r.data.stock;
+    skuId.value = r.data.sku_id;
   }
 });
 
+async function shoppingClick() {
+  if (utils.isLogin()) {
+    let body = { sku_id: skuId.value };
+    const [e, r] = await api.addSkuToCart(body);
+    if (!e && r) {
+      dialogSuccess.success({
+        title: "加入购物车成功!",
+        content: "跳转至购物车结账？",
+        positiveText: "跳转",
+        negativeText: "继续浏览",
+        onPositiveClick: () => {
+          message.success("耶！");
+        },
+      });
+    }
+  } else {
+    dialogWarning.warning({
+      title: "尚未登录",
+      content: "跳转至登录页？",
+      positiveText: "确定",
+      onPositiveClick: () => {
+        router.push("/login");
+      },
+    });
+  }
+}
+
 const init = async () => {
-  console.log(route.params.productDetailID)
   const [e, r] = await api.getProductDetail(
     Number(route.params.productDetailID)
   );
@@ -44,7 +77,7 @@ onMounted(() => {
     <ProductHead :product-name="product.productName"></ProductHead>
     <main class="mt-20px flex justify-between w-[80%] mx-auto">
       <img
-        class="aspect-square w-560px"
+        class="aspect-square w-560px h-560px object-cover pr-30px"
         :src="product.productPic"
         :alt="product.productName"
       />
@@ -84,12 +117,15 @@ onMounted(() => {
           <p class="text-gray-500 text-15px">库存：{{ productStock }}</p>
         </n-card>
         <div class="flex gap-x-12px">
-          <n-button strong secondary class="w-300px h-54px">
+          <n-button
+            type="primary"
+            class="w-300px h-54px"
+            :disabled="productStock === 0 ? true : false"
+            @click="shoppingClick"
+          >
             加入购物车
           </n-button>
-          <n-button strong secondary type="tertiary" class="w-142px h-54px">
-            喜欢
-          </n-button>
+          <n-button type="info" class="w-142px h-54px"> 喜欢 </n-button>
         </div>
       </article>
     </main>
