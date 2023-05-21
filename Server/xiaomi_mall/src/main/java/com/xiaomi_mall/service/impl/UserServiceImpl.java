@@ -401,7 +401,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
                 //找子类下的所有商品，最多填满八个
                 QueryWrapper<Product> productQueryWrapper1 = new QueryWrapper<>();
-                productQueryWrapper1.eq("category_id", category.getCategoryId());
+                productQueryWrapper1.eq("category_id", category.getCategoryId())
+                        .eq("status", 1)
+                        .eq("del_flag", 0);
                 List<Product> tempProductList = productMapper.selectList(productQueryWrapper1);
                 for (Product product:tempProductList) {
                     if(tempProducts.size() >= 8) break;
@@ -448,7 +450,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
                 //找子类下的所有商品，最多填满八个
                 QueryWrapper<Product> productQueryWrapper1 = new QueryWrapper<>();
-                productQueryWrapper1.eq("category_id", category.getCategoryId());
+                productQueryWrapper1.eq("category_id", category.getCategoryId())
+                        .eq("status", 1)
+                        .eq("del_flag", 0);
                 List<Product> tempProductList = productMapper.selectList(productQueryWrapper1);
                 for (Product product:tempProductList) {
                     if(tempProducts.size() >= 8) break;

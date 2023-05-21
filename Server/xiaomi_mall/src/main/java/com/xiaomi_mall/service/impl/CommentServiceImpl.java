@@ -19,7 +19,6 @@ import com.xiaomi_mall.vo.CommentVo;
 import com.xiaomi_mall.vo.PageVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.security.task.DelegatingSecurityContextAsyncTaskExecutor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
