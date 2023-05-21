@@ -60,9 +60,9 @@ public class ProductController {
     @PreAuthorize("hasAnyAuthority('普通用户')")
     @ApiOperation("删除购物车中商品")
     @DeleteMapping("/deleteCartProduct")
-    public Result deleteCartProduct(@RequestBody List<Integer> cartIds) {
+    public Result deleteCartProduct(HttpServletRequest request, @RequestBody List<Integer> cartIds) {
         cartService.removeByIds(cartIds);
-        return Result.okResult();
+        return cartService.getCartList(request);
     }
 
 
@@ -110,6 +110,13 @@ public class ProductController {
     @PostMapping("/addProductToFavorite")
     public Result addProductToFavorite(HttpServletRequest request, @RequestBody Integer product_id) {
         return productService.addProductToFavorite(request, product_id);
+    }
+
+    @PreAuthorize("hasAnyAuthority('普通用户')")
+    @ApiOperation("删除喜欢")
+    @DeleteMapping("/deleteProductToFavorite")
+    public Result deleteProductToFavorite(HttpServletRequest request, @RequestBody Integer product_id) {
+        return productService.deleteProductToFavorite(request, product_id);
     }
 
     @PreAuthorize("hasAnyAuthority('普通用户')")

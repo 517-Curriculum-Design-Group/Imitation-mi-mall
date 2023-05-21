@@ -482,6 +482,28 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         return Result.okResult("添加喜欢成功");
     }
 
+    @Override
+    public Result deleteProductToFavorite(HttpServletRequest request, Integer product_id) {
+        long userId = -1;
+        try {
+            userId = JwtUtil.getUserId(request);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        QueryWrapper<Favorite> favoriteQueryWrapper = new QueryWrapper<>();
+        favoriteQueryWrapper.eq("user_id", userId)
+                .eq("product_id", product_id)
+                .eq("del_flag", 0);
+        int cnt = favoriteService.count(favoriteQueryWrapper);
+        if(cnt == 0)
+            return Result.okResult("取消喜欢失败");
+
+        Favorite favorite = favoriteMapper.selectOne(favoriteQueryWrapper);
+        favoriteMapper.deleteById(favorite.getFavoriteId());
+        return Result.okResult("取消喜欢成功");
+    }
+
 
     @Override
     public Result getFavoriteList(HttpServletRequest request)
@@ -494,12 +516,19 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         }
 
         QueryWrapper<Favorite> favoriteQueryWrapper = new QueryWrapper<>();
-        favoriteQueryWrapper.eq("user_id", userId);
-        List<Favorite> favorites = favoriteMapper.selectList(favoriteQueryWrapper);
+        favoriteQueryWrapper.select("product_id")
+                .eq("user_id", userId)
+                .eq("del_flag", 0);
 
-        List<FavoriteVo> favoritesVo = new ArrayList<>();
-        return Result.okResult(favoritesVo);
+        List<Favorite> favoriteProductIds = favoriteMapper.selectList(favoriteQueryWrapper);
+//        List<FavoriteVo> favoriteVos = BeanCopyUtils.copyBeanList(favorites, FavoriteVo.class);
+//
+//        QueryWrapper
+
+        return Result.okResult();
     }
+
+
 
 
 }

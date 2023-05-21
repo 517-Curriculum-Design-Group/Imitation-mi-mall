@@ -37,6 +37,8 @@ public interface ProductService extends IService<Product> {
     Result addProductStock(AddProductStockDto addProductStockDto);
 
     Result getFavoriteList(HttpServletRequest request);
+
+    Result deleteProductToFavorite(HttpServletRequest request, Integer product_id);
 }
 
 
