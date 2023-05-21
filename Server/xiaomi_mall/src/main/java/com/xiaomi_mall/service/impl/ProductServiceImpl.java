@@ -465,9 +465,19 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
             throw new RuntimeException(e);
         }
 
+        QueryWrapper<Favorite> favoriteQueryWrapper = new QueryWrapper<>();
+        favoriteQueryWrapper.eq("user_id", userId)
+                .eq("product_id", product_id)
+                .eq("del_flag", 0);
+        int cnt = favoriteService.count(favoriteQueryWrapper);
+        if(cnt != 0)
+            return Result.okResult("你已经喜欢过了");
+
         Favorite favorite = new Favorite();
         favorite.setUserId(userId);
         favorite.setProductId(product_id);
+        favorite.setFavoriteTime(new Date());
+        favoriteService.save(favorite);
 
         return Result.okResult("添加喜欢成功");
     }
