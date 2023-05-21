@@ -14,9 +14,6 @@ inst.interceptors.request.use(
     const token = getSession("token");
     if (token) {
       config.headers.token = token;
-      if (typeof store.getUserInfo()) {
-        console.log(typeof store.userInfo,   store.getUserInfo());
-      }
     }
     return config;
   },
