@@ -107,8 +107,8 @@ public class ProductController {
      */
     @PreAuthorize("hasAnyAuthority('普通用户')")
     @ApiOperation("添加商品到喜欢")
-    @PostMapping("/addProductToFavorite/{product_id}")
-    public Result addProductToFavorite(HttpServletRequest request, @PathVariable Integer product_id) {
+    @PostMapping("/addProductToFavorite")
+    public Result addProductToFavorite(HttpServletRequest request, @RequestBody Integer product_id) {
         return productService.addProductToFavorite(request, product_id);
     }
 
