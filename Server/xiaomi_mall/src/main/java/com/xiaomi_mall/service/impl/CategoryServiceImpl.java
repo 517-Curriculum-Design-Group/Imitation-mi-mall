@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xiaomi_mall.config.Result;
 import com.xiaomi_mall.constants.SystemConstants;
 import com.xiaomi_mall.enity.Category;
+import com.xiaomi_mall.enity.Product;
 import com.xiaomi_mall.mapper.CategoryMapper;
 import com.xiaomi_mall.mapper.ProductMapper;
 import com.xiaomi_mall.service.CategoryService;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> implements CategoryService {
@@ -32,33 +34,44 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
     }
 
     @Override
-    public Result getCateProduct(Integer categoryId) {
-        List<CateProductVo> res = new ArrayList<>();
-        //根据传进来的categoryId查询它所对应的parentId
-        Category category = categoryMapper.selectById(categoryId);
-        Long parentId = category.getParentId();
-        //判断parentId是否等于-1
-        if (parentId == SystemConstants.ROOT_ID) {   //说明该分类是根类
-            //可以将其categoryId当做parentId查询它的子分类
-            List<Category> children = getChildren(categoryId);
-            //查询每个分类下的商品
-            for (Category item : children) {
-                List<Category> allByCategory = categoryMapper.getAllByCategory(item.getCategoryId());
-                for(Category temp : allByCategory)
-                {
+    public Result getCateProduct(String search) {
+        LambdaQueryWrapper<Category> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Category::getCategoryName, search);
+        Category category1 = categoryMapper.selectOne(queryWrapper);
+        if (Objects.nonNull(category1)) {
+            int categoryId = category1.getCategoryId();
+            List<CateProductVo> res = new ArrayList<>();
+            //根据传进来的categoryId查询它所对应的parentId
+            Category category = categoryMapper.selectById(categoryId);
+            Long parentId = category.getParentId();
+            //判断parentId是否等于-1
+            if (parentId == SystemConstants.ROOT_ID) {   //说明该分类是根类
+                //可以将其categoryId当做parentId查询它的子分类
+                List<Category> children = getChildren(categoryId);
+                //查询每个分类下的商品
+                for (Category item : children) {
+                    List<Product> allByCategory = productMapper.getAllByCategory1(item.getCategoryId());
+                    for(Product temp : allByCategory)
+                    {
+                        res.add(BeanCopyUtils.copyBean(temp, CateProductVo.class));
+                    }
+                }
+                return Result.okResult(res);
+            } else {
+                //直接根据categoryId查询商品
+                List<Category> allByCategories = categoryMapper.getAllByCategory(categoryId);
+                for(Category temp : allByCategories) {
                     res.add(BeanCopyUtils.copyBean(temp, CateProductVo.class));
                 }
+                return Result.okResult(res);
             }
-            return Result.okResult(res);
+        } else {
+            LambdaQueryWrapper<Product> productWrapper = new LambdaQueryWrapper<>();
+            productWrapper.like(Product::getProductName, search);
+            List<Product> productList = productMapper.selectList(productWrapper);
+            return Result.okResult(productList);
         }
-        else {
-            //直接根据categoryId查询商品
-            List<Category> allByCategories = categoryMapper.getAllByCategory(categoryId);
-            for(Category temp : allByCategories) {
-                res.add(BeanCopyUtils.copyBean(temp, CateProductVo.class));
-            }
-            return Result.okResult(res);
-        }
+
     }
 
     @Override
