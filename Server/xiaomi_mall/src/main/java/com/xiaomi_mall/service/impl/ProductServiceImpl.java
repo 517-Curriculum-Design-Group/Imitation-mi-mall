@@ -19,10 +19,7 @@ import com.xiaomi_mall.mapper.*;
 import com.xiaomi_mall.service.*;
 import com.xiaomi_mall.util.BeanCopyUtils;
 import com.xiaomi_mall.util.JwtUtil;
-import com.xiaomi_mall.vo.FavoriteVo;
-import com.xiaomi_mall.vo.ProductListVo;
-import com.xiaomi_mall.vo.ProductVo;
-import com.xiaomi_mall.vo.SkuVo;
+import com.xiaomi_mall.vo.*;
 import io.swagger.models.auth.In;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
@@ -130,10 +127,11 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         page(pageInfo, queryWrapper);
         //获取到Product的数据
         List<Product> productList = pageInfo.getRecords();
+        long total = pageInfo.getTotal();
         //封装到vo类
         List<ProductListVo> productListVos = toProductListVo(productList);
-
-        return Result.okResult(productListVos);
+        GetProductListVo getProductListVo = new GetProductListVo(total, productListVos);
+        return Result.okResult(getProductListVo);
 
     }
 
