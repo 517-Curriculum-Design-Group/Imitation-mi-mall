@@ -119,6 +119,7 @@ const login = async () => {
   const [e, r] = await api.postLogin(formState);
   if (!e && r) {
     utils.setSession("token", r.data.token);
+    utils.setSession("userId", JSON.stringify(r.data.userInfo));
     store.setUserInfo(r.data.userInfo);
     router.replace("/home");
     notify("success", "通知", "登录成功");
