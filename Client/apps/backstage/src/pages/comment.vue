@@ -9,11 +9,20 @@
       <el-button type="danger" size="small" @click="deletelist"
         >批量删除</el-button
       >
-      <el-tooltip class="box-item" effect="dark" content="刷新" placement="top">
-        <el-button text @click="getData()">
-          <el-icon size="”20"><Refresh /></el-icon>
-        </el-button>
-      </el-tooltip>
+      <div class="ml-1">
+        <el-button type="primary" size="small" @click="getData"
+        >全部</el-button
+      >
+      <el-button type="success" size="small" @click="findgood"
+        >好评</el-button
+      >
+      <el-button type="warning" size="small" @click="findm"
+        >中评</el-button
+      >
+            <el-button type="danger" size="small" @click="findbad"
+        >差评</el-button
+      >
+      </div>
     </div>
 
     <el-table :data="list" stripe style="" @selection-change="handleSelectionChange"  >
@@ -66,7 +75,7 @@
 </template>
 
 <script setup>
-import {getcommentlist,deletecommentlist} from '~/api/comments'
+import {getcommentlevel,deletecommentlist} from '~/api/comments'
 import{ref,onMounted} from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { toast } from "~/composables/util";
@@ -85,8 +94,8 @@ function getData(p = null) {
   }
 
   loading.value = true;
-  console.log("!!!")
-  getcommentlist(currentPage.value, pageSize.value)
+  console.log("我要全部")
+  getcommentlevel(currentPage.value, pageSize.value,"-1")
     .then((res) => {
       console.log(res)
       list.value = res;
@@ -96,6 +105,49 @@ function getData(p = null) {
       loading.value = false;
     });
 }
+
+const findgood=()=>{
+  loading.value = true;
+  console.log("我要好评")
+  getcommentlevel(currentPage.value, pageSize.value,0)
+    .then((res) => {
+      console.log(res)
+      list.value = res;
+      total.value = parseInt(res.length);
+    })
+    .finally(() => {
+      loading.value = false;
+    });
+}
+
+const findm=()=>{
+  loading.value = true;
+  console.log("我要中评")
+  getcommentlevel(currentPage.value, pageSize.value,1)
+    .then((res) => {
+      console.log(res)
+      list.value = res;
+      total.value = parseInt(res.length);
+    })
+    .finally(() => {
+      loading.value = false;
+    });
+}
+
+const findbad=()=>{
+  loading.value = true;
+  console.log("我要差评")
+  getcommentlevel(currentPage.value, pageSize.value,2)
+    .then((res) => {
+      console.log(res)
+      list.value = res;
+      total.value = parseInt(res.length);
+    })
+    .finally(() => {
+      loading.value = false;
+    });
+}
+
 
 function dateFormat (row, column, cellValue, index) {
       const daterc = row[column.property]
