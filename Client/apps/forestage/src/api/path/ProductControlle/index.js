@@ -1,4 +1,4 @@
-import { Get, Post } from "../../server";
+import { Get, Post,Delete } from "../../server";
 
 export function getProductDetail(id) {
   let params = {
@@ -19,9 +19,14 @@ export function addProductToFavorite(body) {
   return Post("/addProductToFavorite", body);
 }
 
+export function deleteLike(body){
+  return Delete("/deleteProductToFavorite",body)
+}
+
 export const prodApi = {
   getProductDetail,
   getProductPrice,
   addSkuToCart,
   addProductToFavorite,
+  deleteLike,
 };

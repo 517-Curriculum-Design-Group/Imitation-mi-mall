@@ -40,7 +40,7 @@ const routes = [
             component: async () => await import("@/view/user/MyOrder.vue"),
           },
           {
-            path:":orderId",
+            path: ":orderId",
             name: "OrderId",
             component: async () => await import("@/view/user/[OrderId].vue")
           },
@@ -103,7 +103,7 @@ const routes = [
     },
   },
   {
-    path: "/checkout",
+    path: "/OrderCheck",
     name: "OrderCheck",
     component: async () => await import("@/view/checkout/OrderCheck.vue"),
   },

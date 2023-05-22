@@ -24,8 +24,12 @@ export function getPersonInfo() {
   return Get("/getPersonInfo");
 }
 
-export function getAllAddresses() {
-  return Get("/getAllAddresses");
+export function getAllAddresses(id) {
+  return Get("/getAllAddress",id);
+}
+
+export function getLike(){
+  return Get("/getFavoriteList")
 }
 
 export const userApi = {
@@ -36,4 +40,5 @@ export const userApi = {
   deleteCartProduct,
   getPersonInfo,
   getAllAddresses,
+  getLike
 };
