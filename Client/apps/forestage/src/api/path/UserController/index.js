@@ -28,6 +28,10 @@ export function getAllAddresses(id) {
   return Get("/getAllAddress",id);
 }
 
+export function getLike(){
+  return Get("/getFavoriteList")
+}
+
 export const userApi = {
   postLogin,
   postRegister,
@@ -36,4 +40,5 @@ export const userApi = {
   deleteCartProduct,
   getPersonInfo,
   getAllAddresses,
+  getLike
 };

@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive,onMounted } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import { api } from '@/api'
 
 const isShow = ref(false)
@@ -28,14 +28,15 @@ const options = [
 ]
 
 let allAddresses = ref(null)
-onMounted(async ()=>{
-    const [e,r] = await api.getAllAddresses()
-    allAddresses.value = r.data
+onMounted(async () => {
+    const [e, r] = await api.getAllAddresses()
+    
 })
 </script>
 
 <template>
     <h1 class="w-[882px] h-[68px] text-gray-500">收货地址</h1>
+
     <div class="flex flex-wrap">
         <div class="container flex flex-col justify-center items-center w-[270px] h-[180px] border-1 border-solid border-gray-400 cursor-pointer hover:border-gray-500"
             @click="isShow = true">
@@ -45,8 +46,7 @@ onMounted(async ()=>{
     </div>
 
     <n-modal v-model:show="isShow">
-        <n-form :model="userInfo"
-            class="flex userForm flex-col w-[660px] h-[280px] shadow-lg bg-light-50 p-4 t-[100px]"
+        <n-form :model="userInfo" class="flex userForm flex-col w-[660px] h-[280px] shadow-lg bg-light-50 p-4 t-[100px]"
             :class="{ 'userForm-active': isShow }">
             <div class="flex justify-between w-[635px] h-[60px] pt-[14px] pb-[14px] pl-[20px] pr-[20px] bg-gray-100">
                 <h2>添加收货地址</h2>

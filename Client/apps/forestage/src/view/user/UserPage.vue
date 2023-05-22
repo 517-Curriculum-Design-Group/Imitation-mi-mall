@@ -54,7 +54,7 @@ const menu = [
 </script>
 
 <template>
-    <div class="container h-100% bg-gray-100 flex justify-between">
+    <div class="h-100% bg-gray-100 flex justify-between">
         <div class="flex justify-between w-80% h-full m-auto bg-transparent">
             <nav class="w-[234px] h-auto bg-light-50 pt-[36px] pb-[36px]">
                 <ul tabindex="1" class="text-xl ml-5 leading-15" v-for="(items, index) in menu" :key="index">

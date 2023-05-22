@@ -4,6 +4,7 @@ import com.xiaomi_mall.config.Result;
 import com.xiaomi_mall.dto.ModifyAddressInOrderDto;
 import com.xiaomi_mall.dto.OrderCommit;
 import com.xiaomi_mall.dto.SearchProductDto;
+import com.xiaomi_mall.enity.Product;
 import com.xiaomi_mall.service.CartService;
 import com.xiaomi_mall.service.OrderService;
 import com.xiaomi_mall.service.ProductService;
@@ -118,15 +119,15 @@ public class ProductController {
     @PreAuthorize("hasAnyAuthority('普通用户')")
     @ApiOperation("添加商品到喜欢")
     @PostMapping("/addProductToFavorite")
-    public Result addProductToFavorite(HttpServletRequest request, @RequestBody Integer product_id) {
-        return productService.addProductToFavorite(request, product_id);
+    public Result addProductToFavorite(HttpServletRequest request, @RequestBody Product product) {
+        return productService.addProductToFavorite(request, product);
     }
 
     @PreAuthorize("hasAnyAuthority('普通用户')")
     @ApiOperation("删除喜欢")
     @DeleteMapping("/deleteProductToFavorite")
-    public Result deleteProductToFavorite(HttpServletRequest request, @RequestBody Integer product_id) {
-        return productService.deleteProductToFavorite(request, product_id);
+    public Result deleteProductToFavorite(HttpServletRequest request, @RequestBody Product product) {
+        return productService.deleteProductToFavorite(request, product);
     }
 
     @PreAuthorize("hasAnyAuthority('普通用户')")

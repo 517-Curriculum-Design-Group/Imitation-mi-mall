@@ -11,7 +11,12 @@ export function getOrderDetails(id){
     return Get(`/getUserOrderDetail/${params.orderId}`)
 }
 
+export function updateOrderDetails(obj){
+    return Post("/ModifyAddressInOrder",obj)
+}
+
 export const orderApi = {
     getOrderList,
-    getOrderDetails
+    getOrderDetails,
+    updateOrderDetails
 }

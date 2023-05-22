@@ -470,7 +470,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
 
 
     @Override
-    public Result addProductToFavorite(HttpServletRequest request, Integer product_id) {
+    public Result addProductToFavorite(HttpServletRequest request, Product product) {
         long userId = -1;
         try {
             userId = JwtUtil.getUserId(request);
@@ -480,7 +480,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
 
         QueryWrapper<Favorite> favoriteQueryWrapper = new QueryWrapper<>();
         favoriteQueryWrapper.eq("user_id", userId)
-                .eq("product_id", product_id)
+                .eq("product_id", product.getProductId())
                 .eq("del_flag", 0);
         int cnt = favoriteService.count(favoriteQueryWrapper);
         if(cnt != 0)
@@ -488,7 +488,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
 
         Favorite favorite = new Favorite();
         favorite.setUserId(userId);
-        favorite.setProductId(product_id);
+        favorite.setProductId(product.getProductId());
         favorite.setFavoriteTime(new Date());
         favoriteService.save(favorite);
 
@@ -496,7 +496,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     }
 
     @Override
-    public Result deleteProductToFavorite(HttpServletRequest request, Integer product_id) {
+    public Result deleteProductToFavorite(HttpServletRequest request, Product product) {
         long userId = -1;
         try {
             userId = JwtUtil.getUserId(request);
@@ -506,7 +506,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
 
         QueryWrapper<Favorite> favoriteQueryWrapper = new QueryWrapper<>();
         favoriteQueryWrapper.eq("user_id", userId)
-                .eq("product_id", product_id)
+                .eq("product_id",product.getProductId())
                 .eq("del_flag", 0);
         int cnt = favoriteService.count(favoriteQueryWrapper);
         if(cnt == 0)
@@ -545,8 +545,5 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         return Result.okResult(productListVos);
 
     }
-
-
-
 
 }
