@@ -268,9 +268,12 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         //region 插入新的sku值
         String product_img = productMapper.selectById(modifySkuDetailDto.getProductId()).getProductPic();
 
+        List<String> attributeNames =  new ArrayList<>();
+        for (int i = 0; i < modifySkuDetailDto.getSkuList().size(); i++) {
+            attributeNames.add(modifySkuDetailDto.getSkuList().get(i).getSkuName());
+        }
         for (ModifySkuDetail skuDetail : modifySkuDetailDto.getSkuDetailList())
         {
-            List<String> attributeNames =  skuDetail.getSkuNames();
             List<String> attributeValues = skuDetail.getSkuValues();
             List<Sku> skus = new ArrayList<>();
             Map<String, Object> skuJsonMap = new LinkedHashMap<>();

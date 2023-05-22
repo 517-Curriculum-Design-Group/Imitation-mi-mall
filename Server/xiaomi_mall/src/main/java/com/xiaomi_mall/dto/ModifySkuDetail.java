@@ -10,7 +10,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ModifySkuDetail {
-    public List<String> skuNames;
     public List<String> skuValues;
     public double skuPrice;
     public int skuStock;
