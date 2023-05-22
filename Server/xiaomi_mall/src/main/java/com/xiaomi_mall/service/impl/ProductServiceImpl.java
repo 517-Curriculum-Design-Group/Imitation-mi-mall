@@ -130,9 +130,11 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         long total = pageInfo.getTotal();
         //封装到vo类
         List<ProductListVo> productListVos = toProductListVo(productList);
+        for (int i = 0; i < productList.size(); i++) {
+            productListVos.get(i).setStatus(productList.get(i).getStatus() == 1);
+        }
         GetProductListVo getProductListVo = new GetProductListVo(total, productListVos);
         return Result.okResult(getProductListVo);
-
     }
 
     @Override

@@ -26,7 +26,7 @@ public class ProductListVo {
 
     private String leastPrice;
 
-    private int status;
+    private boolean status;
 
     private String productDescription;
 
