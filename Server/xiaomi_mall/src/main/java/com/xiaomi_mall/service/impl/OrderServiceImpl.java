@@ -327,6 +327,8 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     {
         Order order = orderMapper.selectById(modifyAddressInOrderDto.getOrderId());
         order.setAddress(modifyAddressInOrderDto.getNewAddress());
+        order.setName(modifyAddressInOrderDto.getNewName());
+        order.setPhone(modifyAddressInOrderDto.getNewPhone());
         orderService.updateById(order);
         return Result.okResult(order);
     }
