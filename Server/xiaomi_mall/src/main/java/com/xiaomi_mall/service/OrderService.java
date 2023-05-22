@@ -3,6 +3,7 @@ package com.xiaomi_mall.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.xiaomi_mall.config.Result;
+import com.xiaomi_mall.dto.ModifyAddressInOrderDto;
 import com.xiaomi_mall.dto.OrderCommit;
 import com.xiaomi_mall.dto.SeckillOrderDto;
 import com.xiaomi_mall.enity.Order;
@@ -28,6 +29,8 @@ public interface OrderService extends IService<Order> {
 
 
     void createSeckillOrder(SeckillOrderDto seckillOrderDto);
+
+    Result ModifyAddressInOrder(HttpServletRequest request, ModifyAddressInOrderDto modifyAddressInOrderDto);
 }
 
 

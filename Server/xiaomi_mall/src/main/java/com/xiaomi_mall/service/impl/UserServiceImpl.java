@@ -266,6 +266,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         res.put("XList", XList);
         res.put("YList", YList);
 
+        //TODO:销售额哦
         //各类订单状态
         QueryWrapper<Order> orderDetailsWrapper = new QueryWrapper<>();
         orderDetailsWrapper

@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xiaomi_mall.config.Result;
+import com.xiaomi_mall.dto.ModifyAddressInOrderDto;
 import com.xiaomi_mall.dto.OrderCommit;
 import com.xiaomi_mall.dto.SeckillOrderDto;
 import com.xiaomi_mall.enity.*;
@@ -319,6 +320,15 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         orderDetail.setSkuQuantity(1);
 
         orderDetailService.save(orderDetail);
+    }
+
+    @Override
+    public Result ModifyAddressInOrder(HttpServletRequest request, ModifyAddressInOrderDto modifyAddressInOrderDto)
+    {
+        Order order = orderMapper.selectById(modifyAddressInOrderDto.getOrderId());
+        order.setAddress(modifyAddressInOrderDto.getNewAddress());
+        orderService.save(order);
+        return Result.okResult(order);
     }
 
 
