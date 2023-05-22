@@ -11,7 +11,8 @@ import java.util.List;
 @NoArgsConstructor
 public class AddProductStockDto
 {
-    private List<Integer> skuIds;
-    private List<Integer> stocks;
+    private Integer skuId;
+    private Double price;
+    private Integer stock;
 
 }

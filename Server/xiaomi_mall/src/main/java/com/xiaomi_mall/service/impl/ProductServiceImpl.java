@@ -452,19 +452,13 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     @Override
     public Result addProductStock(AddProductStockDto addProductStockDto)
     {
-        List<Integer> skuIds = addProductStockDto.getSkuIds();
-        List<Integer> stocks = addProductStockDto.getStocks();
-
-        if(skuIds.isEmpty() || stocks.isEmpty())
-            return Result.errorResult(904, "sku和库存不能为空");
-        if(skuIds.size() != stocks.size())
-            return Result.errorResult(905, "sku和库存数组不等长");
-
-        List<Sku> skus = skuService.listByIds(skuIds);
-        for (int i = 0; i < skus.size(); i++)
-            skus.get(i).setSkuStock(stocks.get(i));
-        skuService.updateBatchById(skus);
-
+        int skuId = addProductStockDto.getSkuId();
+        double price = addProductStockDto.getPrice();
+        int stock = addProductStockDto.getStock();
+        Sku sku = skuService.getById(skuId);
+        sku.setSkuPrice(new BigDecimal(price));
+        sku.setSkuStock(stock);
+        skuService.updateById(sku);
         return Result.okResult("补货成功");
     }
 
