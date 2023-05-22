@@ -44,4 +44,11 @@ public class AddressController {
     public Result setDefaultAddress(@RequestBody Address address) {
         return addressService.setDefaultAddress(address);
     }
+
+    @PreAuthorize("hasAnyAuthority('普通用户')")
+    @ApiOperation("修改地址接口")
+    @PutMapping("/updateAddress")
+    public Result updateAddress(@RequestBody Address address) {
+        return addressService.updateAddress(address);
+    }
 }

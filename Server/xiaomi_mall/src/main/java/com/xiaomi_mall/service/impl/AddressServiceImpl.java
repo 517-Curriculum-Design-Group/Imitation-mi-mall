@@ -60,4 +60,10 @@ public class AddressServiceImpl extends ServiceImpl<AddressMapper, Address> impl
         return Result.okResult(addressList);
 
     }
+
+    @Override
+    public Result updateAddress(Address address) {
+        updateById(address);
+        return Result.okResult("修改成功 ");
+    }
 }
