@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xiaomi_mall.config.Result;
 import com.xiaomi_mall.constants.SystemConstants;
+import com.xiaomi_mall.dto.AddCategoryNameDto;
 import com.xiaomi_mall.enity.Category;
 import com.xiaomi_mall.enity.Product;
 import com.xiaomi_mall.mapper.CategoryMapper;
@@ -85,6 +86,15 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
         Category category = categoryMapper.selectById(categoryId);
         String categoryName = category.getCategoryName();
         return Result.okResult(categoryName);
+    }
+
+    @Override
+    public Result addCategoryName(AddCategoryNameDto addCategoryNameDto) {
+        Category category = new Category();
+        category.setCategoryName(addCategoryNameDto.getCategoryName());
+        category.setParentId(addCategoryNameDto.getParentId());
+        categoryMapper.insert(category);
+        return getCategoryList();
     }
 
 
