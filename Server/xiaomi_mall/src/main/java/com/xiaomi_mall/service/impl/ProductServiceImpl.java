@@ -429,7 +429,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
 
         Product product = productMapper.selectById(modifyProductStatusDto.getProductId());
         //没有Sku不准上架
-        if(product.getSkuList().isEmpty())
+        if(product.getSkuList() == null || product.getSkuList().isEmpty())
             return Result.errorResult(909, "该商品无SKU");
 
         QueryWrapper<Sku> skuQueryWrapper = new QueryWrapper<>();
