@@ -40,6 +40,11 @@ const routes = [
             component: async () => await import("@/view/user/MyOrder.vue"),
           },
           {
+            path:":orderId",
+            name: "OrderId",
+            component: async () => await import("@/view/user/[OrderId].vue")
+          },
+          {
             path: "comment",
             name: "Comment",
             component: async () => await import("@/view/user/Comment.vue"),

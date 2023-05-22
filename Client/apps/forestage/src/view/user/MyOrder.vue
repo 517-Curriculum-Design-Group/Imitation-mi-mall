@@ -1,8 +1,9 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { api } from "@/api";
-import { onMounted } from "vue";
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
 const value = ref('')
 
 let OrderId = ref([])
@@ -40,12 +41,17 @@ function dateFormat(daterc) {
 }
 
 function clearStatus(status) {
-    switch(status){
+    switch (status) {
         case 0: return "未支付"
         case 1: return "已支付"
         case 2: return "已发货"
         case 3: return "已完成"
     }
+}
+const orderId = ref('')
+function order(id) {
+    orderId.value = id
+    router.push(`/user/${orderId.value}`)
 }
 </script>
 
@@ -71,31 +77,13 @@ function clearStatus(status) {
     </article>
 
     <article class="flex flex-col w-full h-auto">
-        <!-- <div class="w-full h-auto flex justify-between border-1 border-solid border-orange-500 mt-4 p-2"
-            v-for="(items, index) in orderDetail" :key="index">
-
-            <div class="flex gap-8">
-                <span class="flex flex-col items-center">
-                    <span class="text-2xl" v-for="(item, num) in items.productDetail.productList" :key="num">{{ item.productName }}</span>
-                </span>
-                <span class="flex flex-col  mt-4">
-                    <span class="text-sm text-gray-400" v-for="(item, num) in items.productDetail.productList" :key="num">{{ mySkuname(item.skuName) }}</span>
-                </span>
-            </div>
-
-            <div class="flex flex-row-reverse">
-                <span class="text-2xl text-orange-500">¥{{ items.productDetail.totalPrice }}</span>
-                <span class="flex items-center text-sm mr-5">订单状态</span>
-                <span class="flex items-center text-sm text-gray-400 mr-2">{{ items.orderDetail.orderTime }}</span>
-                <span class="flex items-center mr-4">{{ items.addressDetail.address }}</span>
-            </div>
-        </div> -->
         <div class="flex flex-col w-full h-auto border-1 border-solid border-orange-500 mt-4"
             v-for="(items, index) in orderDetail" :key="index">
 
             <div
                 class="order-top w-full h-[100px] flex flex-col border-r-0 border-t-0 border-l-0 border-b-1 border-solid border-orange-500 p-[20px]">
-                <span class="w-full h-[27px] text-2xl text-orange-500">{{ clearStatus(items.orderDetail.orderStatus) }}</span>
+                <span class="w-full h-[27px] text-2xl text-orange-500">{{ clearStatus(items.orderDetail.orderStatus)
+                }}</span>
                 <div class="flex justify-between mt-4">
                     <div class="flex items-center">
                         <span class="flex items-center text-gray-500">{{ dateFormat(items.orderDetail.orderTime) }}</span>
@@ -117,14 +105,19 @@ function clearStatus(status) {
                 </div>
 
                 <div class="flex flex-col h-[auto]">
-                    <n-button type="error" class="w-[120px] h-[34px] mb-4" style="--n-color:var( --text-hover-color);--n-color-hover:var(--button-background-color);--n-color-pressed:var(--button-background-color);--n-color-focus:var(--button-background-color);--n-color-disabled:var(--button-background-color);--n-ripple-color:var(--button-background-color);--n-border:1px solid var( --text-hover-color);--n-border-hover:1px solid var( --text-hover-color);--n-border-pressed: 1px solid var( --text-hover-color);--n-border-focus: 1px solid var( --text-hover-color);--n-border-disabled: 1px solid var( --text-hover-color);">
+                    <n-button type="error" class="w-[120px] h-[34px] mb-4"
+                        style="--n-color:var( --text-hover-color);--n-color-hover:var(--button-background-color);--n-color-pressed:var(--button-background-color);--n-color-focus:var(--button-background-color);--n-color-disabled:var(--button-background-color);--n-ripple-color:var(--button-background-color);--n-border:1px solid var( --text-hover-color);--n-border-hover:1px solid var( --text-hover-color);--n-border-pressed: 1px solid var( --text-hover-color);--n-border-focus: 1px solid var( --text-hover-color);--n-border-disabled: 1px solid var( --text-hover-color);"
+                        v-if="!items.orderDetail.orderStatus">
                         立即支付
                     </n-button>
-                    <n-button type="tertiary" class="w-[120px] h-[34px]"  style="--n-text-color-hover:gray;--n-color-disabled:gray;--n-ripple-color:gray;--n-border-hover:1px solid gray;--n-border-pressed: 1px solid gray;--n-border-focus: 1px solid gray;--n-border-disabled: 1px solid gray;">
+
+                    <n-button type="tertiary" class="w-[120px] h-[34px]"
+                        style="--n-text-color-hover:gray;--n-color-disabled:gray;--n-ripple-color:gray;--n-border-hover:1px solid gray;--n-border-pressed: 1px solid gray;--n-border-focus: 1px solid gray;--n-border-disabled: 1px solid gray;"
+                        @click="order(items.orderDetail.orderId)">
                         订单详情
                     </n-button>
+                    
                 </div>
-
             </div>
         </div>
     </article>
