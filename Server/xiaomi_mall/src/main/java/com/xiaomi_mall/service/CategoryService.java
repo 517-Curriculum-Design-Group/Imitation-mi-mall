@@ -8,7 +8,7 @@ public interface CategoryService extends IService<Category> {
 
     Result getCategoryList();
 
-    Result getCateProduct(Integer categoryId);
+    Result getCateProduct(String search);
 
     Result updateCategoryName(Category category);
 

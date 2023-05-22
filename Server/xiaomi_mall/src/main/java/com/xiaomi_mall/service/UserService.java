@@ -30,4 +30,5 @@ public interface UserService extends IService<User> {
     Result getLowerProducts();
 
 
+    User addAdvater();
 }

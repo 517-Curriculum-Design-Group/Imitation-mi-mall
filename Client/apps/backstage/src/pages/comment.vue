@@ -1,9 +1,5 @@
 <template>
   <el-card shadow="never" class="border-0">
-    <el-form :model="searchForm" label-width="80px" class="mb-3" size="small">
-      
-
-    </el-form>
 
         <div class="flex items-center justify-between mb-4">
       <el-button type="danger" size="small" @click="deletelist"
