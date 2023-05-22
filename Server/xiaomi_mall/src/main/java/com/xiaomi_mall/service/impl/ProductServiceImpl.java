@@ -425,6 +425,10 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
             return Result.errorResult(902, "状态码不在范围内");
 
         Product product = productMapper.selectById(modifyProductStatusDto.getProductId());
+        //没有Sku不准上架
+        if(product.getSkuList().isEmpty())
+            return Result.errorResult(909, "该商品无SKU");
+
         product.setStatus(modifyProductStatusDto.getStatus());
         productMapper.updateById(product);
 
