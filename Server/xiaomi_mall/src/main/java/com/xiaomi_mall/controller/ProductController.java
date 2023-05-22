@@ -1,6 +1,7 @@
 package com.xiaomi_mall.controller;
 
 import com.xiaomi_mall.config.Result;
+import com.xiaomi_mall.dto.GenerateOrderDto;
 import com.xiaomi_mall.dto.ModifyAddressInOrderDto;
 import com.xiaomi_mall.dto.OrderCommit;
 import com.xiaomi_mall.dto.SearchProductDto;
@@ -85,8 +86,8 @@ public class ProductController {
     @PreAuthorize("hasAnyAuthority('普通用户')")
     @ApiOperation("生成订单")
     @PostMapping("/generateOrder")
-    public Result generateOrder(HttpServletRequest request, @RequestBody List<OrderCommit> skuIds, Integer addressId) {
-        return orderService.generateOrder(request, skuIds, addressId);
+    public Result generateOrder(HttpServletRequest request, @RequestBody GenerateOrderDto generateOrderDto) {
+        return orderService.generateOrder(request, generateOrderDto);
     }
 
     @PreAuthorize("hasAnyAuthority('普通用户')")

@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xiaomi_mall.config.Result;
+import com.xiaomi_mall.dto.GenerateOrderDto;
 import com.xiaomi_mall.dto.ModifyAddressInOrderDto;
 import com.xiaomi_mall.dto.OrderCommit;
 import com.xiaomi_mall.dto.SeckillOrderDto;
@@ -195,7 +196,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     }
 
     @Override
-    public Result generateOrder(HttpServletRequest request, List<OrderCommit> commits, Integer addressId) {
+    public Result generateOrder(HttpServletRequest request, GenerateOrderDto generateOrderDto) {
         //取userId
         long userId = -1;
         try {
@@ -205,6 +206,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
             throw new RuntimeException(e);
         }
 
+        List<OrderCommit> commits = generateOrderDto.getCommits();
         //求单价*数量+总价 + //库存减少
         List<Integer> skuIds = new ArrayList<>();
         for (OrderCommit commit : commits) {
@@ -230,7 +232,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         skuService.updateBatchById(skus);
 
         //得地址
-        Address address = addressMapper.selectById(addressId);
+        Address address = addressMapper.selectById(generateOrderDto.getAddressId());
         Order order = new Order();
         order.setUserId(userId);
         order.setOrderTime(new Date());
