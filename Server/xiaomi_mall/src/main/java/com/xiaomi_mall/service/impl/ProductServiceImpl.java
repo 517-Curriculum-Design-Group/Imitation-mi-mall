@@ -496,7 +496,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     }
 
     @Override
-    public Result deleteProductToFavorite(HttpServletRequest request, Integer product_id) {
+    public Result deleteProductToFavorite(HttpServletRequest request, Product product) {
         long userId = -1;
         try {
             userId = JwtUtil.getUserId(request);
@@ -506,7 +506,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
 
         QueryWrapper<Favorite> favoriteQueryWrapper = new QueryWrapper<>();
         favoriteQueryWrapper.eq("user_id", userId)
-                .eq("product_id", product_id)
+                .eq("product_id",product.getProductId())
                 .eq("del_flag", 0);
         int cnt = favoriteService.count(favoriteQueryWrapper);
         if(cnt == 0)
