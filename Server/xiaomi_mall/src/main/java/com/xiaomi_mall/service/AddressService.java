@@ -13,6 +13,8 @@ public interface AddressService extends IService<Address> {
     Result setDefaultAddress(Address address);
 
     Result getAllAddress(Long userId);
+
+    Result updateAddress(Address address);
 }
 
 
