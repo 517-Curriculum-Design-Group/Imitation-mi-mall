@@ -426,8 +426,8 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     @Override
     public Result ModifyProductStatus(ModifyProductStatusDto modifyProductStatusDto)
     {
-        if(modifyProductStatusDto.getStatus() != 0 || modifyProductStatusDto.getStatus() != 1)
-            return Result.errorResult(902, "状态码不在范围内");
+//        if(modifyProductStatusDto.getStatus() != 0 || modifyProductStatusDto.getStatus() != 1)
+//            return Result.errorResult(902, "状态码不在范围内");
 
         Product product = productMapper.selectById(modifyProductStatusDto.getProductId());
         //没有Sku不准上架
@@ -445,7 +445,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         productMapper.updateById(product);
 
         if(modifyProductStatusDto.getStatus() == 0)
-            return Result.okResult("成功");
+            return Result.okResult("下架成功");
         else if (modifyProductStatusDto.getStatus() == 1)
             return Result.okResult("上架成功");
         return Result.errorResult(901, "无此ID对应商品");
