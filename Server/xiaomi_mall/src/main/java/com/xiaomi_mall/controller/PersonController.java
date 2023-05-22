@@ -2,6 +2,7 @@ package com.xiaomi_mall.controller;
 
 import com.xiaomi_mall.config.MinioConfig;
 import com.xiaomi_mall.config.Result;
+import com.xiaomi_mall.enity.User;
 import com.xiaomi_mall.enums.AppHttpCodeEnum;
 import com.xiaomi_mall.service.UserService;
 import com.xiaomi_mall.util.MinioUtil;
@@ -40,6 +41,9 @@ public class PersonController {
     public Result uploadImg(MultipartFile img) {
         String objectName = minioUtil.upload(img);
         if (null != objectName) {
+            String avatar = prop.getEndpoint() + "/" + prop.getBucketName() + "/" + objectName;
+            User user = userService.addAdvater();
+            user.setAvatar(avatar);
             return Result.okResult(prop.getEndpoint() + "/" + prop.getBucketName() + "/" + objectName);
         }
         return Result.errorResult(AppHttpCodeEnum.UPLOAD_ERROR);

@@ -12,7 +12,7 @@ import router from './router'
 import './permission'
 
 const app=createApp(App)
-app.use(ElementPlus).use(router).use(store)
+app.use(ElementPlus).use(router).use(store).use(SkuForm)
 
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
     app.component(key, component)

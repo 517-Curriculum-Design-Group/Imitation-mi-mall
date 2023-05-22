@@ -470,6 +470,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return Result.okResult(lowerProducts);
     }
 
+    @Override
+    public User addAdvater() {
+        Long userId = SecurityUtils.getUserId();
+        User user = userMapper.selectById(userId);
+        return user;
+    }
+
 
     @Override
     public Result getPersonInfo() {
