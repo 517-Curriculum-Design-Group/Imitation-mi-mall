@@ -4,13 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ModifySkuDetail {
-    public List<String> skuValues;
-    public double skuPrice;
-    public int skuStock;
+public class ModifyAddressInOrderDto {
+    int orderId;
+    String newAddress;
 }

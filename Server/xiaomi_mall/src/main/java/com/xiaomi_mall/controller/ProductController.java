@@ -1,6 +1,7 @@
 package com.xiaomi_mall.controller;
 
 import com.xiaomi_mall.config.Result;
+import com.xiaomi_mall.dto.ModifyAddressInOrderDto;
 import com.xiaomi_mall.dto.OrderCommit;
 import com.xiaomi_mall.dto.SearchProductDto;
 import com.xiaomi_mall.service.CartService;
@@ -37,14 +38,6 @@ public class ProductController {
     @PostMapping("/getProductPrice")
     public Result getProductPrice(@RequestBody Map<String, Object> map) {
         return productService.getProductPrice(map);
-    }
-
-    //TODO:
-    @ApiOperation("搜索商品")
-    @PostMapping("/searchProduct")
-    public Result searchProduct(SearchProductDto searchProductDto) {
-        //return productService.searchProduct(searchProductDto);
-        return Result.okResult("没写完");
     }
 
     /**
@@ -107,6 +100,14 @@ public class ProductController {
     @GetMapping("/getUserOrderDetail/{orderId}")
     public Result getUserOrderDetail(HttpServletRequest request, @PathVariable Integer orderId) {
         return orderService.getUserOrderDetail(request, orderId);
+    }
+
+
+    @PreAuthorize("hasAnyAuthority('普通用户')")
+    @ApiOperation("修改订单中地址")
+    @PostMapping("/ModifyAddressInOrder")
+    public Result ModifyAddressInOrder(HttpServletRequest request, @RequestBody ModifyAddressInOrderDto modifyAddressInOrderDto) {
+        return orderService.ModifyAddressInOrder(request, modifyAddressInOrderDto);
     }
 
     /**
