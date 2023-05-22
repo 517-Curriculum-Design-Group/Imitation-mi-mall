@@ -40,14 +40,6 @@ public class ProductController {
         return productService.getProductPrice(map);
     }
 
-    //TODO:
-    @ApiOperation("搜索商品")
-    @PostMapping("/searchProduct")
-    public Result searchProduct(SearchProductDto searchProductDto) {
-        //return productService.searchProduct(searchProductDto);
-        return Result.okResult("没写完");
-    }
-
     /**
      * 购物车相关
      *
