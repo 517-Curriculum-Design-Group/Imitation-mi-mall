@@ -30,7 +30,7 @@ public interface ProductService extends IService<Product> {
 
     Result getProductPrice(Map<String, Object> map);
 
-    Result addProductToFavorite(HttpServletRequest request, Integer product_id);
+    Result addProductToFavorite(HttpServletRequest request, Product product);
 
     Result ModifyProductStatus(ModifyProductStatusDto modifyProductStatusDto);
 
