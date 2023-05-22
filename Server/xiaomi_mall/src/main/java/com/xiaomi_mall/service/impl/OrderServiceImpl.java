@@ -216,16 +216,24 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         List<Sku> skus = skuMapper.selectBatchIds(skuIds);
         List<Double> eachPrices = new ArrayList<>();
         double sum = 0;
-        for (int i = 0; i < commits.size(); i++) {
-            double eachPrice = skus.get(i).getSkuPrice().doubleValue() * commits.get(i).getCommitCount();
-            eachPrices.add(eachPrice);
-            sum += eachPrice;
-            //库存减少
-            int restStock = skus.get(i).getSkuStock() - commits.get(i).getCommitCount();
-            if (restStock < 0)
-                return Result.errorResult(SKU_STOCK_LIMIT);
-            skus.get(i).setSkuStock(restStock);
+        try
+        {
+            for (int i = 0; i < commits.size(); i++) {
+                double eachPrice = skus.get(i).getSkuPrice().doubleValue() * commits.get(i).getCommitCount();
+                eachPrices.add(eachPrice);
+                sum += eachPrice;
+                //库存减少
+                int restStock = skus.get(i).getSkuStock() - commits.get(i).getCommitCount();
+                if (restStock < 0)
+                    return Result.errorResult(SKU_STOCK_LIMIT);
+                skus.get(i).setSkuStock(restStock);
+            }
         }
+        catch (Exception e)
+        {
+            Result.errorResult(910,"该SKU已被删除，购买失败！");
+        }
+
         BigDecimal totalPrice = BigDecimal.valueOf(sum);
 
         //提交减少后的库存
