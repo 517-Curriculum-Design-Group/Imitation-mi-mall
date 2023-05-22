@@ -124,6 +124,13 @@ public class BackProductController {
         return categoryService.updateCategoryName(category);
     }
 
+    @PreAuthorize("hasAnyAuthority('普通管理员', '超级管理员')")
+    @ApiOperation("添加分类名称接口")
+    @PostMapping("/addCategoryName")
+    public Result addCategoryName(@RequestBody AddCategoryNameDto addCategoryNameDto) {
+        return categoryService.addCategoryName(addCategoryNameDto);
+    }
+
     /**
      * 后台sku管理
      *

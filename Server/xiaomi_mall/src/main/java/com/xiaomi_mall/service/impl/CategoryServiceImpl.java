@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xiaomi_mall.config.Result;
 import com.xiaomi_mall.constants.SystemConstants;
+import com.xiaomi_mall.dto.AddCategoryNameDto;
 import com.xiaomi_mall.enity.Category;
 import com.xiaomi_mall.enity.Product;
 import com.xiaomi_mall.mapper.CategoryMapper;
@@ -38,14 +39,16 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
         LambdaQueryWrapper<Category> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(Category::getCategoryName, search);
         Category category1 = categoryMapper.selectOne(queryWrapper);
-        if (Objects.nonNull(category1)) {
+        if (Objects.nonNull(category1))
+        {
             int categoryId = category1.getCategoryId();
             List<CateProductVo> res = new ArrayList<>();
             //根据传进来的categoryId查询它所对应的parentId
             Category category = categoryMapper.selectById(categoryId);
             Long parentId = category.getParentId();
             //判断parentId是否等于-1
-            if (parentId == SystemConstants.ROOT_ID) {   //说明该分类是根类
+            if (parentId == SystemConstants.ROOT_ID)
+            {   //说明该分类是根类
                 //可以将其categoryId当做parentId查询它的子分类
                 List<Category> children = getChildren(categoryId);
                 //查询每个分类下的商品
@@ -57,15 +60,19 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
                     }
                 }
                 return Result.okResult(res);
-            } else {
+            }
+            else
+            {
                 //直接根据categoryId查询商品
-                List<Category> allByCategories = categoryMapper.getAllByCategory(categoryId);
-                for(Category temp : allByCategories) {
+                List<Product> allByCategories = productMapper.getAllByCategory1(categoryId);
+                for(Product temp : allByCategories) {
                     res.add(BeanCopyUtils.copyBean(temp, CateProductVo.class));
                 }
                 return Result.okResult(res);
             }
-        } else {
+        }
+        else
+        {
             LambdaQueryWrapper<Product> productWrapper = new LambdaQueryWrapper<>();
             productWrapper.like(Product::getProductName, search);
             List<Product> productList = productMapper.selectList(productWrapper);
@@ -85,6 +92,15 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
         Category category = categoryMapper.selectById(categoryId);
         String categoryName = category.getCategoryName();
         return Result.okResult(categoryName);
+    }
+
+    @Override
+    public Result addCategoryName(AddCategoryNameDto addCategoryNameDto) {
+        Category category = new Category();
+        category.setCategoryName(addCategoryNameDto.getCategoryName());
+        category.setParentId(addCategoryNameDto.getParentId());
+        categoryMapper.insert(category);
+        return getCategoryList();
     }
 
 

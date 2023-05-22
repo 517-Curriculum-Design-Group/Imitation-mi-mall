@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onBeforeMount } from 'vue'
 import { api } from "@/api";
 import { useRouter } from 'vue-router';
 
@@ -9,6 +9,7 @@ const value = ref('')
 let OrderId = ref([])
 let orderList = ref([])
 let orderDetail = ref([])
+let copy = ref([])
 
 onMounted(async () => {
     const [e, r] = await api.getOrderList()
@@ -16,9 +17,11 @@ onMounted(async () => {
     OrderId.value = r.data.map((item) => item.order_id)
     for (let i = 0; i < orderList.value.length; i++) {
         const [e, r] = await api.getOrderDetails(OrderId.value[i])
+        console.log(r.data)
         orderDetail.value.push(r.data)
     }
-    console.log(orderDetail.value)
+    copy.value = orderDetail.value
+    console.log(copy.value)
 })
 
 const mySkuname = (skuName) => {
@@ -46,6 +49,7 @@ function clearStatus(status) {
         case 1: return "已支付"
         case 2: return "已发货"
         case 3: return "已完成"
+        case 4: return "已取消"
     }
 }
 const orderId = ref('')
@@ -53,19 +57,42 @@ function order(id) {
     orderId.value = id
     router.push(`/user/${orderId.value}`)
 }
+
+let currentTab = ref(0)
+const menu = ["全部订单", "待支付", "已发货", "已完成","订单回收站"]
+
+// async function update(index) {
+//     if (index == 0) {
+//         orderDetail.value = copy.value
+//         console.log(orderDetail.value)
+//     }
+//     else if (index == 1) {
+//        const res = await myFilter(index)
+//     }
+// }
+
+// async function myFilter(index){
+//     for (let i = 0; i < orderDetail.value.length; i++) {
+//             if (orderDetail.value[i].orderDetail.orderId === (index-1)) {
+//                 orderDetail.value.push(orderDetail.value[i])
+//             }
+//             console.log(orderDetail.value)
+//         }
+// }
 </script>
 
 <template>
     <h1 class="w-[882px] h-[68px] text-gray-500">我的订单</h1>
     <article class="flex justify-between items-center w-100% h-[56px]">
         <div class="flex">
-            <li tabindex="1">全部订单</li>
+            <!-- <li tabindex="1">全部订单</li>
             <li tabindex="1">待支付</li>
-            <li tabindex="1">待收货</li>
-            <li tabindex="1">订单回收站</li>
+            <li tabindex="1">待收货</li> -->
+            <li tabindex="1" v-for="(items, index) in menu" :key="index" :class="{ active: currentTab === index }"
+                @click="update(index)">{{ items }}</li>
         </div>
 
-        <div class="flex w-[296.6px] h-[41.6px] container">
+        <!-- <div class="flex w-[296.6px] h-[41.6px] container">
             <n-input class="leading-[41.6px] search" v-model:value="value"
                 style="--n-border-hover:1px solid var(--button-background-color);--n-border-focus:1px solid var(--button-background-color);--n-box-shadow-focus: var(--button-background-color);--n-caret-color:var(--button-background-color)"
                 type="text" placeholder="输入商品名称、订单号" />
@@ -73,7 +100,7 @@ function order(id) {
                 style="--n-border-hover:1px solid var(--button-background-color);--n-padding:0 4px">
                 <span class="i-mdi-magnify w-[24px] h-[24px]"></span>
             </n-button>
-        </div>
+        </div> -->
     </article>
 
     <article class="flex flex-col w-full h-auto">
@@ -99,9 +126,14 @@ function order(id) {
             </div>
 
             <div class="flex justify-between w-full h-auto p-8">
-                <div class="flex flex-col h-[80px]" v-for="(item, num) in items.productDetail.productList" :key="num">
-                    <div class="w-auto h-[14px] text-lg">{{ item.productName }} {{ mySkuname(item.skuName) }}</div>
-                    <div class="w-auto h-[14px] text-lg mt-2">{{ item.skuPrice }}元 x{{ item.skuQuantity }}</div>
+
+                <div class="flex h-[80px]" v-for="(item, num) in items.productDetail.productList" :key="num">
+                    <img class="w-[60px] h-[40px]" :src="item.skuImage" />
+                    <div class="flex flex-col">
+                        <div class="w-auto h-[14px] text-lg">{{ item.productName }} {{ mySkuname(item.skuName) }}</div>
+                        <div class="w-auto h-[14px] text-lg mt-2">{{ item.skuPrice }}元 x{{ item.skuQuantity }}</div>
+                    </div>
+
                 </div>
 
                 <div class="flex flex-col h-[auto]">
@@ -116,7 +148,7 @@ function order(id) {
                         @click="order(items.orderDetail.orderId)">
                         订单详情
                     </n-button>
-                    
+
                 </div>
             </div>
         </div>
@@ -146,6 +178,10 @@ li {
     }
 
     &:focus {
+        color: var(--button-background-color);
+    }
+
+    &:active {
         color: var(--button-background-color);
     }
 

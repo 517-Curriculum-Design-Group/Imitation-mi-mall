@@ -9,10 +9,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AddProductStockDto
-{
-    private Integer skuId;
-    private Double price;
-    private Integer stock;
-
+public class GenerateOrderDto {
+    List<OrderCommit> commits;
+    Integer addressId;
 }

@@ -3,9 +3,13 @@ import { reactive, watch, computed, onMounted } from "vue";
 import CartTop from "./CartTop.vue";
 import { api } from "@/api";
 import { useDialog } from "naive-ui";
+import { cartStore } from "@/stores/cart";
+import { useRouter } from "vue-router";
 
 const goods = reactive([]);
 const dialogWarning = useDialog();
+const store = cartStore();
+const router = useRouter();
 
 const checkStatus = computed(() => {
   return goods.every((item) => item.checked == true);
@@ -65,6 +69,12 @@ async function DeleteCartPro(cart_id) {
       }
     },
   });
+}
+
+function clickSubmit() {
+  const newArr = goods.filter((items) => items.checked === true);
+  store.setGoods(newArr);
+  router.push("/OrderCheck");
 }
 
 async function init() {
@@ -187,7 +197,10 @@ onMounted(() => {
           <span class="text-3xl">{{ sum }}</span>
           元</span
         >
-        <button class="sumbutton w-12rem h-full text-light-50 text-lg">
+        <button
+          class="sumbutton w-12rem h-full text-light-50 text-lg"
+          @click="clickSubmit"
+        >
           去结算
         </button>
       </div>

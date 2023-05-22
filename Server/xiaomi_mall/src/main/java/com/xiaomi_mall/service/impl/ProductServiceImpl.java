@@ -130,9 +130,11 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         long total = pageInfo.getTotal();
         //封装到vo类
         List<ProductListVo> productListVos = toProductListVo(productList);
+        for (int i = 0; i < productList.size(); i++) {
+            productListVos.get(i).setStatus(productList.get(i).getStatus() == 1);
+        }
         GetProductListVo getProductListVo = new GetProductListVo(total, productListVos);
         return Result.okResult(getProductListVo);
-
     }
 
     @Override
@@ -429,7 +431,14 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
 
         Product product = productMapper.selectById(modifyProductStatusDto.getProductId());
         //没有Sku不准上架
-        if(product.getSkuList().isEmpty())
+        if(product.getSkuList() == null || product.getSkuList().isEmpty())
+            return Result.errorResult(909, "该商品无SKU");
+
+        QueryWrapper<Sku> skuQueryWrapper = new QueryWrapper<>();
+        skuQueryWrapper.eq("product_id", modifyProductStatusDto.getProductId())
+                .eq("del_flag", 0);
+        int skuCnt = skuService.count(skuQueryWrapper);
+        if(skuCnt == 0)
             return Result.errorResult(909, "该商品无SKU");
 
         product.setStatus(modifyProductStatusDto.getStatus());
@@ -445,25 +454,19 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     @Override
     public Result addProductStock(AddProductStockDto addProductStockDto)
     {
-        List<Integer> skuIds = addProductStockDto.getSkuIds();
-        List<Integer> stocks = addProductStockDto.getStocks();
-
-        if(skuIds.isEmpty() || stocks.isEmpty())
-            return Result.errorResult(904, "sku和库存不能为空");
-        if(skuIds.size() != stocks.size())
-            return Result.errorResult(905, "sku和库存数组不等长");
-
-        List<Sku> skus = skuService.listByIds(skuIds);
-        for (int i = 0; i < skus.size(); i++)
-            skus.get(i).setSkuStock(stocks.get(i));
-        skuService.updateBatchById(skus);
-
+        int skuId = addProductStockDto.getSkuId();
+        double price = addProductStockDto.getPrice();
+        int stock = addProductStockDto.getStock();
+        Sku sku = skuService.getById(skuId);
+        sku.setSkuPrice(new BigDecimal(price));
+        sku.setSkuStock(stock);
+        skuService.updateById(sku);
         return Result.okResult("补货成功");
     }
 
 
     @Override
-    public Result addProductToFavorite(HttpServletRequest request, Integer product_id) {
+    public Result addProductToFavorite(HttpServletRequest request, Product product) {
         long userId = -1;
         try {
             userId = JwtUtil.getUserId(request);
@@ -473,7 +476,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
 
         QueryWrapper<Favorite> favoriteQueryWrapper = new QueryWrapper<>();
         favoriteQueryWrapper.eq("user_id", userId)
-                .eq("product_id", product_id)
+                .eq("product_id", product.getProductId())
                 .eq("del_flag", 0);
         int cnt = favoriteService.count(favoriteQueryWrapper);
         if(cnt != 0)
@@ -481,7 +484,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
 
         Favorite favorite = new Favorite();
         favorite.setUserId(userId);
-        favorite.setProductId(product_id);
+        favorite.setProductId(product.getProductId());
         favorite.setFavoriteTime(new Date());
         favoriteService.save(favorite);
 
@@ -489,7 +492,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     }
 
     @Override
-    public Result deleteProductToFavorite(HttpServletRequest request, Integer product_id) {
+    public Result deleteProductToFavorite(HttpServletRequest request, Product product) {
         long userId = -1;
         try {
             userId = JwtUtil.getUserId(request);
@@ -499,7 +502,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
 
         QueryWrapper<Favorite> favoriteQueryWrapper = new QueryWrapper<>();
         favoriteQueryWrapper.eq("user_id", userId)
-                .eq("product_id", product_id)
+                .eq("product_id",product.getProductId())
                 .eq("del_flag", 0);
         int cnt = favoriteService.count(favoriteQueryWrapper);
         if(cnt == 0)
@@ -538,8 +541,5 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         return Result.okResult(productListVos);
 
     }
-
-
-
 
 }
