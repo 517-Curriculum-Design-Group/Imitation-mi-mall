@@ -48,6 +48,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 "/admin/login", "/v2/api-docs","/getCategoryList", "/getCateProduct",
                         "/getHeaderProducts","/getLeftCategories","/getLowerProducts",
                         "/getProductDetail/**","/getProductPrice",
+                        "/getCateProductAsc","/getCateProductDesc",
                         "/configuration/ui", "/swagger-resources",
                         "/configuration/security", "/swagger-ui.html",
                         "/webjars/**","/swagger-resources/configuration/ui").permitAll()

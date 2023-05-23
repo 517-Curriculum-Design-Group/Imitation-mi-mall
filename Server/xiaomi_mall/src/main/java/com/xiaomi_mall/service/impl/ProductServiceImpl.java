@@ -542,4 +542,37 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
 
     }
 
+    @Override
+    public Result getCateProductAsc(List<CateProductVo> cateProductVos) {
+        List<GetCateProductSortDto> getCateProductSortDtos = HandlePriceStr(cateProductVos);
+        if(getCateProductSortDtos == null)
+            return Result.errorResult(911, "价格解析不正确");
+        getCateProductSortDtos.sort(Comparator.comparing(GetCateProductSortDto::getPrice));
+        return Result.okResult(getCateProductSortDtos);
+    }
+
+    @Override
+    public Result getCateProductDesc(List<CateProductVo> cateProductVos) {
+        List<GetCateProductSortDto> getCateProductSortDtos = HandlePriceStr(cateProductVos);
+        if(getCateProductSortDtos == null)
+            return Result.errorResult(911, "价格解析不正确");
+        getCateProductSortDtos.sort(Comparator.comparing(GetCateProductSortDto::getPrice).reversed());
+        return Result.okResult(getCateProductSortDtos);
+    }
+
+    private List<GetCateProductSortDto> HandlePriceStr(List<CateProductVo> cateProductVos)
+    {
+        List<GetCateProductSortDto> getCateProductSortDtos = BeanCopyUtils.copyBeanList(cateProductVos, GetCateProductSortDto.class);
+        for(int i = 0 ; i < getCateProductSortDtos.size() ; i++)
+        {
+            String leastPriceStr =  getCateProductSortDtos.get(i).getLeastPrice();
+            String[] strs = leastPriceStr.split("元起");
+            if(strs.length == 0)
+                return null;
+            getCateProductSortDtos.get(i).setPrice(Double.parseDouble(strs[0]));
+        }
+        return getCateProductSortDtos;
+    }
+
+
 }
