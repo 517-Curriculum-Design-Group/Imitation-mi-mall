@@ -17,7 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 @RestController
-@Api(tags = "个人信息模块")
+@Api(tags = "个人信息 模块")
 public class PersonController {
 
     @Autowired
