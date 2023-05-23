@@ -31,8 +31,16 @@ export function getCateProduct(params) {
   return Get("/getCateProduct", params);
 }
 
-export function getComment(id,num,size){
-  return Get("/commentList",id,num,size);
+export function getComment(id, num, size) {
+  return Get("/commentList", id, num, size);
+}
+
+export function getCateProductAsc(body) {
+  return Post("/getCateProductAsc", body);
+}
+
+export function getCateProductDesc(body) {
+  return Post("/getCateProductDesc", body);
 }
 
 export const prodApi = {
@@ -43,5 +51,7 @@ export const prodApi = {
   deleteLike,
   getCategoryList,
   getCateProduct,
-  getComment
+  getComment,
+  getCateProductAsc,
+  getCateProductDesc,
 };
