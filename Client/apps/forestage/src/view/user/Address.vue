@@ -89,6 +89,164 @@ onMounted(async () => {
     </n-modal>
 </template>
 
+//   <!-- 新增 -->
+//   <n-modal
+//     v-model:show="userAdress.flag"
+//     :trap-focus="false"
+//     :mask-closable="false"
+//   >
+//     <n-form
+//       :model="userAdress.address"
+//       class="flex userForm flex-col w-[660px] h-auto shadow-lg bg-light-50 p-4 t-[100px]"
+//     >
+//       <div
+//         class="flex justify-between w-[635px] h-[60px] pt-[14px] pb-[14px] pl-[20px] pr-[20px] bg-gray-100"
+//       >
+//         <h2>新增收货地址</h2>
+//       </div>
+//       <n-space tabindex="1">
+//         <n-form-item label="收货人"
+//         :rule="{
+//                     required: true,
+//                     message: '请输入姓名',
+//                     trigger: ['blur']
+//                 }">
+//           <n-input
+//             v-model:value="userAdress.address.recipientName"
+//             type="text"
+//             placeholder="姓名"
+//             clearable
+//             style="width: 303px; height: 40px"
+//           />
+//         </n-form-item>
+
+//         <n-form-item label="收货人手机号" type="text" :rule="{
+//                     required: true,
+//                     message: '请输入手机号',
+//                     trigger: ['blur']
+//                 }">
+//           <n-input
+//             v-model:value="userAdress.address.recipientPhone"
+//             clearable
+//             placeholder="手机号"
+//             style="width: 303px; height: 40px"
+//           />
+//         </n-form-item>
+
+//         <n-form-item label="省"
+//         :rule="{
+//                     required: true,
+//                     message: '请输入省份',
+//                     trigger: ['blur']
+//                 }">
+//           <n-input
+//             v-model:value="userAdress.address.province"
+//             placeholder="省份"
+//             type="text"
+//             clearable
+//             style="width: 303px; height: 40px"
+//           />
+//         </n-form-item>
+
+//         <n-form-item label="市"
+//         :rule="{
+//                     required: true,
+//                     message: '请输入城市',
+//                     trigger: ['blur']
+//                 }">
+//           <n-input
+//             v-model:value="userAdress.address.city"
+//             placeholder="城市"
+//             type="text"
+//             clearable
+//             style="width: 303px; height: 40px"
+//           />
+//         </n-form-item>
+
+//         <n-form-item label="区"
+//         :rule="{
+//                     required: true,
+//                     message: '请输入区/县',
+//                     trigger: ['blur']
+//                 }">
+//           <n-input
+//             v-model:value="userAdress.address.district"
+//             placeholder="区/县"
+//             type="text"
+//             clearable
+//             style="width: 303px; height: 40px"
+//           />
+//         </n-form-item>
+
+//         <n-form-item label="镇"
+//         :rule="{
+//                     required: true,
+//                     message: '请输入乡/镇',
+//                     trigger: ['blur']
+//                 }">
+//           <n-input
+//             v-model:value="userAdress.address.zhen"
+//             type="text"
+//             placeholder="镇/乡"
+//             clearable
+//             style="width: 303px; height: 40px"
+//           />
+//         </n-form-item>
+
+//         <n-form-item path="address" label="收货地址" placeholder="手机号"
+//         :rule="{
+//                     required: true,
+//                     message: '请输入详细地址',
+//                     trigger: ['blur']
+//                 }"
+//         >
+//           <n-input
+//             v-model:value="userAdress.address.detail"
+//             clearable
+//             placeholder="收货地址"
+//             style="width: 606px; height: 40px"
+//           />
+//         </n-form-item>
+//       </n-space>
+
+//       <div class="flex justify-center gap-8 w-[660px] h-[81px] mt-4">
+//         <n-button
+//           class="text-light-50 bg-orange-500 w-[160px] h-[40px]"
+//           attr-type="button"
+//           style="
+//             --n-color-hover: var(--button-background-color);
+//             --n-border-hover: var(--n-border-hover);
+//             --n-text-color-hover: white;
+//             --n-boreder-focus: var(--button-background-color);
+//             --n-ripple-color: var(--button-background-color);
+//             --n-color-focus: gray;
+//             --n-text-color-focus: white;
+//           "
+//           @click="add"
+//         >
+//           确定
+//         </n-button>
+//         <n-button
+//           class="text-light-50 bg-gray-400 w-[160px] h-[40px]"
+//           attr-type="button"
+//           style="
+//             --n-color-hover: gray;
+//             --n-border-hover: gray;
+//             --n-text-color-hover: white;
+//             --n-boreder-focus: var(--button-background-color);
+//             --n-ripple-color: var(--button-background-color);
+//             --n-color-focus: gray;
+//             --n-text-color-focus: white;
+//           "
+//           @click="cancel()"
+//         >
+//           取消
+//         </n-button>
+//       </div>
+//     </n-form>
+//   </n-modal>
+
+
 <style scoped lang="scss">
 // .userForm{
 //     visibility: hidden;

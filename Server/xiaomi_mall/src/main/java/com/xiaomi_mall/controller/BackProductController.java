@@ -3,6 +3,7 @@ package com.xiaomi_mall.controller;
 import com.xiaomi_mall.config.Result;
 import com.xiaomi_mall.dto.*;
 import com.xiaomi_mall.enity.Category;
+import com.xiaomi_mall.enity.Product;
 import com.xiaomi_mall.enity.SkuAttributeValue;
 import com.xiaomi_mall.service.CategoryService;
 import com.xiaomi_mall.service.ProductService;
@@ -88,6 +89,14 @@ public class BackProductController {
     @DeleteMapping("/deleteProduct")
     public Result deleteProduct(@RequestBody List<Integer> productIds) {
         productService.removeByIds(productIds);
+        return Result.okResult();
+    }
+
+    @PreAuthorize("hasAnyAuthority('普通管理员', '超级管理员')")
+    @ApiOperation("删除单个商品接口")
+    @DeleteMapping("/deleteSingleProduct")
+    public Result deleteProduct(@RequestBody Product product) {
+        productService.removeById(product.getProductId());
         return Result.okResult();
     }
 

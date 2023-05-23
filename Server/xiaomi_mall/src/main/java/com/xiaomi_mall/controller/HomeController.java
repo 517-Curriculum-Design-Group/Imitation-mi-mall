@@ -2,13 +2,18 @@ package com.xiaomi_mall.controller;
 
 import com.xiaomi_mall.config.Result;
 import com.xiaomi_mall.service.CategoryService;
+import com.xiaomi_mall.service.ProductService;
 import com.xiaomi_mall.service.UserService;
+import com.xiaomi_mall.vo.CateProductVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -18,6 +23,8 @@ public class HomeController {
     private CategoryService categoryService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private ProductService productService;
     @ApiOperation("获取顶部数据")
     @GetMapping("/getHeaderProducts")
     public Result getHeaderProducts() {
@@ -47,6 +54,18 @@ public class HomeController {
     @GetMapping("/getCateProduct")
     public Result getCateProduct(String search) {
         return categoryService.getCateProduct(search);
+    }
+
+    @ApiOperation("搜索商品（价格升序）接口")
+    @GetMapping("/getCateProductAsc")
+    public Result getCateProductAsc(@RequestBody List<CateProductVo> cateProductVos) {
+        return productService.getCateProductAsc(cateProductVos);
+    }
+
+    @ApiOperation("搜索商品（价格升序）接口")
+    @GetMapping("/getCateProductDesc")
+    public Result getCateProductDesc(@RequestBody List<CateProductVo> cateProductVos) {
+        return productService.getCateProductDesc(cateProductVos);
     }
 
 

@@ -426,8 +426,8 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     @Override
     public Result ModifyProductStatus(ModifyProductStatusDto modifyProductStatusDto)
     {
-        if(modifyProductStatusDto.getStatus() != 0 || modifyProductStatusDto.getStatus() != 1)
-            return Result.errorResult(902, "状态码不在范围内");
+//        if(modifyProductStatusDto.getStatus() != 0 || modifyProductStatusDto.getStatus() != 1)
+//            return Result.errorResult(902, "状态码不在范围内");
 
         Product product = productMapper.selectById(modifyProductStatusDto.getProductId());
         //没有Sku不准上架
@@ -445,7 +445,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         productMapper.updateById(product);
 
         if(modifyProductStatusDto.getStatus() == 0)
-            return Result.okResult("成功");
+            return Result.okResult("下架成功");
         else if (modifyProductStatusDto.getStatus() == 1)
             return Result.okResult("上架成功");
         return Result.errorResult(901, "无此ID对应商品");
@@ -541,5 +541,38 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         return Result.okResult(productListVos);
 
     }
+
+    @Override
+    public Result getCateProductAsc(List<CateProductVo> cateProductVos) {
+        List<GetCateProductSortDto> getCateProductSortDtos = HandlePriceStr(cateProductVos);
+        if(getCateProductSortDtos == null)
+            return Result.errorResult(911, "价格解析不正确");
+        getCateProductSortDtos.sort(Comparator.comparing(GetCateProductSortDto::getPrice));
+        return Result.okResult(getCateProductSortDtos);
+    }
+
+    @Override
+    public Result getCateProductDesc(List<CateProductVo> cateProductVos) {
+        List<GetCateProductSortDto> getCateProductSortDtos = HandlePriceStr(cateProductVos);
+        if(getCateProductSortDtos == null)
+            return Result.errorResult(911, "价格解析不正确");
+        getCateProductSortDtos.sort(Comparator.comparing(GetCateProductSortDto::getPrice).reversed());
+        return Result.okResult(getCateProductSortDtos);
+    }
+
+    private List<GetCateProductSortDto> HandlePriceStr(List<CateProductVo> cateProductVos)
+    {
+        List<GetCateProductSortDto> getCateProductSortDtos = BeanCopyUtils.copyBeanList(cateProductVos, GetCateProductSortDto.class);
+        for(int i = 0 ; i < getCateProductSortDtos.size() ; i++)
+        {
+            String leastPriceStr =  getCateProductSortDtos.get(i).getLeastPrice();
+            String[] strs = leastPriceStr.split("元起");
+            if(strs.length == 0)
+                return null;
+            getCateProductSortDtos.get(i).setPrice(Double.parseDouble(strs[0]));
+        }
+        return getCateProductSortDtos;
+    }
+
 
 }

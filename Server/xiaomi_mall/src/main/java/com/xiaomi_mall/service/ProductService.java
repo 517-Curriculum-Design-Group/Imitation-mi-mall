@@ -7,9 +7,11 @@ import com.xiaomi_mall.dto.AddProductStockDto;
 import com.xiaomi_mall.dto.ModifyProductStatusDto;
 import com.xiaomi_mall.dto.ModifySkuDetailDto;
 import com.xiaomi_mall.enity.Product;
+import com.xiaomi_mall.vo.CateProductVo;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 import java.util.Map;
 
 public interface ProductService extends IService<Product> {
@@ -39,6 +41,10 @@ public interface ProductService extends IService<Product> {
     Result getFavoriteList(HttpServletRequest request);
 
     Result deleteProductToFavorite(HttpServletRequest request, Product product);
+
+    Result getCateProductAsc(List<CateProductVo> cateProductVos);
+
+    Result getCateProductDesc(List<CateProductVo> cateProductVos);
 }
 
 
