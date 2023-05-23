@@ -61,6 +61,8 @@ function getbb(index) {
   console.log("我触发了外边框", index);
 }
 
+
+
 </script>
 <style scoped lang="scss">
 
