@@ -42,21 +42,18 @@ public class SeckillController {
         return seckillService.getSeckillList();
     }
 
-    @PreAuthorize("hasAuthority('普通用户')")
     @ApiOperation("前台获取所有商品秒杀接口(未开始)")
     @GetMapping("/getFollSecList1")
     public Result getFollSecList1(){
         return seckillService.getFollSecList1();
     }
 
-    @PreAuthorize("hasAuthority('普通用户')")
     @ApiOperation("前台获取所有商品秒杀接口(已开始)")
     @GetMapping("/getFollSecList2")
     public Result getFollSecList2(){
         return seckillService.getFollSecList2();
     }
 
-    @PreAuthorize("hasAuthority('普通用户')")
     @ApiOperation("前台获取所有商品秒杀接口(已结束)")
     @GetMapping("/getFollSecList3")
     public Result getFollSecList3(){
