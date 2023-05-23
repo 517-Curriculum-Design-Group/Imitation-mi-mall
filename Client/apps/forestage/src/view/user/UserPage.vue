@@ -44,10 +44,11 @@ const menu = [
             label: "修改密码",
             name: "password"
         },
-        {
-            label: "注销服务",
-            name: "deleteServer"
-        }]
+        // {
+        //     label: "注销服务",
+        //     name: "deleteServer"
+        // }
+        ]
     }
 ]
 

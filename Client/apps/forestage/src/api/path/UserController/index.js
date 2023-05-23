@@ -40,6 +40,10 @@ export function uploadAvatar(url){
   return Post("/upload", url);
 } 
 
+export function updatePassword(psw){
+  return Put("/updatePassword",psw)
+}
+
 export const userApi = {
   postLogin,
   postRegister,
@@ -50,5 +54,6 @@ export const userApi = {
   getAllAddresses,
   getLike,
   uploadAvatar,
-  updatePersonInfo
+  updatePersonInfo,
+  updatePassword,
 };

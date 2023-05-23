@@ -137,7 +137,7 @@ function notify(type) {
         </n-form>
 
         <div class="flex flex-col justify-center items-center w-[600px] h-auto m-auto" v-else>
-            <span class="w-[500px] h-[70px] text-lg">头像:{{ user.avatar }}</span>
+            <span class="w-[500px] h-[70px] text-lg">头像:<img class="w-[80px] h=[80px] ml-6 rounded-full overflow-hidden" :src="user.avatar"/></span>
             <span class="w-[500px] h-[70px] text-lg">用户ID:{{ user.userId }}</span>
             <span class="w-[500px] h-[70px] text-lg">昵称:{{ user.nickName }}</span>
             <span class="w-[500px] h-[70px] text-lg">性别:{{ user.sex === "女" ? "女" : "男" }}</span>
