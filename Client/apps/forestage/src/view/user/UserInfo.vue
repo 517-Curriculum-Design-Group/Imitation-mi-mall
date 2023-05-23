@@ -133,7 +133,7 @@ function notify(type) {
         <div class="flex flex-col justify-center items-center w-[600px] h-auto m-auto" v-else>
             <span class="w-[500px] h-[70px] text-lg">头像:{{ user.avatar }}</span>
             <span class="w-[500px] h-[70px] text-lg">昵称:{{ user.nickName }}</span>
-            <span class="w-[500px] h-[70px] text-lg">性别:{{ user.sex === "male" ? "男" : "女" }}</span>
+            <span class="w-[500px] h-[70px] text-lg">性别:{{ user.sex === "female" ? "女" : "男" }}</span>
             <span class="w-[500px] h-[70px] text-lg">用户ID:{{ user.userId }}</span>
             <span class="w-[500px] h-[70px] text-lg">手机号:{{ user.phone }}</span>
             <span class="w-[500px] h-[70px] text-lg">邮箱:{{ user.email }}</span>

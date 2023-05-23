@@ -19,7 +19,7 @@ onMounted(async () => {
     <article class="flex flex-col">
         <div class="flex justify-between">
             <div class="flex">
-                <img :src="person.avatar" class="w-[150px] h-[150px] mr-8" />
+                <img :src="person.avatar" class="w-[150px] h-[150px] mr-8" style="border-radius:50%;overflow: hidden;"/>
                 <div class="flex flex-col">
                     <span class="text-4xl">{{ person.userId }}</span>
                     <span class="text-gray-400">你好~</span>
