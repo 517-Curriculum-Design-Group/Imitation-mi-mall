@@ -25,7 +25,11 @@ public interface SeckillService extends IService<Seckill> {
 
     Result getSeckillList();
 
-    Result getFollSecList();
+    Result getFollSecList1();
+
+    Result getFollSecList2();
+
+    Result getFollSecList3();
 }
 
 

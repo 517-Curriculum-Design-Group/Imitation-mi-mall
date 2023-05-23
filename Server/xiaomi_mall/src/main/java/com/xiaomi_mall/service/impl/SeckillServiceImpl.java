@@ -25,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -177,8 +178,13 @@ public class SeckillServiceImpl extends ServiceImpl<SeckillMapper, Seckill> impl
     }
 
     @Override
-    public Result getFollSecList() {
-        List<Seckill> list = list();
+    public Result getFollSecList1() {
+        LambdaQueryWrapper<Seckill> queryWrapper = new LambdaQueryWrapper<>();
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String format = sdf.format(date);
+        queryWrapper.gt(Seckill::getStartTime, format);
+        List<Seckill> list = seckillMapper.selectList(queryWrapper);
         List<SeckillListVo> seckillListVos = BeanCopyUtils.copyBeanList(list, SeckillListVo.class);
         for (int i = 0; i < seckillListVos.size(); i++) {
 
@@ -191,6 +197,56 @@ public class SeckillServiceImpl extends ServiceImpl<SeckillMapper, Seckill> impl
             seckillListVos.get(i).setSkuName(skuName);
 
         }
+
+        return Result.okResult(seckillListVos);
+    }
+
+    @Override
+    public Result getFollSecList2() {
+        LambdaQueryWrapper<Seckill> queryWrapper = new LambdaQueryWrapper<>();
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String format = sdf.format(date);
+        queryWrapper.le(Seckill::getStartTime, format)
+                .ge(Seckill::getEndTime, format);
+        List<Seckill> list = seckillMapper.selectList(queryWrapper);
+        List<SeckillListVo> seckillListVos = BeanCopyUtils.copyBeanList(list, SeckillListVo.class);
+        for (int i = 0; i < seckillListVos.size(); i++) {
+
+            Integer productId = seckillListVos.get(i).getProductId();
+            Integer skuId = seckillListVos.get(i).getSkuId();
+            Product product = productMapper.selectById(productId);
+            String skuName = skuMapper.selectById(skuId).getSkuName();
+            seckillListVos.get(i).setProductName(product.getProductName());
+            seckillListVos.get(i).setProductPic(product.getProductPic());
+            seckillListVos.get(i).setSkuName(skuName);
+
+        }
+
+        return Result.okResult(seckillListVos);
+    }
+
+    @Override
+    public Result getFollSecList3() {
+        LambdaQueryWrapper<Seckill> queryWrapper = new LambdaQueryWrapper<>();
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String format = sdf.format(date);
+        queryWrapper.lt(Seckill::getEndTime, format);
+        List<Seckill> list = seckillMapper.selectList(queryWrapper);
+        List<SeckillListVo> seckillListVos = BeanCopyUtils.copyBeanList(list, SeckillListVo.class);
+        for (int i = 0; i < seckillListVos.size(); i++) {
+
+            Integer productId = seckillListVos.get(i).getProductId();
+            Integer skuId = seckillListVos.get(i).getSkuId();
+            Product product = productMapper.selectById(productId);
+            String skuName = skuMapper.selectById(skuId).getSkuName();
+            seckillListVos.get(i).setProductName(product.getProductName());
+            seckillListVos.get(i).setProductPic(product.getProductPic());
+            seckillListVos.get(i).setSkuName(skuName);
+
+        }
+
         return Result.okResult(seckillListVos);
     }
 
