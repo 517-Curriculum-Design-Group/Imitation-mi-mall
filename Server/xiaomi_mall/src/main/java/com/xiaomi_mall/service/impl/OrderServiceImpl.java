@@ -51,9 +51,6 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     private ProductMapper productMapper;
     @Autowired
     private OrderDetailService orderDetailService;
-
-    @Autowired
-    private CartService cartService;
     @Autowired
     private CartMapper cartMapper;
     @Override
