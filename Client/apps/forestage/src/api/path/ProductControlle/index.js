@@ -23,10 +23,15 @@ export function deleteLike(body){
   return Delete("/deleteProductToFavorite",body)
 }
 
+export function getComment(id,num,size){
+  return Get("/commentList",id,num,size);
+}
+
 export const prodApi = {
   getProductDetail,
   getProductPrice,
   addSkuToCart,
   addProductToFavorite,
   deleteLike,
+  getComment
 };
