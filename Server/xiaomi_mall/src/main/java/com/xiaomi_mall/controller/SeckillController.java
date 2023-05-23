@@ -42,6 +42,13 @@ public class SeckillController {
         return seckillService.getSeckillList();
     }
 
+    @PreAuthorize("hasAuthority('普通用户')")
+    @ApiOperation("前台获取所有商品秒杀接口")
+    @GetMapping("/getFollSecList")
+    public Result getFollSecList(){
+        return seckillService.getFollSecList();
+    }
+
     @PreAuthorize("hasAnyAuthority('普通管理员', '超级管理员')")
     @ApiOperation("后台添加商品秒杀时获取所有商品接口")
     @GetMapping("/getSeckillProd")
