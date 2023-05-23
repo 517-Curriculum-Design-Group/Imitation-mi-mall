@@ -1,4 +1,4 @@
-import { Get, Post,Delete } from "../../server";
+import { Get, Post, Delete } from "../../server";
 
 export function getProductDetail(id) {
   let params = {
@@ -19,8 +19,28 @@ export function addProductToFavorite(body) {
   return Post("/addProductToFavorite", body);
 }
 
-export function deleteLike(body){
-  return Delete("/deleteProductToFavorite",body)
+export function deleteLike(body) {
+  return Delete("/deleteProductToFavorite", body);
+}
+
+export function getCategoryList() {
+  return Get("/getCategoryList");
+}
+
+export function getCateProduct(params) {
+  return Get("/getCateProduct", params);
+}
+
+export function getComment(id, num, size) {
+  return Get("/commentList", id, num, size);
+}
+
+export function getCateProductAsc(body) {
+  return Post("/getCateProductAsc", body);
+}
+
+export function getCateProductDesc(body) {
+  return Post("/getCateProductDesc", body);
 }
 
 export const prodApi = {
@@ -29,4 +49,9 @@ export const prodApi = {
   addSkuToCart,
   addProductToFavorite,
   deleteLike,
+  getCategoryList,
+  getCateProduct,
+  getComment,
+  getCateProductAsc,
+  getCateProductDesc,
 };

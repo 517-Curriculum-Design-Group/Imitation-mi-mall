@@ -19,7 +19,7 @@ public interface ProductMapper extends BaseMapper<Product> {
 
     @Select("SELECT c.category_id,ANY_VALUE(p.product_id) AS product_id, c.category_name, p.product_name, ANY_VALUE(p" +
             ".product_description) AS " +
-            "product_description, ANY_VALUE(p.product_pic) AS product_pic, MIN(p.least_price) AS least_price \n" +
+            "product_description, ANY_VALUE(p.product_pic) AS product_pic, MIN(p.least_price) AS least_price, ANY_VALUE(p.status) AS status \n" +
             "FROM Category c \n" +
             "LEFT JOIN Product p ON c.category_id = p.category_id \n" +
             "LEFT JOIN SKU s ON s.product_id = p.product_id \n" +

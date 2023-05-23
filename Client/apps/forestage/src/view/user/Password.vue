@@ -1,19 +1,53 @@
 <script setup>
-import { userStore } from "@/stores/user.js";
-import { ref } from "vue"
+import { api } from "@/api"
+import { ref,reactive } from "vue"
+import { useNotification } from 'naive-ui'
+import { useRouter } from 'vue-router';
 
-const store = userStore();
-const user = store.getUserInfo();
+const router = useRouter();
+const notification = useNotification()
+let psw = reactive({
+    rawPassword:null,
+    newPassword:null,
+    checkNewPassword:null
+})
 
-const oldpsw = user.password
-const newpsw = ''
-const verpsw = ''
-
-function changePsw(psw) {
-    if(psw != verpsw) {
-        alert("两次输入的新密码必须相同！")
+async function changePsw() {
+    const [e,r] = await api.updatePassword(psw)
+    if(r.code === 912) notify('error')
+    else if(r.code === 913) notify('warning')
+    else{
+        notify('success')
+        await api.postLogout()
+        router.push('/login')
     }
-    else user.password = psw
+}
+
+function notify(type) {
+    if(type ==='success'){
+         notification['success']({
+          content: "修改成功",
+          meta: "密码已更改，请重新登录",
+          duration: 2500,
+          keepAliveOnHover: true
+        });
+    }
+    else if( type === 'error'){
+        notification['error']({
+          content: "修改失败",
+          meta: "原密码错误",
+          duration: 2500,
+          keepAliveOnHover: true
+        });
+    }
+    else{
+        notification['warning']({
+          content: "修改失败",
+          meta: "两次新密码输入不一致",
+          duration: 2500,
+          keepAliveOnHover: true
+        });
+    }   
 }
 </script>
 
@@ -25,19 +59,19 @@ function changePsw(psw) {
             <n-form-item class="w-[500px] h-[50px]" path="oldpsw" label="旧密码" label-placement="left" label-align="right"
                 style="--n-color-hover:var(--button-background-color); --n-border-hover:1px solid var(--button-background-color);
                 --n-boreder-focus:1px solid var(--button-background-color);--n-ripple-color:var(--button-background-color);--n-caret-color:var(--button-background-color)">
-                <n-input v-model:value="oldpsw" placeholder="请输入旧密码"></n-input>
+                <n-input type="password" v-model:value="psw.rawPassword" placeholder="请输入旧密码"></n-input>
             </n-form-item>
 
             <n-form-item class="w-[500px] h-[50px]" path="newpsw" label="新密码" label-placement="left" label-align="right"
                 style="--n-color-hover:var(--button-background-color); --n-border-hover:1px solid var(--button-background-color);
                 --n-boreder-focus:1px solid var(--button-background-color);--n-ripple-color:var(--button-background-color);--n-caret-color:var(--button-background-color)">
-                <n-input v-model:value="newpsw" placeholder="请输入新密码"></n-input>
+                <n-input type="password" v-model:value="psw.newPassword" placeholder="请输入新密码"></n-input>
             </n-form-item>
 
             <n-form-item class="w-[500px] h-[50px]" path="verpsw" label="确认新密码" label-placement="left" label-align="right"
                 style="--n-color-hover:var(--button-background-color); --n-border-hover:1px solid var(--button-background-color);
                 --n-boreder-focus:1px solid var(--button-background-color);--n-ripple-color:var(--button-background-color);--n-caret-color:var(--button-background-color)">
-                <n-input v-model:value="verpsw" placeholder="确认密码"></n-input>
+                <n-input type="password" v-model:value="psw.checkNewPassword" placeholder="确认密码"></n-input>
             </n-form-item>
 
             <n-button class="text-light-50 bg-orange-500 w-[360px] h-[60px]" attr-type="button"

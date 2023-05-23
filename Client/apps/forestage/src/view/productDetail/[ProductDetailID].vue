@@ -61,10 +61,13 @@ async function shoppingClick() {
 
 function addFavorite(product_id) {
   console.log(product_id);
-  // const [e, r] = api.addProductToFavorite(product_id);
-  // if (!e && r) {
-  //   console.log(r.data);
-  // }
+  const id = {
+    productId : product_id
+  }
+  const [e, r] = api.addProductToFavorite(id);
+  if (!e && r) {
+    console.log(r.data);
+  }
 }
 
 const init = async (ID) => {
