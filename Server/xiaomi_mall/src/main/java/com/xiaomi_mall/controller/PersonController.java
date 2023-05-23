@@ -2,11 +2,7 @@ package com.xiaomi_mall.controller;
 
 import com.xiaomi_mall.config.MinioConfig;
 import com.xiaomi_mall.config.Result;
-<<<<<<< Updated upstream
 import com.xiaomi_mall.dto.UpdatePasswordDto;
-import com.xiaomi_mall.enity.Address;
-=======
->>>>>>> Stashed changes
 import com.xiaomi_mall.enity.User;
 import com.xiaomi_mall.enums.AppHttpCodeEnum;
 import com.xiaomi_mall.service.UserService;
