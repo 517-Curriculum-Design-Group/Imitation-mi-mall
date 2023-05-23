@@ -8,7 +8,7 @@ import { useRouter } from 'vue-router';
 // const productId = parseInt(router.currentRoute.value.params.producId)
 onMounted(async()=>{
     const [e,r] = await api.getComment(5,1,10000)
-    console.log(r.data)
+    console.log(r)
 })
 </script>
 
