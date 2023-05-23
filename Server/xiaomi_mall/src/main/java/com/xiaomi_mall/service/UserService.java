@@ -32,5 +32,5 @@ public interface UserService extends IService<User> {
 
     User addAdvater();
 
-    Result updatePersonInfo(User userInfo);
+    Result updatePersonInfo(User user);
 }

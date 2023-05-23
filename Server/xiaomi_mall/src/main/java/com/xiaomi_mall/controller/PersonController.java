@@ -36,9 +36,9 @@ public class PersonController {
 
 
     @PreAuthorize("hasAnyAuthority('普通用户')")
-    @ApiOperation(" 查看个人信息")
+    @ApiOperation(" 修改个人信息")
     @PutMapping("/updatePersonInfo")
-    public Result updatePersonInfo(User user) {
+    public Result updatePersonInfo(@RequestBody User user) {
         return userService.updatePersonInfo(user);
     }
 
