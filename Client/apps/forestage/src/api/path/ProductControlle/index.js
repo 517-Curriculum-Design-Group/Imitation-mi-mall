@@ -31,8 +31,8 @@ export function getCateProduct(params) {
   return Get("/getCateProduct", params);
 }
 
-export function getComment(id, num, size) {
-  return Get("/commentList", id, num, size);
+export function getComment(params) {
+  return Get("/commentList", params);
 }
 
 export function getCateProductAsc(body) {

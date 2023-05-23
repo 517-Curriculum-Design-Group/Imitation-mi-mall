@@ -29,9 +29,10 @@ onBeforeMount(async () => {
 function clearStatus(status) {
     switch (status) {
         case 0: return "未支付"
-        case 1: return "已支付"
+        case 1: return "未发货"
         case 2: return "已发货"
         case 3: return "已完成"
+        case 4: return "已取消"
     }
 }
 

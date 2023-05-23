@@ -55,12 +55,12 @@ onMounted(async () => {
             <div class="flex mr-50 mt-4">
                 <img src="https://s01.mifile.cn/i/user/portal-icon-3.png" class="mr-4" />
                 <div class="flex flex-col items-center pt-8">
-                    <span class="text-2xl text-gray-500">待评价商品数</span>
+                    <span class="text-2xl text-gray-500">待评价商品数:0</span>
                     <router-link to="/user/comment">
                         <span class="text-gray-500">查看待评价商品></span></router-link>
                 </div>
             </div>
-            <div class="flex ml-10 mt-4">
+            <div class="flex ml-5 mt-4">
                 <img src="https://s01.mifile.cn/i/user/portal-icon-4.png" class="mr-4" />
                 <div class="flex flex-col items-center pt-8">
                     <span class="text-2xl text-gray-500">喜欢的商品:0</span>

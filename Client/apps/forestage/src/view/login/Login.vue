@@ -117,14 +117,18 @@ function ChangeType() {
 const login = async () => {
   loading.value = !loading.value;
   const [e, r] = await api.postLogin(formState);
-  if (!e && r) {
+  if (r.code === 200) {
     utils.setSession("token", r.data.token);
     utils.setSession("userId", JSON.stringify(r.data.userInfo));
     store.setUserInfo(r.data.userInfo);
     router.replace("/home");
     notify("success", "通知", "登录成功");
   }
-  loading.value = !loading.value;
+  else{
+    notify("error", "通知", "账号不存在或密码错误");
+    console.log(r)
+  }
+  loading.value = false
 };
 </script>
 

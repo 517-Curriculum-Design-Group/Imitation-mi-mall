@@ -2,6 +2,9 @@
 import { ref, onMounted, reactive } from 'vue'
 import { useNotification } from 'naive-ui'
 import { api } from '@/api'
+import { userStore } from "@/stores/user.js";
+
+const Userstore = userStore();
 
 const notification = useNotification()
 let user = reactive({
@@ -26,6 +29,7 @@ async function changeInfo() {
     const [e,r] = await api.updatePersonInfo(user)
     console.log(r)
     if(r.code === 200){
+        Userstore.setUserInfo(user)
         notify('success')
         isEdit.value = false;
         // window.location.reload();

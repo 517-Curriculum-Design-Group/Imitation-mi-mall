@@ -2,13 +2,21 @@
 import { api } from "@/api";
 import ProductHead from "./ProductHead.vue";
 import { onMounted } from "vue";
-import { useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
 
-// const router = useRouter();
-// const productId = parseInt(router.currentRoute.value.params.producId)
-onMounted(async()=>{
-    const [e,r] = await api.getComment(5,1,10000)
-    console.log(r)
+const route = useRoute();
+const productId = parseInt(route.params.id)
+
+async function init(){
+    const [e, r] = await api.getComment({productId: productId,pageNum: 1,pageSize:10000})
+    if(!e && r){
+        console.log(r)
+    }
+    console.log(route.params.id)
+}
+
+onMounted(()=>{
+   init()
 })
 </script>
 
