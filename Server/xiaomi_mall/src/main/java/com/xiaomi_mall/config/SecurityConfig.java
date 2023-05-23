@@ -47,7 +47,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/user/login", "/register",
                 "/admin/login", "/v2/api-docs","/getCategoryList", "/getCateProduct",
                         "/getHeaderProducts","/getLeftCategories","/getLowerProducts",
-                        "/getProductDetail/**","/getProductPrice",
+                        "/getProductDetail/**","/getProductPrice","/comment/commentList",
                         "/getCateProductAsc","/getCateProductDesc",
                         "/getFollSecList1", "/getFollSecList2", "/getFollSecList3",
                         "/configuration/ui", "/swagger-resources",

@@ -101,11 +101,14 @@
         <el-input v-model="newseckill.Seckill.stockCount" />
       </el-form-item>
 
+
+
       <el-form-item label="开始时间">
         <el-date-picker
           v-model="newseckill.Seckill.startTime"
           type="datetime"
           placeholder="请选择开始时间"
+          :disabledDate="banner1"
         />
       </el-form-item>
 
@@ -114,6 +117,7 @@
           v-model="newseckill.Seckill.endTime"
           type="datetime"
           placeholder="请选择开始时间"
+          :disabledDate="bannner2"
         />
       </el-form-item>
     </el-form>
@@ -161,6 +165,7 @@
 import { getSeckillList,getSeckillProd,getSeckillSku } from "~/api/seckill";
 import { ref, reactive,onMounted } from "vue";
 
+
 const tt = ref();
 const list = ref();
 const product =ref();
@@ -184,6 +189,44 @@ const newseckill = reactive({
     endTime: "",
   },
 });
+
+const times = reactive({
+  starttime : Date.parse(new Date(newseckill.Seckill.startTime).toString()),
+  endtime : Date.parse(new Date(newseckill.Seckill.endTime).toString())
+})
+
+const banner1=(time)=>{
+    const mintime = Date.now() - 24 * 60 * 60 * 1000 * 1
+    var maxtime;
+    if(Date.parse(new Date(newseckill.Seckill.endTime).toString()))
+    {
+       maxtime = Date.parse(new Date(newseckill.Seckill.endTime).toString())
+    }
+    else{
+       maxtime = Date.now() + 24 * 60 * 60 * 1000 * 7
+    }
+    
+    console.log(mintime,maxtime)
+    console.log(times.starttime)
+    return time.getTime()<mintime || time.getTime()>maxtime
+}
+
+const bannner2=(time)=>{
+  const maxtime = Date.now() + 24 * 60 * 60 * 1000 * 14
+    var mintime;
+    if(Date.parse(new Date(newseckill.Seckill.startTime).toString()))
+    {
+       mintime = Date.parse(new Date(newseckill.Seckill.startTime).toString())
+    }
+    else{
+       mintime = Date.now() - 24 * 60 * 60 * 1000 * 1
+      }
+    console.log(mintime,maxtime)
+    console.log(times.starttime)
+    return time.getTime()<mintime || time.getTime()>maxtime
+}
+
+
 
 const getData=()=>{
   getSeckillList().then((r) => {
