@@ -11,13 +11,24 @@ let orderList = ref([])
 let orderDetail = ref([])
 let copy = ref([])
 
+let noPay = ref([])
+let pay = ref([])
+let out = ref([])
+let cancel = ref([])
+let complete = ref([])
+
 onMounted(async () => {
     const [e, r] = await api.getOrderList()
     orderList.value = r.data
     OrderId.value = r.data.map((item) => item.order_id)
     for (let i = 0; i < orderList.value.length; i++) {
         const [e, r] = await api.getOrderDetails(OrderId.value[i])
-        console.log(r.data)
+        console.log(r.data.orderDetail.orderStatus)
+        if(r.data.orderDetail.orderStatus === 0) noPay.value.push(r.data)
+        else if(r.data.orderDetail.orderStatus === 1) pay.value.push(r.data)
+        else if(r.data.orderDetail.orderStatus === 2) out.value.push(r.data)
+        else if(r.data.orderDetail.orderStatus === 3) complete.value.push(r.data)
+        else cancel.value.push(r.data)
         orderDetail.value.push(r.data)
     }
     copy.value = orderDetail.value
@@ -46,7 +57,7 @@ function dateFormat(daterc) {
 function clearStatus(status) {
     switch (status) {
         case 0: return "未支付"
-        case 1: return "已支付"
+        case 1: return "未发货"
         case 2: return "已发货"
         case 3: return "已完成"
         case 4: return "已取消"
@@ -59,26 +70,32 @@ function order(id) {
 }
 
 let currentTab = ref(0)
-const menu = ["全部订单", "待支付", "已发货", "已完成","订单回收站"]
+const menu = ["全部订单", "未支付", "未发货","已发货", "已完成","订单回收站"]
 
-// async function update(index) {
-//     if (index == 0) {
-//         orderDetail.value = copy.value
-//         console.log(orderDetail.value)
-//     }
-//     else if (index == 1) {
-//        const res = await myFilter(index)
-//     }
-// }
+function update(index) {
+    if (index === 0) {
+        orderDetail.value = copy.value
+    }
 
-// async function myFilter(index){
-//     for (let i = 0; i < orderDetail.value.length; i++) {
-//             if (orderDetail.value[i].orderDetail.orderId === (index-1)) {
-//                 orderDetail.value.push(orderDetail.value[i])
-//             }
-//             console.log(orderDetail.value)
-//         }
-// }
+    else if (index === 1) {
+        orderDetail.value = noPay.value
+    }
+
+    else if( index === 4){
+        orderDetail.value = out.value
+    }
+
+    else if(index === 3 ){
+        orderDetail.value = complete.value
+    }
+
+    else if(index === 2){
+        orderDetail.value = pay.value
+    }
+
+    else orderDetail.value = cancel.value
+}
+
 </script>
 
 <template>
@@ -104,8 +121,9 @@ const menu = ["全部订单", "待支付", "已发货", "已完成","订单回�
     </article>
 
     <article class="flex flex-col w-full h-auto">
+        <h2 v-if="!orderDetail.length" class="text-gray-400 text-center">暂无符合订单。</h2>
         <div class="flex flex-col w-full h-auto border-1 border-solid border-orange-500 mt-4"
-            v-for="(items, index) in orderDetail" :key="index">
+            v-for="(items, index) in orderDetail" :key="index" v-else>
 
             <div
                 class="order-top w-full h-[100px] flex flex-col border-r-0 border-t-0 border-l-0 border-b-1 border-solid border-orange-500 p-[20px]">
