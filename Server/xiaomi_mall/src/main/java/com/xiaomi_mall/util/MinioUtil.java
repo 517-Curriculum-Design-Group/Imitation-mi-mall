@@ -62,7 +62,7 @@ public class MinioUtil {
         if (StringUtils.isBlank(originalFilename)){
             throw new RuntimeException();
         }
-        String fileName = UUIDUtils.getUUID() + originalFilename.substring(originalFilename.lastIndexOf("."));
+        String fileName = UUIDUtils.getUUID() + originalFilename;
         String objectName = CommUtils.getNowDateLongStr("yyyy-MM/dd") + "/" + fileName;
         try {
             PutObjectArgs objectArgs = PutObjectArgs.builder().bucket(prop.getBucketName()).object(objectName)
@@ -72,6 +72,12 @@ public class MinioUtil {
         } catch (Exception e) {
             e.printStackTrace();
             return null;
+        }finally {
+            try {
+                file.getInputStream().close();
+            }catch (Exception exception){
+                System.out.println(exception);
+            }
         }
         return objectName;
     }
