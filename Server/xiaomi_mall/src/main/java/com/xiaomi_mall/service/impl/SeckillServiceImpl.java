@@ -14,8 +14,10 @@ import com.xiaomi_mall.mapper.UserMapper;
 import com.xiaomi_mall.service.AddressService;
 import com.xiaomi_mall.service.ProductService;
 import com.xiaomi_mall.service.SeckillService;
+import com.xiaomi_mall.util.BeanCopyUtils;
 import com.xiaomi_mall.util.RedisCache;
 import com.xiaomi_mall.util.SecurityUtils;
+import com.xiaomi_mall.vo.SeckillListVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -154,6 +156,24 @@ public class SeckillServiceImpl extends ServiceImpl<SeckillMapper, Seckill> impl
     public Result getSelectSku(Sku sku) {
         Integer skuId = sku.getSkuId();
         return Result.okResult(skuId);
+    }
+
+    @Override
+    public Result getSeckillList() {
+        List<Seckill> list = list();
+        List<SeckillListVo> seckillListVos = BeanCopyUtils.copyBeanList(list, SeckillListVo.class);
+        for (int i = 0; i < seckillListVos.size(); i++) {
+
+            Integer productId = seckillListVos.get(i).getProductId();
+            Integer skuId = seckillListVos.get(i).getSkuId();
+            Product product = productMapper.selectById(productId);
+            String skuName = skuMapper.selectById(skuId).getSkuName();
+            seckillListVos.get(i).setProductName(product.getProductName());
+            seckillListVos.get(i).setProductPic(product.getProductPic());
+            seckillListVos.get(i).setSkuName(skuName);
+
+        }
+        return Result.okResult(seckillListVos);
     }
 
     private String getDefaultAddress1(Long userId) {

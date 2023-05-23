@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -38,8 +39,8 @@ public class PersonController {
     @PreAuthorize("hasAnyAuthority('普通用户')")
     @ApiOperation(" 上传头像")
     @PostMapping("/upload")
-    public Result uploadImg(MultipartFile img) {
-        String objectName = minioUtil.upload(img);
+    public Result uploadImg(@RequestBody MultipartFile file) {
+        String objectName = minioUtil.upload(file);
         if (null != objectName) {
             String avatar = prop.getEndpoint() + "/" + prop.getBucketName() + "/" + objectName;
             User user = userService.addAdvater();
