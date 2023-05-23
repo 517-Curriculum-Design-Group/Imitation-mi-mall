@@ -1,4 +1,4 @@
-import { Get, Post, Delete } from "../../server";
+import { Get, Post, Delete,Put } from "../../server";
 
 export function postLogin(userobj) {
   return Post("/user/login", userobj);
@@ -24,6 +24,10 @@ export function getPersonInfo() {
   return Get("/getPersonInfo");
 }
 
+export function updatePersonInfo(obj){
+  return Put("/updatePersonInfo",obj)
+}
+
 export function getAllAddresses(id) {
   return Get("/getAllAddress",id);
 }
@@ -45,5 +49,6 @@ export const userApi = {
   getPersonInfo,
   getAllAddresses,
   getLike,
-  uploadAvatar
+  uploadAvatar,
+  updatePersonInfo
 };
