@@ -176,6 +176,24 @@ public class SeckillServiceImpl extends ServiceImpl<SeckillMapper, Seckill> impl
         return Result.okResult(seckillListVos);
     }
 
+    @Override
+    public Result getFollSecList() {
+        List<Seckill> list = list();
+        List<SeckillListVo> seckillListVos = BeanCopyUtils.copyBeanList(list, SeckillListVo.class);
+        for (int i = 0; i < seckillListVos.size(); i++) {
+
+            Integer productId = seckillListVos.get(i).getProductId();
+            Integer skuId = seckillListVos.get(i).getSkuId();
+            Product product = productMapper.selectById(productId);
+            String skuName = skuMapper.selectById(skuId).getSkuName();
+            seckillListVos.get(i).setProductName(product.getProductName());
+            seckillListVos.get(i).setProductPic(product.getProductPic());
+            seckillListVos.get(i).setSkuName(skuName);
+
+        }
+        return Result.okResult(seckillListVos);
+    }
+
     private String getDefaultAddress1(Long userId) {
         LambdaQueryWrapper<Address> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Address::getUserId, userId)
