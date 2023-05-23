@@ -39,6 +39,8 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
         LambdaQueryWrapper<Category> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(Category::getCategoryName, search);
         Category category1 = categoryMapper.selectOne(queryWrapper);
+
+        //若为分类名
         if (Objects.nonNull(category1))
         {
             int categoryId = category1.getCategoryId();
