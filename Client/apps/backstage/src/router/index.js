@@ -14,6 +14,7 @@ import Category from '~/pages/category.vue'
 import List from '~/pages/list.vue'
 import Common from '~/pages/common.vue'
 import AdminControl from '~/pages/admincontrol.vue'
+import Seckill from '~/pages/seckill.vue'
 
 const routes = [{
     path:"/",
@@ -37,6 +38,13 @@ const routes = [{
             title:"商品管理"
         },
     },{
+        path:"/seckill",
+        component:Seckill,
+        meta:{
+            title:"秒杀商品管理"
+        },
+    },
+    {
         path:"/category",
         component:Category,
         meta:{

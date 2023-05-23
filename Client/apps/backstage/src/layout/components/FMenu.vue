@@ -10,6 +10,7 @@
           <span>商品管理</span>
         </template>
         <el-menu-item index="/list"> 商品管理</el-menu-item>
+        <el-menu-item index="/seckill"> 秒杀商品管理</el-menu-item>
         <el-menu-item index="/category"> 分类管理</el-menu-item>
         <el-menu-item index="/sku"> 规格管理</el-menu-item>
         <!-- <el-sub-menu index="1-4">
