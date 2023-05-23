@@ -26,6 +26,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -136,7 +137,17 @@ public class SeckillServiceImpl extends ServiceImpl<SeckillMapper, Seckill> impl
     @Override
     public Result getSeckillProd() {
         List<Product> list = productService.list();
-        return Result.okResult(list);
+        List<Product> res = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            LambdaQueryWrapper<Sku> queryWrapper = new LambdaQueryWrapper<>();
+            queryWrapper.eq(Sku::getProductId, list.get(i).getProductId());
+            Sku sku = skuMapper.selectOne(queryWrapper);
+            if (Objects.nonNull(sku)) {
+                res.add(list.get(i));
+            }
+        }
+
+        return Result.okResult(res);
     }
 
     @Override
