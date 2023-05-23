@@ -76,7 +76,7 @@ public class SeckillController {
 
     @PreAuthorize("hasAnyAuthority('普通管理员', '超级管理员')")
     @ApiOperation("后台添加商品秒杀时获取该商品下所有sku接口")
-    @GetMapping("/getSeckillSku")
+    @GetMapping("/getSeckillSku/{productId}")
     public Result getSeckillSku(@PathVariable int productId){
         return seckillService.getSeckillSku(productId);
     }

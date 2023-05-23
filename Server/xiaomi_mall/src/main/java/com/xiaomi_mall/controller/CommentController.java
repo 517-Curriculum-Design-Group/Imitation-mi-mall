@@ -19,7 +19,6 @@ public class CommentController {
     @Autowired
     private CommentService commentService;
 
-    @PreAuthorize("hasAnyAuthority('普通用户')")
     @ApiOperation("前台评论列表展示")
     @GetMapping("/commentList")
     public Result commentList(int productId, Integer pageNum, Integer pageSize) {
