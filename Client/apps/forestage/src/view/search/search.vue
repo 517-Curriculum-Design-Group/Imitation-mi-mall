@@ -68,10 +68,9 @@ async function init() {
 }
 
 onBeforeRouteUpdate(async (to, from) => {
-  const Rex = /[\u4e00-\u9fa5]+/g;
+  const Rex = /[\u4e00-\u9fa5\s]+/g;
   let n = to.path.match(Rex);
   let flag = categoryName.value.includes(n[0]);
-  console.log(flag);
   active.value = flag ? n[0] : "全部";
 });
 
