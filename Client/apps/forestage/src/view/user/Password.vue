@@ -5,9 +5,10 @@ import { ref } from "vue"
 const store = userStore();
 const user = store.getUserInfo();
 
-const oldpsw = user.password
-const newpsw = ''
-const verpsw = ''
+let oldpsw = user.password
+let thepsw = ref(null)
+let newpsw = ref(null)
+let verpsw = ref(null)
 
 function changePsw(psw) {
     if(psw != verpsw) {
@@ -25,7 +26,7 @@ function changePsw(psw) {
             <n-form-item class="w-[500px] h-[50px]" path="oldpsw" label="旧密码" label-placement="left" label-align="right"
                 style="--n-color-hover:var(--button-background-color); --n-border-hover:1px solid var(--button-background-color);
                 --n-boreder-focus:1px solid var(--button-background-color);--n-ripple-color:var(--button-background-color);--n-caret-color:var(--button-background-color)">
-                <n-input v-model:value="oldpsw" placeholder="请输入旧密码"></n-input>
+                <n-input v-model:value="thepsw" placeholder="请输入旧密码"></n-input>
             </n-form-item>
 
             <n-form-item class="w-[500px] h-[50px]" path="newpsw" label="新密码" label-placement="left" label-align="right"

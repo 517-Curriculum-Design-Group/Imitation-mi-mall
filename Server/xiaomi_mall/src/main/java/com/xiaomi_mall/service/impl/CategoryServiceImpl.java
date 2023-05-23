@@ -56,7 +56,8 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
                     List<Product> allByCategory = productMapper.getAllByCategory1(item.getCategoryId());
                     for(Product temp : allByCategory)
                     {
-                        res.add(BeanCopyUtils.copyBean(temp, CateProductVo.class));
+                        if(temp.getStatus() == 1)
+                            res.add(BeanCopyUtils.copyBean(temp, CateProductVo.class));
                     }
                 }
                 return Result.okResult(res);
@@ -66,7 +67,8 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
                 //直接根据categoryId查询商品
                 List<Product> allByCategories = productMapper.getAllByCategory1(categoryId);
                 for(Product temp : allByCategories) {
-                    res.add(BeanCopyUtils.copyBean(temp, CateProductVo.class));
+                    if(temp.getStatus() == 1)
+                        res.add(BeanCopyUtils.copyBean(temp, CateProductVo.class));
                 }
                 return Result.okResult(res);
             }
@@ -74,7 +76,8 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
         else
         {
             LambdaQueryWrapper<Product> productWrapper = new LambdaQueryWrapper<>();
-            productWrapper.like(Product::getProductName, search);
+            productWrapper.like(Product::getProductName, search)
+                    .eq(Product::getStatus, 1);
             List<Product> productList = productMapper.selectList(productWrapper);
             return Result.okResult(productList);
         }

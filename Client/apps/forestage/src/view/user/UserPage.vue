@@ -20,10 +20,10 @@ const menu = [
             label: "我的个人中心",
             name: "main"
         },
-        {
-            label: "消息通知",
-            name: "news"
-        },
+        // {
+        //     label: "消息通知",
+        //     name: "news"
+        // },
         {
             label: "喜欢的商品",
             name:"like",

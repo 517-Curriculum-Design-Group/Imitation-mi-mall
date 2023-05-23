@@ -25,6 +25,11 @@ const routes = [
           await import("@/view/productDetail/[ProductDetailID].vue"),
       },
       {
+        path:"/comment:id",
+        name: "CommentID",
+        component: async () => await import("@/view/productDetail/Comment.vue")
+      },
+      {
         path: "/shop",
         name: "Shop",
         component: async () => await import("@/view/search/search.vue"),
@@ -37,7 +42,6 @@ const routes = [
           },
         ],
       },
-
       {
         path: "/user",
         name: "User",

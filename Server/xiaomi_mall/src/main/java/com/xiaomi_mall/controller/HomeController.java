@@ -62,7 +62,7 @@ public class HomeController {
         return productService.getCateProductAsc(cateProductVos);
     }
 
-    @ApiOperation("搜索商品（价格升序）接口")
+    @ApiOperation("搜索商品（价格降序）接口")
     @GetMapping("/getCateProductDesc")
     public Result getCateProductDesc(@RequestBody List<CateProductVo> cateProductVos) {
         return productService.getCateProductDesc(cateProductVos);

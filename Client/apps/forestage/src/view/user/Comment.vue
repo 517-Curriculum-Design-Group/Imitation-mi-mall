@@ -1,5 +1,11 @@
 <script setup>
+import { api } from "@/api"
+import { onMounted } from "vue";
 
+onMounted(async()=>{
+    const [e,r] = await api.getComment(2,1,2)
+    console.log(r.data)
+})
 const comments=[]
 </script>
 
