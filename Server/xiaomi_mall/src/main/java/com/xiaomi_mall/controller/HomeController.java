@@ -10,6 +10,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -57,13 +58,13 @@ public class HomeController {
     }
 
     @ApiOperation("搜索商品（价格升序）接口")
-    @GetMapping("/getCateProductAsc")
+    @PostMapping("/getCateProductAsc")
     public Result getCateProductAsc(@RequestBody List<CateProductVo> cateProductVos) {
         return productService.getCateProductAsc(cateProductVos);
     }
 
     @ApiOperation("搜索商品（价格降序）接口")
-    @GetMapping("/getCateProductDesc")
+    @PostMapping("/getCateProductDesc")
     public Result getCateProductDesc(@RequestBody List<CateProductVo> cateProductVos) {
         return productService.getCateProductDesc(cateProductVos);
     }
