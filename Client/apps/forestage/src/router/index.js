@@ -19,6 +19,11 @@ const routes = [
         component: async () => await import("@/view/HomeCom/Home.vue"),
       },
       {
+        path: "/seckill",
+        name: "Seckill",
+        component: async () => await import("@/view/seckill/seckill.vue"),
+      },
+      {
         path: "/:productDetailID",
         name: "ProductDetailID",
         component: async () =>
