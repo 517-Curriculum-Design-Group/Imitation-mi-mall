@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
@@ -29,6 +28,9 @@ public class Seckill implements Serializable {
 
     @ApiModelProperty("商品id")
     private Integer productId;
+
+    @ApiModelProperty("skuid")
+    private Integer skuId;
 
     @ApiModelProperty("商品价格")
     private BigDecimal seckillPrice;
