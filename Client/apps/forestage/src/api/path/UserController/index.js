@@ -32,6 +32,10 @@ export function getLike(){
   return Get("/getFavoriteList")
 }
 
+export function uploadAvatar(url){
+  return Post("/upload", url);
+} 
+
 export const userApi = {
   postLogin,
   postRegister,
@@ -40,5 +44,6 @@ export const userApi = {
   deleteCartProduct,
   getPersonInfo,
   getAllAddresses,
-  getLike
+  getLike,
+  uploadAvatar
 };

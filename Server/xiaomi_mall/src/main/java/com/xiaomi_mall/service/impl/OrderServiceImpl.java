@@ -11,10 +11,7 @@ import com.xiaomi_mall.dto.OrderCommit;
 import com.xiaomi_mall.dto.SeckillOrderDto;
 import com.xiaomi_mall.enity.*;
 import com.xiaomi_mall.mapper.*;
-import com.xiaomi_mall.service.OrderDetailService;
-import com.xiaomi_mall.service.OrderService;
-import com.xiaomi_mall.service.SkuService;
-import com.xiaomi_mall.service.UserService;
+import com.xiaomi_mall.service.*;
 import com.xiaomi_mall.util.BeanCopyUtils;
 import com.xiaomi_mall.util.JwtUtil;
 import com.xiaomi_mall.vo.BackOrderListVo;
@@ -54,7 +51,8 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     private ProductMapper productMapper;
     @Autowired
     private OrderDetailService orderDetailService;
-
+    @Autowired
+    private CartMapper cartMapper;
     @Override
     public Result getBackOrderList(Integer pageNum, Integer pageSize, Integer status) {
         LambdaQueryWrapper<Order> queryWrapper = new LambdaQueryWrapper<>();
@@ -216,16 +214,24 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         List<Sku> skus = skuMapper.selectBatchIds(skuIds);
         List<Double> eachPrices = new ArrayList<>();
         double sum = 0;
-        for (int i = 0; i < commits.size(); i++) {
-            double eachPrice = skus.get(i).getSkuPrice().doubleValue() * commits.get(i).getCommitCount();
-            eachPrices.add(eachPrice);
-            sum += eachPrice;
-            //库存减少
-            int restStock = skus.get(i).getSkuStock() - commits.get(i).getCommitCount();
-            if (restStock < 0)
-                return Result.errorResult(SKU_STOCK_LIMIT);
-            skus.get(i).setSkuStock(restStock);
+        try
+        {
+            for (int i = 0; i < commits.size(); i++) {
+                double eachPrice = skus.get(i).getSkuPrice().doubleValue() * commits.get(i).getCommitCount();
+                eachPrices.add(eachPrice);
+                sum += eachPrice;
+                //库存减少
+                int restStock = skus.get(i).getSkuStock() - commits.get(i).getCommitCount();
+                if (restStock < 0)
+                    return Result.errorResult(SKU_STOCK_LIMIT);
+                skus.get(i).setSkuStock(restStock);
+            }
         }
+        catch (Exception e)
+        {
+            Result.errorResult(910,"该SKU已被删除，购买失败！");
+        }
+
         BigDecimal totalPrice = BigDecimal.valueOf(sum);
 
         //提交减少后的库存
@@ -258,6 +264,13 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
             orderDetailList.add(orderDetail);
         }
         orderDetailService.saveBatch(orderDetailList);
+
+        //从购物车中删除
+        List<Integer> cartIds = new ArrayList<>();
+        for (OrderCommit commit : commits) {
+            cartIds.add(commit.getCartId());
+        }
+        cartMapper.deleteBatchIds(cartIds);
         return Result.okResult("订单支付成功！");
     }
 

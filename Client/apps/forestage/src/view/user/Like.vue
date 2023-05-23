@@ -21,7 +21,7 @@ async function deleteLike(categoryId) {
 
 <template>
     <h1 class="w-[882px] h-[68px] text-gray-500">喜欢的商品</h1>
-    <n-empty v-if="like.value.length" description="暂无喜爱的商品"></n-empty>
+    <n-empty v-if="!like.value" description="暂无喜爱的商品"></n-empty>
     <div class="w-full h-auto flex flex-wrap">
         <div class="flex flex-col w-[250px] h-auto justify-center" v-for="(items, index) in like">
             <img :src="items.productPic" />

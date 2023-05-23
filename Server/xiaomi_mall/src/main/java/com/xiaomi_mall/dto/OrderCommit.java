@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class OrderCommit
 {
+    private int cartId;
     private String productName;
     private int skuId;
     private int commitCount;
