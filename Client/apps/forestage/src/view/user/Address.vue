@@ -36,13 +36,16 @@ onMounted(async () => {
 
 <template>
     <h1 class="w-[882px] h-[68px] text-gray-500">收货地址</h1>
-
+    
     <div class="flex flex-wrap">
+        
         <div class="container flex flex-col justify-center items-center w-[270px] h-[180px] border-1 border-solid border-gray-400 cursor-pointer hover:border-gray-500"
             @click="isShow = true">
             <span class="icon i-mdi-plus-circle text-gray-200 text-5xl mb-2 hover:text-gray-400"></span>
             <h4 class="text-gray-400">添加新地址</h4>
         </div>
+
+
     </div>
 
     <n-modal v-model:show="isShow">
@@ -89,8 +92,8 @@ onMounted(async () => {
     </n-modal>
 </template>
 
-//   <!-- 新增 -->
-//   <n-modal
+   <!-- 新增 -->
+<!-- //   <n-modal
 //     v-model:show="userAdress.flag"
 //     :trap-focus="false"
 //     :mask-closable="false"
@@ -244,7 +247,7 @@ onMounted(async () => {
 //         </n-button>
 //       </div>
 //     </n-form>
-//   </n-modal>
+//   </n-modal> -->
 
 
 <style scoped lang="scss">

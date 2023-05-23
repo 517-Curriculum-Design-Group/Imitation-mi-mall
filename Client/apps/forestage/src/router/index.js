@@ -25,7 +25,7 @@ const routes = [
           await import("@/view/productDetail/[ProductDetailID].vue"),
       },
       {
-        path:"/comment:id",
+        path:"/comment/:id",
         name: "CommentID",
         component: async () => await import("@/view/productDetail/Comment.vue")
       },
@@ -45,6 +45,7 @@ const routes = [
       {
         path: "/user",
         name: "User",
+        redirect:"/user/order",
         component: async () => await import("@/view/user/UserPage.vue"),
         children: [
           {
