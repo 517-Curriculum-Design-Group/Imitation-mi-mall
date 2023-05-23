@@ -2,6 +2,7 @@ package com.xiaomi_mall.controller;
 
 import com.xiaomi_mall.config.MinioConfig;
 import com.xiaomi_mall.config.Result;
+import com.xiaomi_mall.dto.UpdatePasswordDto;
 import com.xiaomi_mall.enity.Address;
 import com.xiaomi_mall.enity.User;
 import com.xiaomi_mall.enums.AppHttpCodeEnum;
@@ -41,6 +42,15 @@ public class PersonController {
     public Result updatePersonInfo(@RequestBody User user) {
         return userService.updatePersonInfo(user);
     }
+
+
+    @PreAuthorize("hasAnyAuthority('普通用户')")
+    @ApiOperation(" 修改密码")
+    @PutMapping("/updatePassword")
+    public Result updatePassword(@RequestBody UpdatePasswordDto updatePasswordDto) {
+        return userService.updatePassword(updatePasswordDto);
+    }
+
 
     @PreAuthorize("hasAnyAuthority('普通用户')")
     @ApiOperation(" 上传头像")

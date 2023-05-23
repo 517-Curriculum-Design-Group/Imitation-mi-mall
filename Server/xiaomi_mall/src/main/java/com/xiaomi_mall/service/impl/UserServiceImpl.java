@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xiaomi_mall.config.Result;
 import com.xiaomi_mall.constants.SystemConstants;
+import com.xiaomi_mall.dto.UpdatePasswordDto;
 import com.xiaomi_mall.enity.*;
 import com.xiaomi_mall.enums.AppHttpCodeEnum;
 import com.xiaomi_mall.exception.SystemException;
@@ -480,6 +481,25 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public Result updatePersonInfo(User user) {
+        updateById(user);
+        return Result.okResult();
+    }
+
+    @Override
+    public Result updatePassword(UpdatePasswordDto updatePasswordDto) {
+        Long userId = SecurityUtils.getUserId();
+        User user = userMapper.selectById(userId);
+        if(!passwordEncoder.matches(updatePasswordDto.getRawPassword(), user.getPassword()))
+            return Result.errorResult(912, "原密码错误");
+
+        if(!updatePasswordDto.getNewPassword().equals(updatePasswordDto.getCheckNewPassword()))
+            return Result.errorResult(913, "两次新密码输入不一致");
+
+        if(updatePasswordDto.getNewPassword().equals(updatePasswordDto.getRawPassword()))
+            return Result.errorResult(914, "新密码和原密码一致");
+
+        String encodeNewPassword = passwordEncoder.encode(updatePasswordDto.getNewPassword());
+        user.setPassword(encodeNewPassword);
         updateById(user);
         return Result.okResult();
     }
