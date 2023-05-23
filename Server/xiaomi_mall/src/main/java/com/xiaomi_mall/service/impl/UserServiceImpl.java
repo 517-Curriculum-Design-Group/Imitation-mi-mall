@@ -480,7 +480,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public Result updatePersonInfo(User userInfo) {
-        updateById(userInfo);
+        User user = userMapper.selectById(userInfo.getUserId());
+        user.setNickName(user.getNickName());
+        user.setEmail(user.getEmail());
+        user.setSex(user.getSex());
+        updateById(user);
         return Result.okResult("修改成功 ");
     }
 
