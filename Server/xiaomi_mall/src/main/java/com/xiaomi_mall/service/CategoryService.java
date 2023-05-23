@@ -16,6 +16,7 @@ public interface CategoryService extends IService<Category> {
     Result getCategoryName(Integer categoryId);
 
     Result addCategoryName(AddCategoryNameDto addCategoryNameDto);
+
 }
 
 
