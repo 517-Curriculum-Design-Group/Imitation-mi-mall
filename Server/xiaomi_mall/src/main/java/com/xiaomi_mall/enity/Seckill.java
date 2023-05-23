@@ -17,7 +17,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @ApiModel("秒杀实体")
-@TableName("seckill")
+@TableName("Seckill")
 public class Seckill implements Serializable {
 
     private static final long serialVersionUID = -40356785423868312L;
