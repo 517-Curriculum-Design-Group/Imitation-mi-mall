@@ -2,6 +2,7 @@ package com.xiaomi_mall.controller;
 
 import com.xiaomi_mall.config.MinioConfig;
 import com.xiaomi_mall.config.Result;
+import com.xiaomi_mall.enity.Address;
 import com.xiaomi_mall.enity.User;
 import com.xiaomi_mall.enums.AppHttpCodeEnum;
 import com.xiaomi_mall.service.UserService;
@@ -11,10 +12,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
@@ -34,6 +32,14 @@ public class PersonController {
     @GetMapping("/getPersonInfo")
     public Result getPersonInfo() {
         return userService.getPersonInfo();
+    }
+
+
+    @PreAuthorize("hasAnyAuthority('普通用户')")
+    @ApiOperation(" 修改个人信息")
+    @PutMapping("/updatePersonInfo")
+    public Result updatePersonInfo(@RequestBody User user) {
+        return userService.updatePersonInfo(user);
     }
 
     @PreAuthorize("hasAnyAuthority('普通用户')")
