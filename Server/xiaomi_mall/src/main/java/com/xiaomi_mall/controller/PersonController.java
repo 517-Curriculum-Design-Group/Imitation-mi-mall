@@ -45,6 +45,7 @@ public class PersonController {
             String avatar = prop.getEndpoint() + "/" + prop.getBucketName() + "/" + objectName;
             User user = userService.addAdvater();
             user.setAvatar(avatar);
+            System.out.println(user);
             return Result.okResult(prop.getEndpoint() + "/" + prop.getBucketName() + "/" + objectName);
         }
         return Result.errorResult(AppHttpCodeEnum.UPLOAD_ERROR);
