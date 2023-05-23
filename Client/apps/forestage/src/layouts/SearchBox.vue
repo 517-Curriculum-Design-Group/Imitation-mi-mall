@@ -1,7 +1,9 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { api } from "@/api";
+import { useRouter } from "vue-router";
 
+const router = useRouter();
 const titles = ref([]);
 const value = ref("");
 
@@ -11,6 +13,11 @@ const getHeaderProductsData = async () => {
     titles.value = r.data;
   }
 };
+
+function searchBoxEnter() {
+  router.push(`/shop/${value.value}`);
+  value.value = "";
+}
 
 onMounted(() => {
   getHeaderProductsData();
@@ -70,10 +77,12 @@ onMounted(() => {
           "
           type="text"
           placeholder="搜索"
+          @keyup.enter="searchBoxEnter"
         />
         <n-button
           class="w-[52px] h-[50px] search-btn"
           style="--n-border-hover: 1px solid var(--button-background-color)"
+          @click="searchBoxEnter"
         >
           <span class="i-mdi-magnify w-[24px] h-[24px]"></span>
         </n-button>

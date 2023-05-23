@@ -24,11 +24,18 @@ const routes = [
         component: async () =>
           await import("@/view/productDetail/[ProductDetailID].vue"),
       },
-
       {
-        path: "/search",
-        name: "Search",
+        path: "/shop",
+        name: "Shop",
         component: async () => await import("@/view/search/search.vue"),
+        children: [
+          {
+            path: ":search",
+            name: "Search",
+            component: async () => await import("@/view/search/[search].vue"),
+            props: true,
+          },
+        ],
       },
 
       {
@@ -49,7 +56,7 @@ const routes = [
           {
             path: ":orderId",
             name: "OrderId",
-            component: async () => await import("@/view/user/[OrderId].vue")
+            component: async () => await import("@/view/user/[OrderId].vue"),
           },
           {
             path: "comment",
