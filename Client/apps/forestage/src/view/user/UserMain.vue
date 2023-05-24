@@ -39,15 +39,15 @@ onMounted(async () => {
             <div class="flex mr-50 mt-4">
                 <img src="https://s01.mifile.cn/i/user/portal-icon-1.png" class="mr-4" />
                 <div class="flex flex-col items-center pt-8">
-                    <span class="text-2xl text-gray-500">待支付的订单:0</span>
+                    <span class="text-2xl text-gray-500">已支付的订单</span>
                     <router-link to="/user/order">
-                        <span class="text-gray-500">查看待支付订单></span></router-link>
+                        <span class="text-gray-500">查看已支付订单></span></router-link>
                 </div>
             </div>
             <div class="flex ml-4 mt-4">
                 <img src="https://s01.mifile.cn/i/user/portal-icon-2.png" class="mr-4" />
                 <div class="flex flex-col items-center pt-8">
-                    <span class="text-2xl text-gray-500">待收货的订单:0</span>
+                    <span class="text-2xl text-gray-500">待收货的订单</span>
                     <router-link to="/user/order">
                         <span class="text-gray-500">查看待收货订单></span></router-link>
                 </div>
@@ -55,7 +55,7 @@ onMounted(async () => {
             <div class="flex mr-50 mt-4">
                 <img src="https://s01.mifile.cn/i/user/portal-icon-3.png" class="mr-4" />
                 <div class="flex flex-col items-center pt-8">
-                    <span class="text-2xl text-gray-500">待评价商品数:0</span>
+                    <span class="text-2xl text-gray-500">待评价商品数</span>
                     <router-link to="/user/comment">
                         <span class="text-gray-500">查看待评价商品></span></router-link>
                 </div>
@@ -63,7 +63,7 @@ onMounted(async () => {
             <div class="flex ml-5 mt-4">
                 <img src="https://s01.mifile.cn/i/user/portal-icon-4.png" class="mr-4" />
                 <div class="flex flex-col items-center pt-8">
-                    <span class="text-2xl text-gray-500">喜欢的商品:0</span>
+                    <span class="text-2xl text-gray-500">喜欢的商品</span>
                     <router-link to="/user/like">
                         <span class="text-gray-500">查看喜欢的商品></span></router-link>
                 </div>

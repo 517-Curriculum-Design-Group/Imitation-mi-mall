@@ -11,6 +11,8 @@ const store = useDetailStore()
 const Userstore = userStore();
 let currentComment = reactive({
     commentId: null,
+    toCommentUserId: -1,
+    toCommentId: -1,
     userId: Userstore.getUserInfo().userId,
     productId:null,
     content: null,
@@ -31,9 +33,16 @@ const mySkuname = (skuName) => {
 
 const menu = ["好评", "一般", "差评"]
 
-function update(){
+async function update(){
     console.log(currentComment)
+    const [e,r] = await api.addComment(currentComment)
+    if(r.code === 200 ){
+        message.success('评论成功')
+        router.go(-1)
+    }
+    else message.error('评论失败，请检查网络')
 }
+
 let secelctedRate=ref(null)
 function selectRate(item){
     secelctedRate.value = item

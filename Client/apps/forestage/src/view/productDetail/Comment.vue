@@ -69,13 +69,14 @@ let currentComment = reactive({
     productId: productId,
     content: null,
     rate: "好评",
-    parentId: 1,
+    parentId: null,
     delFlag: 0
 })
 
 function realseComment(comment) {
     currentComment.toCommentId = comment.commentId
     currentComment.toCommentUserId = comment.userId
+    currentComment.parentId = comment.commentId
     console.log(currentComment)
     // Object.assign(currentComment, comment)
     isShow.value = true
@@ -99,7 +100,7 @@ async function commitComment() {
 }
 
 function howLong(num) {
-    if (num === 0) return comments.value.length
+    if (num === 0) return copy.value.length
     else if (num === 1) return good.value.length
     else if (num === 0) return common.value.length
     else return bad.value.length
