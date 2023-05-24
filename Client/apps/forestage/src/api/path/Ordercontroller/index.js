@@ -47,7 +47,11 @@ export function seckill(params) {
     return Post("/seckill",undefined,params)
 }
 
+export function hasDefaultAddress() {
+    return Get("/hasDefaultAddress");
+}
 export const orderApi = {
+    hasDefaultAddress,
     seckill,
     getFollSecList3,
     getFollSecList2,

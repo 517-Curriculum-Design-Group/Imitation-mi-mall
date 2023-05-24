@@ -123,12 +123,11 @@ const login = async () => {
     store.setUserInfo(r.data.userInfo);
     router.replace("/home");
     notify("success", "通知", "登录成功");
-  }
-  else{
+  } else {
     notify("error", "通知", "账号不存在或密码错误");
-    console.log(r)
+    console.log(r);
   }
-  loading.value = false
+  loading.value = false;
 };
 </script>
 
