@@ -3,6 +3,7 @@ import { ref, onMounted, reactive } from "vue";
 import { useNotification } from "naive-ui";
 import { api } from "@/api";
 import { userStore } from "@/stores/user.js";
+import { message } from 'ant-design-vue';
 
 const Userstore = userStore();
 
@@ -27,6 +28,14 @@ onMounted(async () => {
 });
 
 const isEdit = ref(false);
+
+const Verify = (()=>{
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  if(!emailRegex.test(user.email)) message.error('邮箱格式错误，请重新输入！')
+  else if(Object.values(user).includes(null)) message.error('信息存在空缺')
+  else changeInfo()
+})
+
 async function changeInfo() {
   const [e, r] = await api.updatePersonInfo(user);
   console.log(r);
@@ -197,7 +206,7 @@ function notify(type) {
             --n-color-focus: gray;
             --n-text-color-focus: white;
           "
-          @click="changeInfo(user)"
+          @click="Verify()"
         >
           保存
         </n-button>

@@ -25,16 +25,15 @@ onMounted(async () => {
     OrderId.value = r.data.map((item) => item.order_id)
     for (let i = 0; i < orderList.value.length; i++) {
         const [e, r] = await api.getOrderDetails(OrderId.value[i])
-        console.log(r.data.orderDetail.orderStatus)
         if (r.data.orderDetail.orderStatus === 0) noPay.value.push(r.data)
         else if (r.data.orderDetail.orderStatus === 1) pay.value.push(r.data)
         else if (r.data.orderDetail.orderStatus === 2) out.value.push(r.data)
         else if (r.data.orderDetail.orderStatus === 3) complete.value.push(r.data)
         else cancel.value.push(r.data)
+        copy.value.push(r.data)
         store.setMostProduct(out.value)
         orderDetail.value.push(r.data)
     }
-    copy.value = orderDetail.value
     console.log(copy.value)
 })
 

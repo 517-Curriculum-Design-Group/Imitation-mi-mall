@@ -114,7 +114,7 @@ onMounted(() => {
 
 <template>
   <div>
-    <ProductHead :product-name="product.productName"></ProductHead>
+    <ProductHead :product-name="product.productName" :product-id="product.productId"></ProductHead>
     <main class="mt-20px flex justify-between w-[80%] mx-auto">
       <img
         class="aspect-square w-560px h-560px object-cover pr-30px"

@@ -70,9 +70,7 @@ const logout = async () => {
       ></router-link
     >
     <span v-if="userid" class="seq"></span>
-    <router-link to="/user/news">
-      <a-button type="default" class="news">消息通知</a-button></router-link
-    >
+      <a-button type="default" class="news cursor-not-allowed">消息通知</a-button>
     <span v-if="!userid" class="seq"></span>
     <router-link to="/login"
       ><a-button v-if="!userid" type="default" class="register"

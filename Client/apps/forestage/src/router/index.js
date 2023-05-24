@@ -83,11 +83,11 @@ const routes = [
             name: "Main",
             component: async () => await import("@/view/user/UserMain.vue"),
           },
-          {
-            path: "news",
-            name: "News",
-            component: async () => await import("@/view/user/News.vue"),
-          },
+          // {
+          //   path: "news",
+          //   name: "News",
+          //   component: async () => await import("@/view/user/News.vue"),
+          // },
           {
             path: "address",
             name: "Address",

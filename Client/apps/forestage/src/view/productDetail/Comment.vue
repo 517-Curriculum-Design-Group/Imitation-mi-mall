@@ -18,6 +18,7 @@ let copy = ref([])
 let good = ref([])
 let common = ref([])
 let bad = ref([])
+let productName = ref('')
 
 async function init() {
     const [e, r] = await api.getComment({ productId: productId, pageNum: 1, pageSize: 10000 })
@@ -28,6 +29,7 @@ async function init() {
         console.log(comments.value)
         comments.value.forEach(items => {
             if (items.rate === "好评") good.value.push(items)
+            productName.value = items.productName
         })
         comments.value.forEach(items => {
             if (items.rate === "一般") common.value.push(items)
@@ -35,6 +37,7 @@ async function init() {
         comments.value.forEach(items => {
             if (items.rate === "差评") bad.value.push(items)
         })
+        
     }
 }
 
@@ -115,7 +118,7 @@ function selectList(index) {
 </script>
 
 <template>
-    <ProductHead class="fixed"></ProductHead>
+    <ProductHead class="fixed" :product-name="productName"></ProductHead>
 
     <div class="w-full h-100vh flex justify-center" style="background-color:#f5f5f5;">
         <article class="flex flex-col w-[1226px] h-full ">
