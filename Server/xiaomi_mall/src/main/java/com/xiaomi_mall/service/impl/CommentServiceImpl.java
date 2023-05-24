@@ -130,6 +130,23 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
             }
         }
 
+        List<Integer> productIdList = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            productIdList.add(list.get(i).getProductId());
+        }
+
+        List<Product> productList = productService.listByIds(productIdList);
+        for (int i = 0; i < commentVoList.size(); i++) {
+            for (int j = 0; j < productList.size(); j++)
+            {
+                if(commentVoList.get(i).getProductId() == productList.get(j).getProductId())
+                {
+                    commentVoList.get(i).setProductName(productList.get(j).getProductName());
+                    break;
+                }
+            }
+        }
+
         for (CommentVo commentVo : commentVoList) {
             //通过createBy查询用户的昵称并赋值
             String nickName = userService.getById(commentVo.getUserId()).getNickName();
