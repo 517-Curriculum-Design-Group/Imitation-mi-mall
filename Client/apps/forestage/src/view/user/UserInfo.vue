@@ -13,27 +13,28 @@ let user = reactive({
     avatar: null,
     sex: null,
     email: null,
-    mobile:null,
+    mobile: null,
 })
 
 let copy = reactive({})
+let userAvatar = ref(null)
 onMounted(async () => {
-    const [e,r] = await api.getPersonInfo()
+    const [e, r] = await api.getPersonInfo()
     Object.assign(user, r.data)
-    Object.assign(copy,user)
+    userAvatar.value = user.avatar
+    Object.assign(copy, user)
     console.log(copy)
 })
 
 const isEdit = ref(false)
 async function changeInfo() {
-    const [e,r] = await api.updatePersonInfo(user)
+    const [e, r] = await api.updatePersonInfo(user)
     console.log(r)
-    if(r.code === 200){
+    if (r.code === 200) {
         Userstore.setUserInfo(user)
         notify('success')
         isEdit.value = false;
-        // window.location.reload();
-    } 
+    }
     else notify('error')
 }
 
@@ -47,9 +48,13 @@ async function beforeUpload(data) {
     if (data.file.file?.type !== "image/png") {
         notify('error')
     }
-    else{
-        const [e,r] = await api.uploadAvatar(data.file.file)
-       if(r.code === 200) notify('success')
+    else {
+        const [e, r] = await api.uploadAvatar(data.file)
+        if (r.code === 200){
+            user.avatar = r.data
+            Userstore.setUserInfo({avater:user.avatar})
+            notify('success')
+        }
     }
 }
 
@@ -80,15 +85,16 @@ function notify(type) {
         <n-form :mdoel="user" class="flex flex-col w-[600px] gap-4 justify-center items-center h-auto m-auto"
             label-align="right" v-if="isEdit">
 
-            <n-form-item class="w-[500px] h-[50px]" path="avatar" label="头像" label-placement="left" label-align="right"
+            <!-- <n-form-item class="w-[500px] h-[50px]" path="avatar" label="头像" label-placement="left" label-align="right"
                 style="--n-color-hover:var(--button-background-color); --n-border-hover:1px solid var(--button-background-color);
                 --n-boreder-focus:1px solid var(--button-background-color);--n-ripple-color:var(--button-background-color);--n-caret-color:var(--button-background-color)">
                 <n-upload  @before-upload="beforeUpload">
-                    <n-button style="--n-text-color-hover:var(--button-background-color);--n-text-color-focus:var(--button-background-color);">上传 PNG 文件</n-button>
+                    <n-button style="--n-text-color-hover:var(--button-background-color);--n-text-color-focus:var(--button-background-color);" circle="true">上传 PNG 文件</n-button>
                 </n-upload>
-            </n-form-item>
+            </n-form-item> -->
 
-            <n-form-item class="w-[500px] h-[50px] mt-8" path="nickName" label="昵称" label-placement="left" label-align="right"
+            <n-form-item class="w-[500px] h-[50px] mt-8" path="nickName" label="昵称" label-placement="left"
+                label-align="right"
                 style="--n-color-hover:var(--button-background-color);--n-border-hover:var(--n-border-hover);
                 --n-boreder-focus:var(--button-background-color);--n-ripple-color:var(--button-background-color);caret-color:var(--button-background-color)">
                 <n-input v-model:value="user.nickName" placeholder="请输入昵称"></n-input>
@@ -141,8 +147,14 @@ function notify(type) {
         </n-form>
 
         <div class="flex flex-col justify-center items-center w-[600px] h-auto m-auto" v-else>
-            <span class="w-[500px] h-[70px] text-lg">头像:<img class="w-[80px] h=[80px] ml-6 rounded-full overflow-hidden" :src="user.avatar"/></span>
-            <span class="w-[500px] h-[70px] text-lg">用户ID:{{ user.userId }}</span>
+            <span class="w-[500px] h-auto text-lg">
+                <n-upload @before-upload="beforeUpload">
+                    <n-button
+                        style="--n-text-color-hover:var(--button-background-color);--n-text-color-focus:var(--button-background-color);"
+                        circle="true" :show-file-list="false" class="w-[80px] h-[80px]"><img class="w-[80px] h-[80px] rounded-full" :src="user.avatar"/></n-button>
+                </n-upload>
+            </span>
+            <span class="w-[500px] h-[70px] text-lg mt-8">用户ID:{{ user.userId }}</span>
             <span class="w-[500px] h-[70px] text-lg">昵称:{{ user.nickName }}</span>
             <span class="w-[500px] h-[70px] text-lg">性别:{{ user.sex === "女" ? "女" : "男" }}</span>
             <span class="w-[500px] h-[70px] text-lg">手机号:{{ user.mobile }}</span>
@@ -153,5 +165,4 @@ function notify(type) {
                 编辑
             </n-button>
         </div>
-    </div>
-</template>
+</div></template>

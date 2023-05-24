@@ -32,7 +32,7 @@ export function getCateProduct(params) {
 }
 
 export function getComment(params) {
-  return Get("/commentList", params);
+  return Get("/comment/commentList", params);
 }
 
 export function getCateProductAsc(body) {
