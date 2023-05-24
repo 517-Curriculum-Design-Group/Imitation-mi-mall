@@ -3,7 +3,7 @@ import { ref, onMounted, reactive } from "vue";
 import { useNotification } from "naive-ui";
 import { api } from "@/api";
 import { userStore } from "@/stores/user.js";
-import { message } from 'ant-design-vue';
+import { message } from "ant-design-vue";
 
 const Userstore = userStore();
 
@@ -29,12 +29,12 @@ onMounted(async () => {
 
 const isEdit = ref(false);
 
-const Verify = (()=>{
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-  if(!emailRegex.test(user.email)) message.error('邮箱格式错误，请重新输入！')
-  else if(Object.values(user).includes(null)) message.error('信息存在空缺')
-  else changeInfo()
-})
+const Verify = () => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(user.email)) message.error("邮箱格式错误，请重新输入！");
+  else if (Object.values(user).includes(null)) message.error("信息存在空缺");
+  else changeInfo();
+};
 
 async function changeInfo() {
   const [e, r] = await api.updatePersonInfo(user);
@@ -52,14 +52,16 @@ function update() {
 }
 
 async function beforeUpload(data) {
-  console.log(data);
   if (data.file.file?.type !== "image/png") {
     notify("error");
   } else {
     const [e, r] = await api.uploadAvatar(data.file);
     if (r.code === 200) {
       user.avatar = r.data;
-      Userstore.setUserInfo({ avater: user.avatar });
+      Userstore.setUserAvart(r.data);
+      const userInfo = JSON.parse(window.sessionStorage.getItem("userId"));
+      userInfo.avatar = r.data;
+      window.sessionStorage.setItem("userId", JSON.stringify(userInfo));
       notify("success");
     }
   }

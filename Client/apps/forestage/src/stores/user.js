@@ -21,6 +21,9 @@ export const userStore = defineStore("user", {
     deleteUserInfo() {
       this.userInfo = null;
     },
+    setUserAvart(url) {
+      this.userInfo.avatar = url
+    }
   },
   persist: {
     key: "userStore",

@@ -204,8 +204,11 @@
             size="medium"
             :loading="formData.loading"
             @click="clickSubmit"
+            :disabled="skuButtonDis"
             >确认</el-button
           >
+          {{ skuButtonDis }}
+          {{ tableData }}
         </div>
       </div>
     </el-drawer>
@@ -562,6 +565,8 @@ function clickSwitch(obj) {
     });
   });
 }
+
+const skuButtonDis = computed(() => tableData.value.length === 0);
 
 function handleDelete(o) {
   let obj = {

@@ -5,7 +5,9 @@ import { api } from "@/api";
 import { useDialog } from "naive-ui";
 import { cartStore } from "@/stores/cart";
 import { useRouter } from "vue-router";
+import utils from "@/utils";
 
+let isLogin = utils.isLogin();
 const goods = reactive([]);
 const dialogWarning = useDialog();
 const store = cartStore();
@@ -206,7 +208,12 @@ onMounted(() => {
       </div>
     </div>
   </div>
-  <n-result v-else class="mt-[10%]" title="还在疑惑?" description="不要再看了,你购物车没有东西">
+  <n-result
+    v-else
+    class="mt-[10%]"
+    title="还在疑惑?"
+    description="不要再看了,你购物车没有东西"
+  >
     <template #icon>
       <div>
         <img
@@ -217,7 +224,7 @@ onMounted(() => {
       </div>
     </template>
     <div class="w-full flex justify-center gap-12px">
-      <n-button type="primary" @click="$router.push('/login')">
+      <n-button v-if="!isLogin" type="primary" @click="$router.push('/login')">
         去登录
       </n-button>
       <n-button type="info" @click="$router.push('/home')"> 去购物 </n-button>
