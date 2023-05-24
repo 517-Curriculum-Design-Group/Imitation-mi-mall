@@ -16,6 +16,7 @@ import com.xiaomi_mall.util.BeanCopyUtils;
 import com.xiaomi_mall.util.JwtUtil;
 import com.xiaomi_mall.vo.BackOrderListVo;
 import com.xiaomi_mall.vo.GetBackOrderListVo;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -145,10 +146,26 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         res.put("orderDetail", map1);
 
         //商品相关
+
+        List<Integer> skuIds = new ArrayList<>();
+        for (OrderDetail orderDetail : orderDetailList) {
+            skuIds.add(orderDetail.getSkuId());
+        }
+        List<Sku> skus = skuMapper.selectBatchIds(skuIds);
+
         HashMap<String, Object> map2 = new LinkedHashMap<>();
         List<HashMap<String, Object>> productList = new ArrayList<>();
         for (OrderDetail orderDetail : orderDetailList) {
             HashMap<String, Object> map = new LinkedHashMap<>();
+
+            for (Sku s : skus)
+            {
+                if(s.getSkuId() == orderDetail.getSkuId())
+                {
+                    map.put("productId", s.getProductId());
+                    break;
+                }
+            }
             map.put("productName", orderDetail.getProductName());
             map.put("skuName", orderDetail.getSkuName());
             map.put("skuImage", orderDetail.getSkuImage());
