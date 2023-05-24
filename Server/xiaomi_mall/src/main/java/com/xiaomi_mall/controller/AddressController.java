@@ -46,6 +46,14 @@ public class AddressController {
     }
 
     @PreAuthorize("hasAnyAuthority('普通用户')")
+    @ApiOperation("拥有默认地址？")
+    @GetMapping("/hasDefaultAddress")
+    public Result hasDefaultAddress(@RequestParam Long userId) {
+        return addressService.hasDefaultAddress(userId);
+    }
+
+
+    @PreAuthorize("hasAnyAuthority('普通用户')")
     @ApiOperation("修改地址接口")
     @PutMapping("/updateAddress")
     public Result updateAddress(@RequestBody Address address) {

@@ -74,12 +74,11 @@ public class SeckillServiceImpl extends ServiceImpl<SeckillMapper, Seckill> impl
         int skuId = seckill.getSkuId();
         BigDecimal seckillPrice = seckill.getSeckillPrice();
 
-        Object cacheObject = redisCache.getCacheObject("SeckillUserId:" + userId);
+        Object cacheObject = redisCache.getCacheObject("SeckillUserId:" + userId + " " + "ProductId:" + productId);
 
         String message = null;
         if (cacheObject == null) {
             logger.info("参加秒杀的用户是: {}, 秒杀的商品时: {}", user.getUserName(), product.getProductName());
-
 
             Long decrByResult = redisCache.decrBy("productId+" + productId);
             //调用redis给相应商品库存量减一
@@ -110,8 +109,8 @@ public class SeckillServiceImpl extends ServiceImpl<SeckillMapper, Seckill> impl
 //            mqOrderService.createSeckillOrder(seckillOrderDto);
                 rabbitTemplate.convertAndSend(MyRabbitMQConfig.ORDER_EXCHANGE, MyRabbitMQConfig.ORDER_ROUTING_KEY, seckillOrderDto);
                 //orderService.createSeckillOrder(seckillOrderDto);
-                redisCache.setCacheObject("SeckillUserId:"+ userId, 1);
-                redisCache.expire("SeckillUserId:"+ userId, 5000000);
+                redisCache.setCacheObject("SeckillUserId:"+ userId + " " + "ProductId:" + productId, 1);
+                redisCache.expire("SeckillUserId:"+ userId+ " " + "ProductId:" + productId, 5000000);
                 message = "恭喜，您秒杀商品" + product.getProductName() + "成功";
                 return Result.okResult(message);
             } else {

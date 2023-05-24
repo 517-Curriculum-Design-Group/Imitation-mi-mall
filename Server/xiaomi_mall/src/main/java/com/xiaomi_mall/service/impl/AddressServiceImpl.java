@@ -9,11 +9,14 @@ import com.xiaomi_mall.enity.Address;
 import com.xiaomi_mall.mapper.AddressMapper;
 import com.xiaomi_mall.service.AddressService;
 import com.xiaomi_mall.util.SecurityUtils;
+import org.apache.ibatis.ognl.IntHashMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class AddressServiceImpl extends ServiceImpl<AddressMapper, Address> implements AddressService {
@@ -65,5 +68,22 @@ public class AddressServiceImpl extends ServiceImpl<AddressMapper, Address> impl
     public Result updateAddress(Address address) {
         updateById(address);
         return Result.okResult("修改成功 ");
+    }
+
+    @Override
+    public Result hasDefaultAddress(Long userId) {
+        LambdaQueryWrapper<Address> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Address::getUserId, userId);
+        List<Address> addressList = addressMapper.selectList(wrapper);
+        Map<String, Boolean> res = new LinkedHashMap<>();
+        for (Address address : addressList) {
+            if(address.getIsDefault() == 1)
+            {
+                res.put("hasDefaultAddress", true);
+                return Result.okResult(res);
+            }
+        }
+        res.put("hasDefaultAddress", false);
+        return Result.okResult(res);
     }
 }
