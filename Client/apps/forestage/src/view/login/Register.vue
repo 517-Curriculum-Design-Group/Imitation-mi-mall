@@ -60,7 +60,7 @@ const formState = reactive({
   userName: "",
   nickName: "",
   password: "",
-  mobile: "325644848",
+  // mobile: "325644848",
   email:""
 });
 
