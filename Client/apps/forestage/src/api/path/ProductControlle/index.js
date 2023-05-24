@@ -43,6 +43,8 @@ export function getCateProductDesc(body) {
   return Post("/getCateProductDesc", body);
 }
 
+
+
 export const prodApi = {
   getProductDetail,
   getProductPrice,

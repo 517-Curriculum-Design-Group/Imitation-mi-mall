@@ -96,6 +96,17 @@ export default {
           borderFocusInfo: "1px solid #757575",
           borderDisabledInfo: "1px solid #757575",
         },
+        Tabs: {
+          tabTextColorSegment: "rgba(255, 255, 255, 1)",
+          tabTextColorActiveSegment: "rgba(255, 255, 255, 1)",
+          tabTextColorHoverSegment: "rgba(255, 255, 255, 1)",
+          tabTextColorDisabledSegment: "rgba(0, 0, 0, 1)",
+          tabColorSegment: "#FF282CFF",
+          colorSegment: "rgba(37, 37, 37, 1)",
+          tabBorderColor: "rgba(255, 0, 4, 1)",
+          tabTextColorCard: "rgba(47, 58, 70, 1)",
+          tabGapLargeSegmentVertical: "0",
+        },
       },
     };
   },
