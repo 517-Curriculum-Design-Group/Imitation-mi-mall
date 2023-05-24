@@ -71,6 +71,19 @@ export const Post = (url, data, params) => {
   });
 };
 
+export const PostForm = (url, data, params) => {
+  return new Promise((resolve) => {
+    inst
+      .postForm(url, data, { params })
+      .then((result) => {
+        resolve([null, result.data]);
+      })
+      .catch((err) => {
+        resolve([err, undefined]);
+      });
+  });
+};
+
 export const Delete = (url, data, params) => {
   return new Promise((resolve) => {
     inst

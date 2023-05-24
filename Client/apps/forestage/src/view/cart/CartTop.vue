@@ -6,18 +6,23 @@
       温馨提示：产品是否购买成功，以最终下单为准哦，请尽快结算
     </p>
     <span class="ml-auto mr-10.5rem text-gray-500 text-xs">
-      <router-link to="/login"><span>登录</span></router-link>
+      <router-link to="/user/main"
+        ><span>{{ usermsg.nickName }}</span></router-link
+      >
       <span
         class="seq border-1 border-solid border-gray-400 ml-1.5 mr-1.5"
       ></span>
-      <router-link to="/login"><span>注册</span></router-link>
+      <router-link to="/user/order"><span>订单中心</span></router-link>
     </span>
   </div>
 </template>
 
 <script setup>
 import utils from "@/utils";
+import { userStore } from "@/stores/user";
 
+const userstore = userStore();
+const usermsg = userstore.getUserInfo();
 const data = utils.isLogin() || "123";
 </script>
 
