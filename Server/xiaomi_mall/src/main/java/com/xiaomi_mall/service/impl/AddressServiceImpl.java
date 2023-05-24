@@ -51,11 +51,13 @@ public class AddressServiceImpl extends ServiceImpl<AddressMapper, Address> impl
         wrapper.eq(Address::getUserId, address.getUserId());
         //将该用户的所有地址的IsDefault先设置为零
         List<Address> addressList = addressMapper.selectList(wrapper);
-        for (Address address1: addressList)
+        for (Address a: addressList)
         {
-            address1.setIsDefault(0);
+            if(a.getAddressId() != address.getAddressId())
+                a.setIsDefault(0);
+            else
+                a.setIsDefault(SystemConstants.DEFAULT_ADDRESS);
         }
-        address.setIsDefault(SystemConstants.DEFAULT_ADDRESS);
         addressService.updateBatchById(addressList);
         return Result.okResult("设置成功");
     }
