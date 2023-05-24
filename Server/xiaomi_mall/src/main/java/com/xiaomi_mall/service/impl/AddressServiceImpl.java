@@ -1,6 +1,7 @@
 package com.xiaomi_mall.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xiaomi_mall.config.Result;
@@ -46,12 +47,16 @@ public class AddressServiceImpl extends ServiceImpl<AddressMapper, Address> impl
 
     @Override
     public Result setDefaultAddress(Address address) {
-        LambdaUpdateWrapper<Address> wrapper = new LambdaUpdateWrapper<>();
+        LambdaQueryWrapper<Address> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Address::getUserId, address.getUserId());
         //将该用户的所有地址的IsDefault先设置为零
-        wrapper.eq(Address::getUserId, address.getUserId()).set(Address::getIsDefault, SystemConstants.NOT_DEFAULT_ADDRESS);
-        addressMapper.update(null, wrapper);
-
+        List<Address> addressList = addressMapper.selectList(wrapper);
+        for (Address address1: addressList)
+        {
+            address1.setIsDefault(0);
+        }
         address.setIsDefault(SystemConstants.DEFAULT_ADDRESS);
+        addressService.updateBatchById(addressList);
         return Result.okResult("设置成功");
     }
 
@@ -71,7 +76,8 @@ public class AddressServiceImpl extends ServiceImpl<AddressMapper, Address> impl
     }
 
     @Override
-    public Result hasDefaultAddress(Long userId) {
+    public Result hasDefaultAddress() {
+        Long userId = SecurityUtils.getUserId();
         LambdaQueryWrapper<Address> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Address::getUserId, userId);
         List<Address> addressList = addressMapper.selectList(wrapper);
