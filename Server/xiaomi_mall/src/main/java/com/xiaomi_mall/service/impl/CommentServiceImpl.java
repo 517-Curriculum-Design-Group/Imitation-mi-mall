@@ -1,12 +1,14 @@
 package com.xiaomi_mall.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xiaomi_mall.config.Result;
 import com.xiaomi_mall.constants.SystemConstants;
 import com.xiaomi_mall.enity.Comment;
 import com.xiaomi_mall.enity.Product;
+import com.xiaomi_mall.enity.User;
 import com.xiaomi_mall.enums.AppHttpCodeEnum;
 import com.xiaomi_mall.exception.SystemException;
 import com.xiaomi_mall.mapper.CommentMapper;
@@ -22,6 +24,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -103,9 +106,30 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         return Result.okResult("评论成功");
     }
 
+
     private List<CommentVo> toCommentVoList(List<Comment> list) {
         List<CommentVo> commentVoList = BeanCopyUtils.copyBeanList(list, CommentVo.class);
-        //遍历vo集合
+
+        List<Long> userIdList = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            userIdList.add(list.get(i).getUserId());
+        }
+
+        if(userIdList.isEmpty())
+            return null;
+
+        List<User> userList = userService.listByIds(userIdList);
+        for (int i = 0; i < commentVoList.size(); i++) {
+            for (int j = 0; j < userList.size(); j++)
+            {
+                if(commentVoList.get(i).getUserId() == userList.get(j).getUserId())
+                {
+                    commentVoList.get(i).setUserAvatar(userList.get(j).getAvatar());
+                    break;
+                }
+            }
+        }
+
         for (CommentVo commentVo : commentVoList) {
             //通过createBy查询用户的昵称并赋值
             String nickName = userService.getById(commentVo.getUserId()).getNickName();

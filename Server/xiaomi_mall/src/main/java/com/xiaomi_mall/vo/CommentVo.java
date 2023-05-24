@@ -16,6 +16,7 @@ public class CommentVo {
     private int productId;
 
     private Long userId;
+    private String userAvatar;
 
     private List<CommentVo> children;
     //根评论id
