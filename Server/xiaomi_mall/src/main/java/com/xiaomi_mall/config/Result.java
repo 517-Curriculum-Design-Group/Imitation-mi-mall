@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.xiaomi_mall.enums.AppHttpCodeEnum;
 
 import java.io.Serializable;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Result<T> implements Serializable {
@@ -36,6 +38,16 @@ public class Result<T> implements Serializable {
         Result result = new Result();
         return result.error(code, msg);
     }
+
+    public static Result errorResult2(int code, String msg) {
+        Result result = new Result();
+        Map<String, Object> map = new LinkedHashMap<>();
+        map.put("code", code);
+        map.put("msg", msg);
+        result.data = map;
+        return result.error(code, msg);
+    }
+
     public static Result okResult() {
         Result result = new Result();
         return result;

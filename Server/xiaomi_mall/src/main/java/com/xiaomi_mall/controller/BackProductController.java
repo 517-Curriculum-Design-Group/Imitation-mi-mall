@@ -156,14 +156,22 @@ public class BackProductController {
     @ApiOperation("删除Attribute接口")
     @DeleteMapping("/deleteAttribute")
     public Result deleteAttribute(@PathVariable Integer attributeId) {
-        skuAttributeService.removeById(attributeId);
-        List<Integer> attributeValueId = new ArrayList<>();
-        for (SkuAttributeValue value: skuAttributeValueService.list()) {
-            if (value.getAttributeId() == attributeId)
-                attributeValueId.add(value.getValueId());
+        try
+        {
+            skuAttributeService.removeById(attributeId);
+            List<Integer> attributeValueId = new ArrayList<>();
+            for (SkuAttributeValue value: skuAttributeValueService.list()) {
+                if (value.getAttributeId() == attributeId)
+                    attributeValueId.add(value.getValueId());
+            }
+            skuAttributeValueService.removeByIds(attributeValueId);
+            return Result.okResult();
         }
-        skuAttributeValueService.removeByIds(attributeValueId);
-        return Result.okResult();
+        catch (Exception e)
+        {
+            return Result.errorResult2(500, e.getMessage());
+        }
+
     }
 
     @PreAuthorize("hasAnyAuthority('普通管理员', '超级管理员')")

@@ -432,14 +432,14 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         Product product = productMapper.selectById(modifyProductStatusDto.getProductId());
         //没有Sku不准上架
         if(product.getSkuList() == null || product.getSkuList().isEmpty())
-            return Result.errorResult(909, "该商品无SKU");
+            return Result.errorResult2(909, "该商品无SKU");
 
         QueryWrapper<Sku> skuQueryWrapper = new QueryWrapper<>();
         skuQueryWrapper.eq("product_id", modifyProductStatusDto.getProductId())
                 .eq("del_flag", 0);
         int skuCnt = skuService.count(skuQueryWrapper);
         if(skuCnt == 0)
-            return Result.errorResult(909, "该商品无SKU");
+            return Result.errorResult2(909, "该商品无SKU");
 
         product.setStatus(modifyProductStatusDto.getStatus());
         productMapper.updateById(product);
@@ -448,7 +448,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
             return Result.okResult("下架成功");
         else if (modifyProductStatusDto.getStatus() == 1)
             return Result.okResult("上架成功");
-        return Result.errorResult(901, "无此ID对应商品");
+        return Result.errorResult2(901, "无此ID对应商品");
     }
 
     @Override
