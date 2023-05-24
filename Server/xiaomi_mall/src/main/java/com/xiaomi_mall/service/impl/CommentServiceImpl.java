@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -76,15 +77,14 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         //查询对应文章的根评论
         LambdaQueryWrapper<Comment> queryWrapper = new LambdaQueryWrapper<>();
         //对productId进行判断
-        queryWrapper.eq(Comment::getProductId, productId);
-        //根评论rookId为-1
-        queryWrapper.eq(Comment::getParentId, SystemConstants.ROOT_ID);
+        queryWrapper.eq(Comment::getProductId, productId)
+                .eq(Comment::getParentId, SystemConstants.ROOT_ID);//根评论rookId为-1
+
         //分页查询
         Page<Comment> page = new Page<>(pageNum, pageSize);
         page(page, queryWrapper);
 
         List<CommentVo> commentVoList = toCommentVoList(page.getRecords());
-
         //查询所有根评论对应的子评论集合，并且赋值给对应的属性
         for (CommentVo commentVo : commentVoList) {
             //查询对应的子评论
@@ -102,6 +102,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         if(!StringUtils.hasText(comment.getContent())){
             throw new SystemException(AppHttpCodeEnum.CONTENT_NOT_NULL);
         }
+        comment.setCommentTime(new Date());
         save(comment);
         return Result.okResult("评论成功");
     }

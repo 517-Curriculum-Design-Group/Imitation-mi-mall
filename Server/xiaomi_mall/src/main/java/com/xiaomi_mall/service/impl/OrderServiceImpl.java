@@ -345,13 +345,16 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
 
         LambdaQueryWrapper<Sku> skuWrapper = new LambdaQueryWrapper<>();
         skuWrapper.eq(Sku::getSkuId, skuId);
-        String skuImage = skuMapper.selectOne(skuWrapper).getSkuImage();
+        Sku sku = skuMapper.selectOne(skuWrapper);
+        String skuImage = sku.getSkuImage();
+        String skuName = sku.getSkuName();
 
         //创建订单详情
         OrderDetail orderDetail = new OrderDetail();
         orderDetail.setOrderId(seckillOrderDto.getOrder().getOrderId());
         orderDetail.setProductName(productName);
         orderDetail.setSkuId(skuId);
+        orderDetail.setSkuName(skuName);
         orderDetail.setSkuImage(skuImage);
         orderDetail.setSkuPrice(seckillOrderDto.getOrder().getTotalPrice());
         orderDetail.setSkuQuantity(1);
