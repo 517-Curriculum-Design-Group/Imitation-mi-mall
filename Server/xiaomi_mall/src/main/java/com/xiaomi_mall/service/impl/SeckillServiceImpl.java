@@ -142,7 +142,11 @@ public class SeckillServiceImpl extends ServiceImpl<SeckillMapper, Seckill> impl
             LambdaQueryWrapper<Sku> queryWrapper = new LambdaQueryWrapper<>();
             queryWrapper.eq(Sku::getProductId, list.get(i).getProductId());
             List<Sku> skus = skuMapper.selectList(queryWrapper);
-            if (skus.size() > 0) {
+
+            LambdaQueryWrapper<Seckill> wrapper = new LambdaQueryWrapper<>();
+            wrapper.eq(Seckill::getProductId, list.get(i).getProductId());
+            Seckill seckill = seckillMapper.selectOne(wrapper);
+            if (skus.size() > 0 && Objects.isNull(seckill)) {
                 res.add(list.get(i));
             }
         }

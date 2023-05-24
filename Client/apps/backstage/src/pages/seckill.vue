@@ -87,9 +87,9 @@
         </div>
       </el-form-item>
 
-      <el-form-item label="产品规格:">
-        <el-radio-group v-model="newseckill.Seckill.skuId" v-for="(item,index) in skus.skulist">
-
+      <el-form-item label="产品规格:"  >
+        <el-radio-group v-model="king.skuname" v-for="(item,index) in skus.skulist" :key="index">
+          <el-radio :label="trans(item.skuName)"  @click="addskuid(index)"/>
         </el-radio-group>
       </el-form-item>
 
@@ -121,6 +121,11 @@
         />
       </el-form-item>
     </el-form>
+    <template #footer>
+      <div style="flex: auto">
+        <el-button type="primary" @click="add">提交</el-button>
+      </div>
+    </template>
   </el-drawer>
 
 <el-drawer
@@ -162,16 +167,18 @@
 </template>
 
 <script setup>
-import { getSeckillList,getSeckillProd,getSeckillSku } from "~/api/seckill";
+import { getSeckillList,getSeckillProd,getSeckillSku,addSeckill } from "~/api/seckill";
 import { ref, reactive,onMounted } from "vue";
-
+import { toast } from "~/composables/util";
 
 const tt = ref();
 const list = ref();
 const product =ref();
+const value = ref();
 const king = reactive({
     pic:"",
-    name:""
+    name:"",
+    skuname:""
 })
 const skus=reactive({
   skulist:""
@@ -190,6 +197,12 @@ const newseckill = reactive({
   },
 });
 
+
+
+const addskuid=(i)=>{
+   newseckill.Seckill.skuId = skus.skulist[i].skuId
+}
+
 const times = reactive({
   starttime : Date.parse(new Date(newseckill.Seckill.startTime).toString()),
   endtime : Date.parse(new Date(newseckill.Seckill.endTime).toString())
@@ -206,8 +219,8 @@ const banner1=(time)=>{
        maxtime = Date.now() + 24 * 60 * 60 * 1000 * 7
     }
     
-    console.log(mintime,maxtime)
-    console.log(times.starttime)
+    // console.log(mintime,maxtime)
+    // console.log(times.starttime)
     return time.getTime()<mintime || time.getTime()>maxtime
 }
 
@@ -221,8 +234,8 @@ const bannner2=(time)=>{
     else{
        mintime = Date.now() - 24 * 60 * 60 * 1000 * 1
       }
-    console.log(mintime,maxtime)
-    console.log(times.starttime)
+    // console.log(mintime,maxtime)
+    // console.log(times.starttime)
     return time.getTime()<mintime || time.getTime()>maxtime
 }
 
@@ -232,6 +245,18 @@ const getData=()=>{
   getSeckillList().then((r) => {
   list.value = r;
 });
+}
+
+const add=()=>{
+  console.log(newseckill.Seckill)
+  addSeckill(newseckill.Seckill)
+  .then((r)=>{
+    toast(r)
+  }).finally(()=>{
+    newseckill.isShow = false
+    getData()
+  }
+)
 }
 
 const choose=(id,pic,name)=>{

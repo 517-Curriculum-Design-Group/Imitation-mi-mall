@@ -40,7 +40,6 @@ const mySkuname = (skuName) => {
 }
 
 function dateFormat(daterc) {
-
     if (daterc) {
         if (daterc.indexOf('T') === -1) return daterc
         const arr = daterc.split('T')

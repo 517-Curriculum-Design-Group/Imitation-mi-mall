@@ -16,7 +16,7 @@ export const userStore = defineStore("user", {
       return this.userInfo;
     },
     setUserInfo(user) {
-      this.userInfo = user;
+      Object.assign(this.userInfo, user);
     },
     deleteUserInfo() {
       this.userInfo = null;

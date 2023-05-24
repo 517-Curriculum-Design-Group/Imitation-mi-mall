@@ -1,4 +1,4 @@
-import { Get, Post, Delete,Put } from "../../server";
+import { Get, Post, Delete,Put,PostForm } from "../../server";
 
 export function postLogin(userobj) {
   return Post("/user/login", userobj);
@@ -37,7 +37,7 @@ export function getLike(){
 }
 
 export function uploadAvatar(url){
-  return Post("/upload", url);
+  return PostForm("/upload", url);
 } 
 
 export function updatePassword(psw){

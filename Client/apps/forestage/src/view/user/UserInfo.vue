@@ -17,9 +17,11 @@ let user = reactive({
 });
 
 let copy = reactive({});
+let userAvatar = ref(null);
 onMounted(async () => {
   const [e, r] = await api.getPersonInfo();
   Object.assign(user, r.data);
+  userAvatar.value = user.avatar;
   Object.assign(copy, user);
   console.log(copy);
 });
@@ -32,7 +34,6 @@ async function changeInfo() {
     Userstore.setUserInfo(user);
     notify("success");
     isEdit.value = false;
-    // window.location.reload();
   } else notify("error");
 }
 
@@ -46,8 +47,12 @@ async function beforeUpload(data) {
   if (data.file.file?.type !== "image/png") {
     notify("error");
   } else {
-    const [e, r] = await api.uploadAvatar(data.file.file);
-    if (r.code === 200) notify("success");
+    const [e, r] = await api.uploadAvatar(data.file);
+    if (r.code === 200) {
+      user.avatar = r.data;
+      Userstore.setUserInfo({ avater: user.avatar });
+      notify("success");
+    }
   }
 }
 
@@ -75,36 +80,11 @@ function notify(type) {
     <h1 class="w-[882px] h-[68px] text-gray-500">个人信息</h1>
 
     <n-form
+      v-if="isEdit"
       :mdoel="user"
       class="flex flex-col w-[600px] gap-4 justify-center items-center h-auto m-auto"
       label-align="right"
-      v-if="isEdit"
     >
-      <n-form-item
-        class="w-[500px] h-[50px]"
-        path="avatar"
-        label="头像"
-        label-placement="left"
-        label-align="right"
-        style="
-          --n-color-hover: var(--button-background-color);
-          --n-border-hover: 1px solid var(--button-background-color);
-          --n-boreder-focus: 1px solid var(--button-background-color);
-          --n-ripple-color: var(--button-background-color);
-          --n-caret-color: var(--button-background-color);
-        "
-      >
-        <n-upload @before-upload="beforeUpload">
-          <n-button
-            style="
-              --n-text-color-hover: var(--button-background-color);
-              --n-text-color-focus: var(--button-background-color);
-            "
-            >上传 PNG 文件</n-button
-          >
-        </n-upload>
-      </n-form-item>
-
       <n-form-item
         class="w-[500px] h-[50px] mt-8"
         path="nickName"
@@ -242,16 +222,21 @@ function notify(type) {
     </n-form>
 
     <div
+      v-if="!isEdit"
       class="flex flex-col justify-center items-center w-[600px] h-auto m-auto"
-      v-else
     >
-      <n-avatar
-        round
-        class="h-250px w-250px"
-        size="small"
-        :src="user.avatar ? user.avatar : 'empty.png'"
-        fallback-src="https://www.gstatic.com/android/keyboard/emojikitchen/20201001/u1f924/u1f924_u1f42d.png"
-      />
+      <n-upload
+        class="flex justify-center"
+        :show-file-list="false"
+        @before-upload="beforeUpload"
+      >
+        <n-avatar
+          round
+          class="h-250px w-250px"
+          size="small"
+          :src="user.avatar ? user.avatar : 'empty.png'"
+          fallback-src="https://www.gstatic.com/android/keyboard/emojikitchen/20201001/u1f924/u1f924_u1f42d.png"
+      /></n-upload>
       <span class="w-[500px] h-[70px] text-lg">用户ID:{{ user.userId }}</span>
       <span class="w-[500px] h-[70px] text-lg">昵称:{{ user.nickName }}</span>
       <span class="w-[500px] h-[70px] text-lg"

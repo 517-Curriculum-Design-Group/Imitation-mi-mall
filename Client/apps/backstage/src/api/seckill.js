@@ -11,3 +11,7 @@ export function getSeckillProd() {
 export function getSeckillSku(productId) {
     return axios.get(`/getSeckillSku/${productId}`)
 }
+
+export function addSeckill(seckill){
+    return axios.post('/addSeckill',seckill)
+}
