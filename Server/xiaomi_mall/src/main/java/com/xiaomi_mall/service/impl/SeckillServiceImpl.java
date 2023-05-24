@@ -11,6 +11,7 @@ import com.xiaomi_mall.mapper.ProductMapper;
 import com.xiaomi_mall.mapper.SeckillMapper;
 import com.xiaomi_mall.mapper.SkuMapper;
 import com.xiaomi_mall.mapper.UserMapper;
+import com.xiaomi_mall.mq.MQOrderService;
 import com.xiaomi_mall.service.AddressService;
 import com.xiaomi_mall.service.ProductService;
 import com.xiaomi_mall.service.SeckillService;
@@ -49,8 +50,11 @@ public class SeckillServiceImpl extends ServiceImpl<SeckillMapper, Seckill> impl
     private RabbitTemplate rabbitTemplate;
     @Autowired
     private AddressService addressService;
+    @Autowired
+    private MQOrderService mqOrderService;
 
     private static final Logger logger = LoggerFactory.getLogger(SeckillServiceImpl.class);
+
     @Override
     public Result seckill(Integer productId) {
         Long userId = SecurityUtils.getUserId();
@@ -64,13 +68,13 @@ public class SeckillServiceImpl extends ServiceImpl<SeckillMapper, Seckill> impl
         Product product = productMapper.selectOne(wrapper);
         Seckill seckill = seckillMapper.selectOne(seckillWrapper);
 
-        int skuId = seckill.getSeckillId();
+        int skuId = seckill.getSkuId();
         BigDecimal seckillPrice = seckill.getSeckillPrice();
 
         logger.info("参加秒杀的用户是: {}, 秒杀的商品时: {}", user.getUserName(), product.getProductName());
 
         String message = null;
-        Long decrByResult = redisCache.decrBy(productId+"");
+        Long decrByResult = redisCache.decrBy("productId+" + productId);
         //调用redis给相应商品库存量减一
         if (decrByResult >= 0) {
             /**
@@ -94,15 +98,16 @@ public class SeckillServiceImpl extends ServiceImpl<SeckillMapper, Seckill> impl
             seckillOrderDto.setProductName(product.getProductName());
             seckillOrderDto.setOrder(order);
             seckillOrderDto.setSkuId(skuId);
-
+//            MQOrderService mqOrderService = new MQOrderService();
+//            mqOrderService.createSeckillOrder(seckillOrderDto);
             rabbitTemplate.convertAndSend(MyRabbitMQConfig.ORDER_EXCHANGE, MyRabbitMQConfig.ORDER_ROUTING_KEY, seckillOrderDto);
-            message = "秒杀商品" + productId + "成功";
+            message = "恭喜，您秒杀商品" + product.getProductName() + "成功";
         } else {
             /**
              * 说明该商品的库存量没有剩余，直接返回秒杀失败的消息给用户
              */
-           // logger.info("用户：{}秒杀时商品的库存量没有剩余,秒杀结束", userName);
-            message = "商品"+ productId +"的库存量没有剩余,秒杀结束";
+            // logger.info("用户：{}秒杀时商品的库存量没有剩余,秒杀结束", userName);
+            message = "商品" + product.getProductName() + "的库存量没有剩余,秒杀结束";
         }
 
         return Result.okResult(message);
@@ -114,20 +119,20 @@ public class SeckillServiceImpl extends ServiceImpl<SeckillMapper, Seckill> impl
         LambdaQueryWrapper<Seckill> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(Seckill::getProductId, productId);
         int store = seckillMapper.selectOne(queryWrapper).getStockCount();
-        if(store >= 1) {
+        if (store >= 1) {
             seckillMapper.decraystore(productId);
         }
     }
 
     @Override
     public Result addSeckill(Seckill seckill) {
-        LambdaQueryWrapper<Seckill> queryWrapper  = new LambdaQueryWrapper<>();
+        LambdaQueryWrapper<Seckill> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(Seckill::getProductId, seckill.getProductId());
         Seckill seckill1 = seckillMapper.selectOne(queryWrapper);
 
         if (Objects.isNull(seckill1)) {
             save(seckill);
-            redisCache.setCacheObject("productId+" + seckill.getProductId(),seckill.getStockCount());
+            redisCache.setCacheObject("productId+" + seckill.getProductId(), seckill.getStockCount());
             return Result.okResult("添加秒杀商品成功");
         } else {
             return Result.errorResult(601, "秒杀商品已经存在，不能添加");

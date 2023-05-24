@@ -9,9 +9,15 @@ import com.xiaomi_mall.dto.GenerateOrderDto;
 import com.xiaomi_mall.dto.ModifyAddressInOrderDto;
 import com.xiaomi_mall.dto.OrderCommit;
 import com.xiaomi_mall.dto.SeckillOrderDto;
-import com.xiaomi_mall.enity.*;
+import com.xiaomi_mall.enity.Address;
+import com.xiaomi_mall.enity.Order;
+import com.xiaomi_mall.enity.OrderDetail;
+import com.xiaomi_mall.enity.Sku;
 import com.xiaomi_mall.mapper.*;
-import com.xiaomi_mall.service.*;
+import com.xiaomi_mall.service.OrderDetailService;
+import com.xiaomi_mall.service.OrderService;
+import com.xiaomi_mall.service.SkuService;
+import com.xiaomi_mall.service.UserService;
 import com.xiaomi_mall.util.BeanCopyUtils;
 import com.xiaomi_mall.util.JwtUtil;
 import com.xiaomi_mall.vo.BackOrderListVo;
@@ -20,7 +26,6 @@ import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
@@ -329,7 +334,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         return Result.okResult("选中的已支付订单已通知发货！");
     }
 
-    @Transactional(rollbackFor = Exception.class)
+//    @Transactional(rollbackFor = Exception.class)
     @Override
     public void createSeckillOrder(SeckillOrderDto seckillOrderDto) {
         int skuId = seckillOrderDto.getSkuId();
