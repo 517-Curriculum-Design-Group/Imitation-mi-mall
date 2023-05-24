@@ -207,8 +207,6 @@
             :disabled="skuButtonDis"
             >确认</el-button
           >
-          {{ skuButtonDis }}
-          {{ tableData }}
         </div>
       </div>
     </el-drawer>
