@@ -25,7 +25,12 @@ const logout = async () => {
 
 <template>
   <div class="containers">
-    <n-button quaternary type="info" class="w-130px">
+    <n-button
+      quaternary
+      type="info"
+      class="w-130px"
+      @click="$router.push('/seckill')"
+    >
       <SvgVue class="h-20px w-20px mr-5px" />
       去秒杀
     </n-button>
