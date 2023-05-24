@@ -132,6 +132,15 @@ import { ref, reactive, onMounted, computed } from "vue";
 import { api } from "@/api";
 import utils from "@/utils";
 import { useNotification } from "naive-ui";
+import { userStore } from "@/stores/user";
+import { useRouter } from "vue-router";
+import { useMessage, useDialog } from 'naive-ui'
+
+const userstore = userStore();
+const router = useRouter();
+const dialog = useDialog()
+
+const usermsg = userstore.getUserInfo();
 
 
 const notification = useNotification();
@@ -175,16 +184,78 @@ const trans = (str) => {
 
 
 const rushsuccess=async(productId)=>{
+  if(!usermsg.userId){
+    dialog.warning({
+          title: '警告',
+          content: '当前未登录，是否前往登录页',
+          positiveText: '前往',
+          negativeText: '取消',
+          onPositiveClick: () => {
+              router.push("/login")
+          },
+          onNegativeClick: () => {
+
+          }
+        })
+        return ;
+  }
+
+  const [e1, r1] = await api.hasDefaultAddress(usermsg.userId);
+  if (r1 && !e1){
+    console.log(r1.data.hasDefaultAddress)
+    if(!r1.data.hasDefaultAddress){
+      dialog.warning({
+          title: '警告',
+          content: '当前未设置默认地址，是否前往收获地址进行设置',
+          positiveText: '前往',
+          negativeText: '取消',
+          onPositiveClick: () => {
+              router.push("/user/address")
+          },
+          onNegativeClick: () => {
+
+          }
+        })
+        return ;
+    }
+  } 
+
+  if(!usermsg){
+    dialog.warning({
+          title: '警告',
+          content: '当前未登录，是否前往登录页',
+          positiveText: '前往',
+          negativeText: '取消',
+          onPositiveClick: () => {
+              router.push("/login")
+          },
+          onNegativeClick: () => {
+
+          }
+        })
+  }
+
   const [e, r] = await api.seckill({productId});
   if (r && !e) {
     console.log(r )
-    notification["error"]({
+    if(r.code == 200){
+          notification["success"]({
       content:r.data,
       duration: 2500,
       keepAliveOnHover: true,
     });
   }
-}
+  else{
+      notification["error"]({
+      content:r.msg,
+      duration: 2500,
+      keepAliveOnHover: true,
+    });
+    }
+    }
+    getData()
+  }
+  
 
 onMounted(() => {
   getData();
