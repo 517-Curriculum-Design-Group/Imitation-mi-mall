@@ -63,7 +63,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     public Result getBackOrderList(Integer pageNum, Integer pageSize, Integer status) {
         LambdaQueryWrapper<Order> queryWrapper = new LambdaQueryWrapper<>();
         List<Order> filterList;
-
+        queryWrapper.orderByDesc(Order::getOrderTime);
         if(status != -1)
         {
             queryWrapper.eq(Order::getStatus, status);

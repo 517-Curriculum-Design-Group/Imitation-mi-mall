@@ -119,6 +119,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     public Result getProductList(Integer pageNum, Integer pageSize, String productName) {
         //构造器
         LambdaQueryWrapper<Product> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.orderByDesc(Product::getCreateTime);
         //判断前端是否传入productName字段
         queryWrapper.like(Objects.nonNull(productName), Product::getProductName, productName);
         //分页
@@ -245,7 +246,6 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         double leastPrice = Double.MAX_VALUE;
         for(ModifySkuDetail modifySkuDetail : modifySkuDetailDto.getSkuDetailList())
         {
-            //BigDecimal price = new BigDecimal(modifySkuDetail.skuPrice);
             leastPrice = Math.min(leastPrice, modifySkuDetail.skuPrice);
         }
         if(leastPrice != 0)
@@ -454,13 +454,25 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     @Override
     public Result addProductStock(AddProductStockDto addProductStockDto)
     {
+
+
         int skuId = addProductStockDto.getSkuId();
         double price = addProductStockDto.getPrice();
         int stock = addProductStockDto.getStock();
+
         Sku sku = skuService.getById(skuId);
         sku.setSkuPrice(new BigDecimal(price));
         sku.setSkuStock(stock);
         skuService.updateById(sku);
+
+        int productId = sku.getProductId();
+        Product product = productMapper.selectById(productId);
+        String leastPriceStr = product.getLeastPrice();
+        String[] strs = leastPriceStr.split("元起");
+        Double oldPrice = Double.valueOf(strs[0]);
+        if(oldPrice > price)
+            productMapper.modifyLeastPrice(productId, price + "元起");
+
         return Result.okResult("补货成功");
     }
 
