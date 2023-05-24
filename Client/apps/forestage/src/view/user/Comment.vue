@@ -1,10 +1,21 @@
 <script setup>
-import { api } from "@/api"
-import { onMounted } from "vue";
+import { ref, onMounted, onBeforeMount, reactive } from 'vue'
+import { api } from "@/api";
+import { useRouter } from 'vue-router';
+import { useDetailStore } from '@/stores/detail.js'
+import { userStore } from "@/stores/user.js";
+import { message } from 'ant-design-vue';
 
+const store = useDetailStore()
+
+let list = []
+let product = []
 onMounted(async()=>{
-    const [e,r] = await api.getComment(2,1,2)
-    console.log(r.data)
+    list = await store.getMostProduct()
+    // for(let i = 0; i < list.length; i++){
+    //     product.push(list[i].productDetail) 
+    // }
+    console.log(product)
 })
 const comments=[]
 </script>

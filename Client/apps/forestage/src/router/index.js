@@ -74,6 +74,11 @@ const routes = [
             component: async () => await import("@/view/user/Comment.vue"),
           },
           {
+            path: "realseComment",
+            name: "RealseComment",
+            component: async () => await import("@/view/user/RealseComment.vue"),
+          },
+          {
             path: "main",
             name: "Main",
             component: async () => await import("@/view/user/UserMain.vue"),
