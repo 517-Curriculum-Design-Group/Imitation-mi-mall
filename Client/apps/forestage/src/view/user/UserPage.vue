@@ -52,6 +52,7 @@ const menu = [
     }
 ]
 
+let currentTab = ref(0)
 </script>
 
 <template>
@@ -61,7 +62,7 @@ const menu = [
                 <ul tabindex="1" class="text-xl ml-5 leading-15" v-for="(items, index) in menu" :key="index">
                     {{ items.label }}
                    <li tabindex="1" class="text-lg pb-3 cursor-pointer hover:text-gray-700"
-                        v-for="item in menu[index].children" :key="item">
+                        v-for="(item, num) in menu[index].children" :key="num" :class="{ active: currentTab === num }">
                         <router-link :to="'/user/' + item.name">{{ item.label }}</router-link>
                     </li>
                 </ul>
@@ -83,6 +84,10 @@ li {
     }
 
     &:focus {
+        color: var(--button-background-color);
+    }
+
+    &:active{
         color: var(--button-background-color);
     }
 
