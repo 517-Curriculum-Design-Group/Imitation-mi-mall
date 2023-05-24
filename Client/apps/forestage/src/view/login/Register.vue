@@ -60,8 +60,8 @@ const formState = reactive({
   userName: "",
   nickName: "",
   password: "",
-  // mobile: "325644848",
-  email:""
+  // mobile: "",
+  email:"",
 });
 
 const Verify = ref(false)

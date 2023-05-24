@@ -37,7 +37,7 @@ if (!e && r) {
           class="emptyTitle absolute my-auto text-[22px]"
           v-if="item.categoryNames.length !== 0 ? false : true"
           size="huge"
-          description="奔商城不卖这商品"
+          description="该商城不卖这商品"
         >
         <template #icon>
           <div>
