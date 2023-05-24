@@ -122,22 +122,42 @@ onMounted(() => {
                 </n-card>
               </template>
               <n-empty
-                class="absolute top-[50%] left-[50%] z-0"
+                class="absolute top-[50%] left-[50%] z-0 text-[22px]"
                 :class="{
                   'op-0': obj.products.length !== 0 ? true : false,
                 }"
-                description="你什么也找不到"
+                size="huge"
+                description="奔商城不卖这商品"
               >
+                <template #icon>
+                  <div>
+                    <img
+                      class="w-65px aspect-square"
+                      src="https://www.gstatic.com/android/keyboard/emojikitchen/20201001/u1f635/u1f635_u1f607.png"
+                      alt="找不到呀找不到!!!"
+                    />
+                  </div>
+                </template>
               </n-empty>
             </n-tab-pane>
           </n-tabs>
           <n-empty
-            class="absolute top-[50%] left-[50%] z-0"
+            class="absolute top-[50%] left-[50%] z-0 text-[22px]"
             :class="{
               'op-0': itemss.eachCategoryProduct.length !== 0 ? true : false,
             }"
-            description="你什么也找不到"
+            size="huge"
+                description="奔商城不卖这商品"
           >
+          <template #icon>
+            <div>
+              <img
+                class="w-65px aspect-square"
+                src="https://www.gstatic.com/android/keyboard/emojikitchen/20201001/u1f635/u1f635_u1f607.png"
+                alt="找不到呀找不到!!!"
+              />
+            </div>
+          </template>
           </n-empty>
         </div>
       </template>

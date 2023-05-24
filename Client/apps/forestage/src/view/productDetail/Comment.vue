@@ -7,7 +7,6 @@ import { userStore } from "@/stores/user.js";
 
 const Userstore = userStore();
 const route = useRoute();
-const productId = parseInt(route.params.id)
 
 let allComment = reactive({})
 let comments = ref([])
@@ -55,16 +54,17 @@ let isShow = ref(false)
 </script>
 
 <template>
-    <ProductHead class="fixed"></ProductHead>
+  <ProductHead class="fixed"></ProductHead>
 
     <div class="w-full h-100vh flex justify-center" style="background-color:#f5f5f5;">
         <article class="flex flex-col w-[1226px] h-full ">
             <div class="bg-light-50 w-full h-[150px] mt-10 p-8">
                 <h2 class="text-gray-400">商品评价</h2>
                 <span class="flex justify-around">
-                    <n-button class="text-light-50 bg-gray-400 w-[160px] h-[40px]" attr-type="button"
-                        style="--n-color-hover:var(--button-background-color);--n-border-hover:var(--button-background-color);--n-text-color-hover:white;--n-boreder-focus:var(--button-background-color);--n-ripple-color:var(--button-background-color);--n-color-focus:var(--button-background-color);--n-text-color-focus:white;ba"
-                        v-for="(btn, num) in menu" :key="num" :class="{ active: currentTab === num }">
+                    <n-button
+v-for="(btn, num) in menu" :key="num"
+                        class="text-light-50 bg-gray-400 w-[160px] h-[40px]"
+                        attr-type="button" style="--n-color-hover:var(--button-background-color);--n-border-hover:var(--button-background-color);--n-text-color-hover:white;--n-boreder-focus:var(--button-background-color);--n-ripple-color:var(--button-background-color);--n-color-focus:var(--button-background-color);--n-text-color-focus:white;ba" :class="{ active: currentTab === num }">
                         {{ btn }}
                     </n-button>
                 </span>
