@@ -48,7 +48,6 @@
         width="200"
       >
         <template #default="scope">
-          {{ scope.row.status }}
           <el-switch
             v-model="scope.row.status"
             active-text="上架"
@@ -114,7 +113,7 @@
       title="规格详情"
       class="overflow-y-hidden"
       size="45%"
-      destroy-on-close
+      destroy-on-close="true"
       :direction="direction"
       :before-close="handleClose"
       :close-on-click-modal="false"
@@ -216,8 +215,9 @@
     v-model="newProduct.isShow"
     title="新增商品"
     direction="ltr"
-    destroy-on-close
+    destroy-on-close="true"
     :close-on-click-modal="false"
+    :before-close="closeNewPro"
   >
     <el-form
       label-width="100px"
@@ -256,7 +256,7 @@
     v-model="productDetail.isShow"
     size="45%"
     title="商品详情"
-    destroy-on-close
+    destroy-on-close="true"
     :close-on-click-modal="false"
   >
     <el-table :data="productDetail.data" style="width: 100%">
@@ -480,7 +480,9 @@ function clickSubmit() {
   }
   tableData.value.forEach((item) => {
     let obj = {
-      skuValues: [item.skuValues],
+      skuValues: Array.isArray(item.skuValues)
+        ? item.skuValues
+        : [item.skuValues],
       skuPrice: item.skuPrice,
       skuStock: item.skuStock,
     };
@@ -512,6 +514,8 @@ function clickNewPro() {
     })
     .finally(() => {
       newProduct.isShow = false;
+      getData();
+      closeNewPro();
     });
 }
 
@@ -563,15 +567,23 @@ function handleDelete(o) {
   let obj = {
     productId: o.productId,
   };
-  deleteSingleProduct(obj).then((r) => {
-    console.log(r);
-    ElNotification({
-      title: "成功",
-      message: r || "删除成功",
-      type: "success",
+  deleteSingleProduct(obj)
+    .then((r) => {
+      console.log(r);
+      ElNotification({
+        title: "成功",
+        message: r || "删除成功",
+        type: "success",
+      });
+    })
+    .finally(() => {
+      getData();
     });
-  });
-  getData();
+}
+
+function closeNewPro() {
+  newProduct.form = {};
+  newProduct.isShow = false;
 }
 
 function clearData() {
