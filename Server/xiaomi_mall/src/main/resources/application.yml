@@ -28,12 +28,15 @@ spring:
     #保证交换机能把消息推送到队列中
     publisher-returns: true
     virtual-host: /xiaomi
-    #这个配置是保证消费者会消费消息，手动确认
     listener:
-      simple:
-        acknowledge-mode: manual
-    template:
-      mandatory: true
+      direct:
+        acknowledge-mode: auto
+  #    #这个配置是保证消费者会消费消息，手动确认
+#    listener:
+#      simple:
+#        acknowledge-mode: manual
+#    template:
+#      mandatory: true
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
