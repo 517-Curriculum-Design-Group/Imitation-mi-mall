@@ -113,18 +113,19 @@ public class SeckillServiceImpl extends ServiceImpl<SeckillMapper, Seckill> impl
                 redisCache.setCacheObject("SeckillUserId:"+ userId, 1);
                 redisCache.expire("SeckillUserId:"+ userId, 5000000);
                 message = "恭喜，您秒杀商品" + product.getProductName() + "成功";
+                return Result.okResult(message);
             } else {
                 /**
                  * 说明该商品的库存量没有剩余，直接返回秒杀失败的消息给用户
                  */
                 // logger.info("用户：{}秒杀时商品的库存量没有剩余,秒杀结束", userName);
                 message = "商品" + product.getProductName() + "的库存量没有剩余,秒杀结束";
+                return Result.errorResult(922, message);
             }
 
-            return Result.okResult(message);
         } else {
             message = "您已经参与秒杀过" + product.getProductName() + "商品了，不能继续参加秒杀";
-            return Result.okResult(message);
+            return Result.errorResult(923, message);
         }
 
     }
