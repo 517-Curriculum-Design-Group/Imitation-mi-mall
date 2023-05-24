@@ -16,7 +16,7 @@ public interface AddressService extends IService<Address> {
 
     Result updateAddress(Address address);
 
-    Result hasDefaultAddress(Long userId);
+    Result hasDefaultAddress();
 }
 
 

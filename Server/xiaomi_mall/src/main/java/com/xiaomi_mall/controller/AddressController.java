@@ -48,8 +48,8 @@ public class AddressController {
     @PreAuthorize("hasAnyAuthority('普通用户')")
     @ApiOperation("拥有默认地址？")
     @GetMapping("/hasDefaultAddress")
-    public Result hasDefaultAddress(@RequestParam Long userId) {
-        return addressService.hasDefaultAddress(userId);
+    public Result hasDefaultAddress() {
+        return addressService.hasDefaultAddress();
     }
 
 
