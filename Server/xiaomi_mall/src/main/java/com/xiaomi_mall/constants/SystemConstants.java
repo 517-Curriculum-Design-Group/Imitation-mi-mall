@@ -16,7 +16,10 @@ public class SystemConstants {
      *  用户昵称不重复
      */
     public static final int NICKNAME_NOT_EXIT = 0;
-
+    /**
+     *  邮箱不重复
+     */
+    public static final int EMAIL_NOT_EXIT = 0;
     /**
      * 分类的状态正常
      */
