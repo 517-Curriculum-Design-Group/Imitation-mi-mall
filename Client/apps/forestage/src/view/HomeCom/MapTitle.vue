@@ -29,14 +29,26 @@ if (!e && r) {
           class="w-[265] h-[76px] hover:text-orange-500"
           v-for="i in item.categoryNames"
           :key="i.category_id"
+          @click="$router.push(`/shop/${i.category_name}`)"
         >
           {{ i.category_name }}
         </div>
         <n-empty
-          class="emptyTitle absolute my-auto"
+          class="emptyTitle absolute my-auto text-[22px]"
           v-if="item.categoryNames.length !== 0 ? false : true"
-          description="你什么也找不到"
+          size="huge"
+          description="奔商城不卖这商品"
         >
+        <template #icon>
+          <div>
+            <img
+              class="w-65px aspect-square"
+              src="https://www.gstatic.com/android/keyboard/emojikitchen/20201001/u1f635/u1f635_u1f607.png"
+              alt="找不到呀找不到!!!"
+            />
+          </div>
+        </template>
+        
         </n-empty>
       </div>
     </nav>
