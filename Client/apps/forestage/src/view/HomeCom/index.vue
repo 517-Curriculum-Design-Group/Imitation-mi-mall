@@ -127,7 +127,7 @@ onMounted(() => {
                   'op-0': obj.products.length !== 0 ? true : false,
                 }"
                 size="huge"
-                description="奔商城不卖这商品"
+                description="该商城不卖这商品"
               >
                 <template #icon>
                   <div>
@@ -147,7 +147,7 @@ onMounted(() => {
               'op-0': itemss.eachCategoryProduct.length !== 0 ? true : false,
             }"
             size="huge"
-                description="奔商城不卖这商品"
+                description="该商城不卖这商品"
           >
           <template #icon>
             <div>

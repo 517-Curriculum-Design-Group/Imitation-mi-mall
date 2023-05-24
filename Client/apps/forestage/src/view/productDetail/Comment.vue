@@ -1,7 +1,7 @@
 <script setup>
 import { api } from "@/api";
 import ProductHead from "./ProductHead.vue";
-import {  onMounted, reactive, ref,nextTick } from "vue";
+import { onMounted, reactive, ref, nextTick } from "vue";
 import { useRoute } from 'vue-router';
 import { userStore } from "@/stores/user.js";
 import { message } from 'ant-design-vue';
@@ -37,7 +37,7 @@ async function init() {
         comments.value.forEach(items => {
             if (items.rate === "差评") bad.value.push(items)
         })
-        
+
     }
 }
 
@@ -89,17 +89,17 @@ async function commitComment() {
     console.log(currentComment)
     const [e, r] = await api.addComment(currentComment)
     console.log(r)
-    if (r.code === 200){
-        nextTick(()=> {
+    if (r.code === 200) {
+        nextTick(() => {
             init()
         })
         message.success('评论成功');
         isShow.value = false
     }
-    else{
+    else {
         message.error('评论失败，请检查网络')
         isShow.value = false
-    }   
+    }
 }
 
 function howLong(num) {
@@ -121,13 +121,15 @@ function selectList(index) {
     <ProductHead class="fixed" :product-name="productName"></ProductHead>
 
     <div class="w-full h-100vh flex justify-center" style="background-color:#f5f5f5;">
+
         <article class="flex flex-col w-[1226px] h-full ">
             <div class="bg-light-50 w-full h-[150px] mt-10 p-8">
                 <h2 class="text-gray-400">商品评价</h2>
                 <span class="flex justify-around">
                     <n-button class="w-[160px] h-[40px]" attr-type="button"
                         style="--n-color-hover:var(--button-background-color);--n-border-hover:var(--button-background-color);--n-text-color-hover:white;--n-boreder-focus:var(--button-background-color);--n-ripple-color:var(--button-background-color);--n-color-focus:var(--button-background-color);--n-text-color-focus:white;ba"
-                        v-for="(btn, num) in menu" :key="num" :class="{ active: currentTab === num }" @click="selectList(num)">
+                        v-for="(btn, num) in menu" :key="num" :class="{ active: currentTab === num }"
+                        @click="selectList(num)">
                         {{ btn }}{{ "(" + howLong(num) + ")" }}
                     </n-button>
                 </span>
@@ -198,6 +200,9 @@ function selectList(index) {
                 </a-modal>
             </div>
         </article>
+
+
+
     </div>
 </template>
 
