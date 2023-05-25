@@ -3,7 +3,9 @@ import utils from "@/utils";
 import { userStore } from "@/stores/user.js";
 import { postLogout } from "@/api/path/UserController/index.js";
 import SvgVue from "@/components/TwemojiFaceSavoringFood.vue";
+import { useRouter } from 'vue-router';
 
+const router = useRouter()
 const Userstore = userStore();
 // const goods = reactive([{ name: "1", price: 100, count: 1 }, { name: "2", price: 500, count: 2 }])
 const goods = [];
@@ -16,10 +18,13 @@ const totalprice = goods.reduce((pre, now) => {
 
 //登出接口
 const logout = async () => {
-  const isLogout = await postLogout(userid);
+  const [e,r] = await postLogout(userid);
   Userstore.userInfo.userId = null;
   utils.clearSession();
-  if (isLogout) window.location.reload();
+  if (r.code === 200) {
+    window.location.reload();
+    router.push("/")
+  }
 };
 </script>
 

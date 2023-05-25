@@ -19,7 +19,10 @@ onMounted(async () => {
     <article class="flex flex-col">
         <div class="flex justify-between">
             <div class="flex">
-                <img :src="person.avatar" class="w-[150px] h-[150px] mr-8" style="border-radius:50%;overflow: hidden;"/>
+                <n-avatar round class="h-150px w-150px mr-8 cursor-pointer" size="small"
+                    :src="person.avatar ? person.avatar : 'empty.png'"
+                    fallback-src="https://www.gstatic.com/android/keyboard/emojikitchen/20201001/u1f924/u1f924_u1f42d.png" />
+                <!-- <img :src="person.avatar" class="w-[150px] h-[150px] mr-8" style="border-radius:50%;overflow: hidden;" /> -->
                 <div class="flex flex-col">
                     <span class="text-4xl">{{ person.userId }}</span>
                     <span class="text-gray-400">你好~</span>
@@ -29,8 +32,8 @@ onMounted(async () => {
             </div>
             <div class="flex flex-col">
                 <span class="w-[358px] h-[33px]">账户安全：<span class="text-yellow-500">普通</span></span>
-                <span class="w-[358px] h-[33px]">绑定手机：{{ user.phonenumber || "未填写" }}</span>
-                <span class="w-[358px] h-[33px]">绑定邮箱：{{ user.email || "未填写" }}</span>
+                <span class="w-[358px] h-[33px]">绑定手机：{{ person.mobile || "未填写" }}</span>
+                <span class="w-[358px] h-[33px]">绑定邮箱：{{ person.email || "未填写" }}</span>
             </div>
         </div>
         <n-divider />

@@ -350,6 +350,9 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         LambdaQueryWrapper<Sku> skuWrapper = new LambdaQueryWrapper<>();
         skuWrapper.eq(Sku::getSkuId, skuId);
         Sku sku = skuMapper.selectOne(skuWrapper);
+        if(sku == null)
+            return;
+
         String skuImage = sku.getSkuImage();
         String skuName = sku.getSkuName();
 

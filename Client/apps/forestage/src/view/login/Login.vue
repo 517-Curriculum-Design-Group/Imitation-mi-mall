@@ -8,7 +8,7 @@
   >
     <a-form-item
       name="username"
-      :rules="[{ required: true, message: '请输入账号' }]"
+      :rules="[{ required: false, message: '请输入账号' }]"
     >
       <div class="input-wrapper">
         <a-input
@@ -23,7 +23,7 @@
 
     <a-form-item
       name="password"
-      :rules="[{ required: true, message: '请登录输入密码' }]"
+      :rules="[{ required: false, message: '请登录输入密码' }]"
     >
       <div class="input-wrapper">
         <a-input
@@ -50,7 +50,7 @@
         html-type="submit"
         color="rgb(249, 115, 22)"
         :loading="loading"
-        @click="login"
+        @click="Verify()"
       >
         登 录
       </n-button>
@@ -105,9 +105,9 @@ const formState = reactive({
 
 const checked = ref(formState.remember);
 
-watch(checked, (value) => {
-  formState.remember = value;
-});
+// watch(checked, (value) => {
+//   formState.remember = value;
+// });
 
 function ChangeType() {
   let btn = document.getElementById("formUserpws");
@@ -120,6 +120,11 @@ function ChangeType() {
     icon.className =
       "svg-eye i-ph-eye-closed-bold?mask text-gray-300 hover:text-gray-500";
   }
+}
+
+function Verify() {
+  if(formState.userName ==="" || formState.password === "") notify("warning", "登录失败", "用户名或密码为空");
+  else login()
 }
 
 const login = async () => {
