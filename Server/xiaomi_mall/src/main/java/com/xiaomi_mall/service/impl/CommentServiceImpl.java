@@ -65,8 +65,17 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
 
         for (BackCommentVo backCommentVo : backCommentVos ) {
             Product product = productService.getById(backCommentVo.getProductId());
-            backCommentVo.setProductName(product.getProductName());
-            backCommentVo.setProductPic(product.getProductPic());
+            if(product == null)
+            {
+                backCommentVo.setProductName("该商品已被删除");
+                backCommentVo.setProductPic("");
+            }
+            else
+            {
+                backCommentVo.setProductName(product.getProductName());
+                backCommentVo.setProductPic(product.getProductPic());
+            }
+
         }
 
         return Result.okResult(backCommentVos);
