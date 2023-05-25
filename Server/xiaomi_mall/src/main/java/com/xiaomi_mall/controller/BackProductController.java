@@ -1,5 +1,7 @@
 package com.xiaomi_mall.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.xiaomi_mall.config.Result;
 import com.xiaomi_mall.dto.*;
 import com.xiaomi_mall.enity.Category;
@@ -158,6 +160,12 @@ public class BackProductController {
     public Result deleteAttribute(@PathVariable Integer attributeId) {
         try
         {
+            LambdaQueryWrapper<SkuAttributeValue> skuAttributeValueQueryWrapper = new LambdaQueryWrapper<>();
+            skuAttributeValueQueryWrapper.eq(SkuAttributeValue::getAttributeId, attributeId);
+            int cnt = skuAttributeValueService.count(skuAttributeValueQueryWrapper);
+            if(cnt != 0)
+                return Result.errorResult2(924, "该规格还有值哦，不能删除~");
+
             skuAttributeService.removeById(attributeId);
             List<Integer> attributeValueId = new ArrayList<>();
             for (SkuAttributeValue value: skuAttributeValueService.list()) {
