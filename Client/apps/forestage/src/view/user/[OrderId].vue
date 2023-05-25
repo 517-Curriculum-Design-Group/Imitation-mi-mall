@@ -143,7 +143,7 @@ function toComment(items){
             <span class="text-2xl">收货信息</span>
             <n-button type="tertiary" class="w-[120px] h-[34px]"
                 style="--n-text-color-hover:gray;--n-color-disabled:gray;--n-ripple-color:gray;--n-border-hover:1px solid gray;--n-border-pressed: 1px solid gray;--n-border-focus: 1px solid gray;--n-border-disabled: 1px solid gray;"
-                @click="isShow = true">
+                @click="isShow = true" v-show="orderList.orderDetail.orderStatus!=4">
                 修改
             </n-button>
         </div>
