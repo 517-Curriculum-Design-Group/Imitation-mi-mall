@@ -240,7 +240,7 @@ public class SeckillServiceImpl extends ServiceImpl<SeckillMapper, Seckill> impl
             seckillListVos.get(i).setSkuName(skuName);
 
         }
-
+        seckillListVos = seckillListVos.stream().filter(p-> !p.getSkuName().equals("NotFound")).collect(Collectors.toList());
         return Result.okResult(seckillListVos);
     }
 
@@ -268,7 +268,7 @@ public class SeckillServiceImpl extends ServiceImpl<SeckillMapper, Seckill> impl
             seckillListVos.get(i).setSkuName(skuName);
 
         }
-
+        seckillListVos = seckillListVos.stream().filter(p-> !p.getSkuName().equals("NotFound")).collect(Collectors.toList());
         return Result.okResult(seckillListVos);
     }
 
@@ -295,7 +295,7 @@ public class SeckillServiceImpl extends ServiceImpl<SeckillMapper, Seckill> impl
             seckillListVos.get(i).setSkuName(skuName);
 
         }
-
+        seckillListVos = seckillListVos.stream().filter(p-> !p.getSkuName().equals("NotFound")).collect(Collectors.toList());
         return Result.okResult(seckillListVos);
     }
 
