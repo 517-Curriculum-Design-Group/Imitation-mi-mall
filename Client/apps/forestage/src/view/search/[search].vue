@@ -2,7 +2,7 @@
   <n-tabs
     v-model:value="searchs.currentNav"
     class="navsC px-[8%] mb-18px"
-    type="line"
+    type="bar"
     animated
   >
     <n-tab-pane display-directive="show" name="综合" tab="综合">
