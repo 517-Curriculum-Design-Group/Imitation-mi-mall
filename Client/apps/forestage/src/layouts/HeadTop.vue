@@ -23,7 +23,7 @@ const logout = async () => {
   utils.clearSession();
   if (r.code === 200) {
     window.location.reload();
-    router.push("/")
+    // router.push("/")
   }
 };
 </script>

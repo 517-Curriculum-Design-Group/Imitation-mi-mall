@@ -150,7 +150,8 @@ function selectList(index) {
                         <span class="text-lg">{{ items.nickName }}</span>
                     </template>
                     <template #avatar>
-                        <a-avatar :src="items.userAvatar" alt="图片无法加载" />
+                        <a-avatar :src="items.userAvatar ? items.userAvatar : 'empty.png'" alt="图片无法加载"
+                            fallback-src="https://www.gstatic.com/android/keyboard/emojikitchen/20201001/u1f924/u1f924_u1f42d.png" />
                     </template>
                     <template #content>
                         <p class="text-2xl">
@@ -184,7 +185,8 @@ function selectList(index) {
                 <a-modal v-model:visible=isShow title="写下你的评论" @ok="commitComment">
                     <a-comment>
                         <template #avatar>
-                            <a-avatar :src="avatar" alt="暂无图片" />
+                            <a-avatar :src="item.userAvatar ? item.userAvatar : 'empty.png' " alt="暂无图片" 
+                            fallback-src="https://www.gstatic.com/android/keyboard/emojikitchen/20201001/u1f924/u1f924_u1f42d.png" />
                         </template>
                         <template #content>
                             <a-form-item>
