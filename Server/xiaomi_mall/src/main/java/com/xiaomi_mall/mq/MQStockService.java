@@ -18,7 +18,7 @@ public class MQStockService {
      * @param productId
      */
     @RabbitListener(queues = MyRabbitMQConfig.STORY_QUEUE)
-    public void decrByStock(Integer productId) {
+    private void decrByStock(Integer productId) {
         /**
          * 调用数据库service给数据库对应商品库存减一
          */

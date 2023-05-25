@@ -24,7 +24,7 @@ public class MQOrderService {
      * @param
      */
     @RabbitListener(queues = MyRabbitMQConfig.ORDER_QUEUE)
-    public void createSeckillOrder(SeckillOrderDto seckillOrderDto) {
+    private void createSeckillOrder(SeckillOrderDto seckillOrderDto) {
         System.out.println("收到订单消息");
         orderService.createSeckillOrder(seckillOrderDto);
     }
