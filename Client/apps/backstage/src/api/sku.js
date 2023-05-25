@@ -54,13 +54,6 @@ export function deleteSku(attributeId) {
 
 //大
 export function deleteSkubig(attributeId) {
-    return axios.delete('/deleteAttribute',  
-    {params: {attributeId}},
+    return axios.delete(`/deleteAttribute/${attributeId}` )
 
-        {
-            headers: {
-                "Content-Type": "application/json"
-            }
-        }
-    )
 }
