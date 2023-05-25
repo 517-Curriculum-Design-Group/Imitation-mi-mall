@@ -31,7 +31,7 @@ onMounted(async () => {
         else if (r.data.orderDetail.orderStatus === 3) complete.value.push(r.data)
         else cancel.value.push(r.data)
         copy.value.push(r.data)
-        store.setMostProduct(complete.value)
+        store.setMostProduct(pay.value)
         orderDetail.value.push(r.data)
     }
     console.log(copy.value)
