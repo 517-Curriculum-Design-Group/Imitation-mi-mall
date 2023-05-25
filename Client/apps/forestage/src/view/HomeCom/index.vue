@@ -90,7 +90,7 @@ onMounted(() => {
       </div>
       <template v-for="itemss in lowerData" :key="itemss.categoryName">
         <div class="flex h-[684px] w-[1246px] relative">
-          <n-tabs type="line" animated trigger="hover" justify-content="end">
+          <n-tabs type="bar" animated trigger="hover" justify-content="end">
             <template #prefix>
               <span class="text-[22px]">{{ itemss.categoryName }}</span>
             </template>
