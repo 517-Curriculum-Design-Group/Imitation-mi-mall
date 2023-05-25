@@ -30,7 +30,6 @@ watchEffect(async () => {
     productPrice.value = r.data.price;
     productStock.value = r.data.stock;
     skuId.value = r.data.sku_id;
-    favorite.value = r.data.favorite;
   }
 });
 
@@ -99,6 +98,7 @@ const init = async (ID) => {
       objKeys.push(element.attributeName);
     }
   });
+  favorite.value = r.data.favorite;
 };
 
 onBeforeRouteUpdate(async (to, from) => {
@@ -114,7 +114,10 @@ onMounted(() => {
 
 <template>
   <div>
-    <ProductHead :product-name="product.productName" :product-id="product.productId"></ProductHead>
+    <ProductHead
+      :product-name="product.productName"
+      :product-id="product.productId"
+    ></ProductHead>
     <main class="mt-20px flex justify-between w-[80%] mx-auto">
       <img
         class="aspect-square w-560px h-560px object-cover pr-30px"
