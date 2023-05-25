@@ -39,8 +39,8 @@ onMounted(async () => {
 
             <div class="goods relative w-[245px] h-[161px] flex flex-wrap items-center justify-center"
                 v-for="(item, num) in items.categoryNames" :key="num" v-if="items.isShow">
-                <span class="w-[245px] h-[20px] hover:text-orange-500" style="text-align: center;"
-                    v-if="!item.categoryNames">{{ item.category_name
+                <span class="w-[245px] h-[20px] hover:text-orange-500 z-500 cursor-pointer" style="text-align: center;"
+                    v-if="!item.categoryNames" @click="$router.push(`/shop/${item.category_name}`)">{{ item.category_name
                     }}</span>
                 <span class="w-[1226px] h-[161px]" v-else>
                     <n-empty description="暂无子分类">

@@ -34,6 +34,7 @@ onMounted(() => {
     <div
       class="flex ml-[160px] gap-x-4 pl-[20px] text-[16px] justify-center items-center"
     >
+    <span class="w-[50px] mr-3 cursor-pointer hover:text-orange-500" @click="$router.push('/page')">全部</span>
       <template v-for="item in titles" :key="item">
         <nav class="nav-titile active w-[100px] h-[88px] cursor-pointer">
           {{ item.cateName }}
