@@ -24,7 +24,7 @@ onMounted(async () => {
                     fallback-src="https://www.gstatic.com/android/keyboard/emojikitchen/20201001/u1f924/u1f924_u1f42d.png" />
                 <!-- <img :src="person.avatar" class="w-[150px] h-[150px] mr-8" style="border-radius:50%;overflow: hidden;" /> -->
                 <div class="flex flex-col">
-                    <span class="text-4xl">{{ person.userId }}</span>
+                    <span class="text-4xl">{{ person.nickName }}</span>
                     <span class="text-gray-400">你好~</span>
                     <router-link to="/user/info">
                         <span class="text-orange-500 cursor-pointer mt-4 text-sm">修改个人信息>></span></router-link>
