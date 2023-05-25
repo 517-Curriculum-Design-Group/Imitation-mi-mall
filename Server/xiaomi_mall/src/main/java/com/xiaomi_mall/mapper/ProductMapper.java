@@ -28,7 +28,7 @@ public interface ProductMapper extends BaseMapper<Product> {
             "ORDER BY least_price;\n")
     List<Product> getAllByCategory1(int category_id);
 
-    @Select("select * from Product where status = 1")
+    @Select("select * from Product where status = 1 AND del_flag = 0")
     List<Product> getAllProd();
 }
 
