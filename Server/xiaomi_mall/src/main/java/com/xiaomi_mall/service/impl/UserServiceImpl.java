@@ -511,6 +511,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public Result updatePersonInfo(User user) {
+        User user1 = SecurityUtils.getLoginUser().getUser();
+        user.setPassword(user1.getPassword());
         updateById(user);
         return Result.okResult();
     }
