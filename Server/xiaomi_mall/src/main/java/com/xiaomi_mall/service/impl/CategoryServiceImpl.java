@@ -40,6 +40,11 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
         queryWrapper.eq(Category::getCategoryName, search);
         Category category1 = categoryMapper.selectOne(queryWrapper);
 
+        if (Objects.equals(search, "全部")) {
+            List<Product> allProd = productMapper.getAllProd();
+            return Result.okResult(allProd);
+        }
+
         //若为分类名
         if (Objects.nonNull(category1))
         {
