@@ -154,7 +154,7 @@ public class BackProductController {
 
     @PreAuthorize("hasAnyAuthority('普通管理员', '超级管理员')")
     @ApiOperation("删除Attribute接口")
-    @DeleteMapping("/deleteAttribute")
+    @DeleteMapping("/deleteAttribute/{attributeId}")
     public Result deleteAttribute(@PathVariable Integer attributeId) {
         try
         {
