@@ -387,7 +387,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         for (int i = 0; i < cates.length; i++) {
             Map<String, Object> map = new LinkedHashMap<>();
             List<Map<String, Object>> sameCategoryProducts = new ArrayList<>();
-            for (int j = 0; j < products.size(); j++) {
+            for (int j = 0; j < products.size() && j < 6; j++) {
                 if(products.get(j).getCategoryId() != cates[i]) continue;
                 Map<String, Object> singleProduct = new LinkedHashMap<>();
                 singleProduct.put("product_id", products.get(j).getProductId());
@@ -487,7 +487,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                         .eq("del_flag", 0);
                 List<Product> tempProductList = productMapper.selectList(productQueryWrapper1);
                 for (Product product:tempProductList) {
-                    if(tempProducts.size() >= 8) break;
+                    if(tempProducts.size() >= 10) break;
                     tempProducts.add(product);
                 }
                 eachCategory.put("products", tempProducts);
