@@ -105,6 +105,10 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         List<HashMap<String, Object>> productList = new ArrayList<>();
         for (OrderDetail orderDetail : orderDetailList) {
             HashMap<String, Object> map = new LinkedHashMap<>();
+            QueryWrapper<Sku> skuQueryWrapper = new QueryWrapper<>();
+            skuQueryWrapper.eq("sku_id", orderDetail.getSkuId());
+            Sku sku = skuMapper.selectOne(skuQueryWrapper);
+            map.put("productId", sku.getProductId());
             map.put("productName", orderDetail.getProductName());
             map.put("skuName", orderDetail.getSkuName());
             map.put("skuImage", orderDetail.getSkuImage());

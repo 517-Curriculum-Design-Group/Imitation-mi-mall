@@ -213,12 +213,11 @@ const logout = async () => {
   transition: all 250ms linear;
 }
 
-.cart:hover + .cartdetail,
-.cartdetail:hover {
-  min-height: 100px;
-  height: fit-content;
-  /* max-height: fit-content; */
-}
+// .cart:hover + .cartdetail,
+// .cartdetail:hover {
+//   min-height: 100px;
+//   height: fit-content;
+// }
 
 .goodslist {
   padding: 5%;

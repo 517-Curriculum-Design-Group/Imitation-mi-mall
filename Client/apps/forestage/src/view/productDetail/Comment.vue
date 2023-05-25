@@ -120,7 +120,7 @@ function selectList(index) {
 <template>
     <ProductHead class="fixed" :product-name="productName"></ProductHead>
 
-    <div class="w-full h-100vh flex justify-center" style="background-color:#f5f5f5;">
+    <div class="w-full h-full flex justify-center" style="background-color:#f5f5f5;">
 
         <article class="flex flex-col w-[1226px] h-full ">
             <div class="bg-light-50 w-full h-[150px] mt-10 p-8">

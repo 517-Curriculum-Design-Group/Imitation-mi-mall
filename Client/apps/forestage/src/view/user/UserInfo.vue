@@ -243,18 +243,18 @@ function notify(type) {
       >
         <n-avatar
           round
-          class="h-250px w-250px"
+          class="h-250px w-250px cursor-pointer"
           size="small"
           :src="user.avatar ? user.avatar : 'empty.png'"
           fallback-src="https://www.gstatic.com/android/keyboard/emojikitchen/20201001/u1f924/u1f924_u1f42d.png"
       /></n-upload>
-      <span class="w-[500px] h-[70px] text-lg">用户ID:{{ user.userId }}</span>
-      <span class="w-[500px] h-[70px] text-lg">昵称:{{ user.nickName }}</span>
-      <span class="w-[500px] h-[70px] text-lg"
+      <span class="w-[500px] h-[70px] text-2xl">用户ID:{{ user.userId }}</span>
+      <span class="w-[500px] h-[70px] text-2xl">昵称:{{ user.nickName }}</span>
+      <span class="w-[500px] h-[70px] text-2xl"
         >性别:{{ user.sex === "女" ? "女" : "男" }}</span
       >
-      <span class="w-[500px] h-[70px] text-lg">手机号:{{ user.mobile }}</span>
-      <span class="w-[500px] h-[70px] text-lg">邮箱:{{ user.email }}</span>
+      <span class="w-[500px] h-[70px] text-2xl">手机号:{{ user.mobile }}</span>
+      <span class="w-[500px] h-[70px] text-2xl">邮箱:{{ user.email }}</span>
       <n-button
         class="text-light-50 bg-orange-500 w-[360px] h-[60px]"
         attr-type="button"
