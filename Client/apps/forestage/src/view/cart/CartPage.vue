@@ -13,6 +13,10 @@ const dialogWarning = useDialog();
 const store = cartStore();
 const router = useRouter();
 
+const isDisableBut = computed(() => {
+  return goods.every((items) => items.checked === false);
+});
+
 const checkStatus = computed(() => {
   return goods.every((item) => item.checked == true);
 });
@@ -199,12 +203,14 @@ onMounted(() => {
           <span class="text-3xl">{{ sum }}</span>
           元</span
         >
-        <button
+        <n-button
           class="sumbutton w-12rem h-full text-light-50 text-lg"
+          type="primary"
+          :disabled="isDisableBut"
           @click="clickSubmit"
         >
           去结算
-        </button>
+        </n-button>
       </div>
     </div>
   </div>
