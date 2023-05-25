@@ -280,7 +280,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         res.put("XList", XList);
         res.put("YList", YList);
 
-        //TODO:销售额哦
         //各类订单状态
         QueryWrapper<Order> orderDetailsWrapper = new QueryWrapper<>();
         orderDetailsWrapper
@@ -315,9 +314,27 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             }
         }
 
-        //TODO:销售额
-
         //各类商品状态
+        QueryWrapper<Order> orderQueryWrapper = new QueryWrapper<>();
+        orderQueryWrapper
+                .eq("status" , 3)
+                .or().eq("status" , 2);
+        List<Order> totalPriceList = orderMapper.selectList(orderQueryWrapper);
+        Double totalPrice = Double.valueOf(0f);
+        for (Order o: totalPriceList)
+        {
+            totalPrice += o.getTotalPrice().doubleValue();
+        }
+        if(totalPrice < 10000.00f)
+        {
+            res.put("totalPrice", totalPrice + "元");
+        }
+        else
+        {
+            totalPrice = totalPrice / 10000;
+            res.put("totalPrice", String.format("%.2f",totalPrice) + "万元");
+        }
+
         //正在销售的
         QueryWrapper<Product> onSaleProductCountWrapper = new QueryWrapper<>();
         onSaleProductCountWrapper.eq("status", "1");

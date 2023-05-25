@@ -68,8 +68,12 @@ public class LoginServiceImpl implements LoginService {
         if(Objects.isNull(authenticate)){
             throw new RuntimeException("用户名或密码错误");
         }
-        //使用userid生成token
+
         LoginUser loginUser = (LoginUser) authenticate.getPrincipal();
+        if(loginUser.getUser().getStatus() == 1)
+            return Result.errorResult2(923, "该用户已被冻结");
+
+        //使用userid生成token
         String userId = loginUser.getUser().getUserId().toString();
         String jwt = JwtUtil.createJWT(userId);
         //authenticate存入redis
