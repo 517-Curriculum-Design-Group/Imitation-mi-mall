@@ -541,8 +541,8 @@ function clickNewSku(newObj) {
   addstock(obj)
     .then((r) => {
       ElNotification({
-        title: "成功",
-        message: "添加 SKU 成功",
+        title: "操作完成",
+        message: "成功调整价格和补货",
         type: "success",
       });
     })
