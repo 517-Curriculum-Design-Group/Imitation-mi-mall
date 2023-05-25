@@ -48,6 +48,11 @@ const routes = [
         ],
       },
       {
+        path: "/page",
+        name: "Page",
+        component: async () => await import("@/view/pagination/Pagination.vue"),
+      },
+      {
         path: "/user",
         name: "User",
         redirect:"/user/order",
@@ -134,11 +139,6 @@ const routes = [
     path: "/OrderCheck",
     name: "OrderCheck",
     component: async () => await import("@/view/checkout/OrderCheck.vue"),
-  },
-  {
-    path: "/page",
-    name: "Page",
-    component: async () => await import("@/view/pagination/Pagination.vue"),
   },
 ];
 
