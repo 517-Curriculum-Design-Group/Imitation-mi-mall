@@ -13,7 +13,7 @@
         <n-card
           v-for="item in searchs.products"
           :key="item.productId"
-          class="w-296px h-430px flex flex-col text-center"
+          class="w-296px h-430px flex flex-col text-center justify-center"
           hoverable
           @click="$router.push(`/${item.productId}`)"
         >
@@ -25,6 +25,9 @@
           <h4 class="my-8px hover:text-orange-500">
             {{ item.productName }}
           </h4>
+          <div class="truncate h-18px w-209px text-gray-400 text-12px ml-20px mb-20px">
+            <span>{{ item.productDescription }}</span>
+          </div>
           <p class="text-orange-500 text-14px leading-21px">
             {{ item.leastPrice }}
           </p>
