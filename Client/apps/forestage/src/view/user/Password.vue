@@ -68,7 +68,6 @@ function notify(type) {
 function ChangeType(id1, id2) {
   let btn = document.getElementById(id1)
   let icon = document.getElementById(id2)
-  console.log(btn + '' + icon)
   if (btn.type == "password") {
     btn.type = "text";
     icon.className = "svg-eye i-ph-eye?mask text-gray-300 hover:text-gray-500"

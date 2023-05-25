@@ -40,7 +40,7 @@ async function update() {
         message.success('评论成功')
         router.go(-1)
     }
-    else message.error('评论失败，请检查网络')
+    else message.error('评论失败，此商品已被删除')
 }
 
 let selectedRate = ref(null)

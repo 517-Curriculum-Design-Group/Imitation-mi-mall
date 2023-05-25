@@ -43,6 +43,7 @@ function toComment(items) {
     <h2 v-if="list.length === 0" class="text-gray-400" style="text-align:center">暂无评价。</h2>
 
     <div v-else class="flex">
+        
         <div class="flex flex-col h-auto">
 
             <div class="flex flex-col w-full h-auto p-4" v-for="(items, index) in list" :key="index">
