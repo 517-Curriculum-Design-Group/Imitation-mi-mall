@@ -2,9 +2,6 @@
   <el-card shadow="never" class="border-0">
     <div class="flex items-center justify-between mb-4">
       <div>
-        <el-button type="danger" size="small" @click="deletelist"
-          >批量删除</el-button
-        >
         <el-button type="success" size="small" @click="newProduct.isShow = true"
           >新增商品</el-button
         >

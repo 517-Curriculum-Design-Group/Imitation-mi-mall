@@ -1,5 +1,5 @@
 <template>
-    <div>
-        标签
+    <div class="min-h-10">
+      
     </div>
 </template>
