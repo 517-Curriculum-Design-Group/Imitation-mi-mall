@@ -231,7 +231,10 @@ public class SeckillServiceImpl extends ServiceImpl<SeckillMapper, Seckill> impl
             Integer productId = seckillListVos.get(i).getProductId();
             Integer skuId = seckillListVos.get(i).getSkuId();
             Product product = productMapper.selectById(productId);
-            String skuName = skuMapper.selectById(skuId).getSkuName();
+            String skuName = "NotFound";
+            Sku sku = skuMapper.selectById(skuId);
+            if(sku != null)
+                skuName = sku.getSkuName();
             seckillListVos.get(i).setProductName(product.getProductName());
             seckillListVos.get(i).setProductPic(product.getProductPic());
             seckillListVos.get(i).setSkuName(skuName);
@@ -256,7 +259,10 @@ public class SeckillServiceImpl extends ServiceImpl<SeckillMapper, Seckill> impl
             Integer productId = seckillListVos.get(i).getProductId();
             Integer skuId = seckillListVos.get(i).getSkuId();
             Product product = productMapper.selectById(productId);
-            String skuName = skuMapper.selectById(skuId).getSkuName();
+            String skuName = "NotFound";
+            Sku sku = skuMapper.selectById(skuId);
+            if(sku != null)
+                skuName = sku.getSkuName();
             seckillListVos.get(i).setProductName(product.getProductName());
             seckillListVos.get(i).setProductPic(product.getProductPic());
             seckillListVos.get(i).setSkuName(skuName);
@@ -280,7 +286,10 @@ public class SeckillServiceImpl extends ServiceImpl<SeckillMapper, Seckill> impl
             Integer productId = seckillListVos.get(i).getProductId();
             Integer skuId = seckillListVos.get(i).getSkuId();
             Product product = productMapper.selectById(productId);
-            String skuName = skuMapper.selectById(skuId).getSkuName();
+            String skuName = "NotFound";
+            Sku sku = skuMapper.selectById(skuId);
+            if(sku != null)
+                skuName = sku.getSkuName();
             seckillListVos.get(i).setProductName(product.getProductName());
             seckillListVos.get(i).setProductPic(product.getProductPic());
             seckillListVos.get(i).setSkuName(skuName);
