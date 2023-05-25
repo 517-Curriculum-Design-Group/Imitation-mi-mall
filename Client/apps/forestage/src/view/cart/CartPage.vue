@@ -5,7 +5,9 @@ import { api } from "@/api";
 import { useDialog } from "naive-ui";
 import { cartStore } from "@/stores/cart";
 import { useRouter } from "vue-router";
+import utils from "@/utils";
 
+let isLogin = utils.isLogin();
 const goods = reactive([]);
 const dialogWarning = useDialog();
 const store = cartStore();
@@ -92,7 +94,7 @@ onMounted(() => {
 
 <template>
   <CartTop></CartTop>
-  <div class="containers w-100% h-100%">
+  <div v-if="goods.length !== 0" class="containers w-100% h-100%">
     <div class="cart grid w-80% bg-light-50 m-auto h-116px">
       <div class="flex flex-row-reverse" :row-span="2">
         <input id="checkbox" type="checkbox" />全选
@@ -206,6 +208,28 @@ onMounted(() => {
       </div>
     </div>
   </div>
+  <n-result
+    v-else
+    class="mt-[10%]"
+    title="还在疑惑?"
+    description="不要再看了,你购物车没有东西"
+  >
+    <template #icon>
+      <div>
+        <img
+          class="aspect-square w-150px h-150px"
+          src="https://www.gstatic.com/android/keyboard/emojikitchen/20201001/u1f605/u1f605_u1f92a.png"
+          alt="差不多得了"
+        />
+      </div>
+    </template>
+    <div class="w-full flex justify-center gap-12px">
+      <n-button v-if="!isLogin" type="primary" @click="$router.push('/login')">
+        去登录
+      </n-button>
+      <n-button type="info" @click="$router.push('/home')"> 去购物 </n-button>
+    </div>
+  </n-result>
 </template>
 
 <style scoped lang="scss">

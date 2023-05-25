@@ -64,6 +64,14 @@
         <span>其他方式登录</span>
       </div>
     </a-form-item>
+    <a-form-item>
+      <div class="flex justify-center items-center gap-8">
+        <img class="w-[40px] h-[40px] cursor-pointer" src="../../assets/zfb.png"/>
+        <img class="w-[44px] h-[40px] cursor-pointer" src="../../assets/wx.png"/>
+        <img class="w-[44px] h-[40px] cursor-pointer" src="../../assets/qq.png"/>
+        <img class="w-[44px] h-[40px] cursor-pointer" src="../../assets/wb.png"/>
+      </div>
+    </a-form-item>
   </a-form>
 </template>
 
@@ -123,12 +131,11 @@ const login = async () => {
     store.setUserInfo(r.data.userInfo);
     router.replace("/home");
     notify("success", "通知", "登录成功");
-  }
-  else{
+  } else {
     notify("error", "通知", "账号不存在或密码错误");
-    console.log(r)
+    console.log(r);
   }
-  loading.value = false
+  loading.value = false;
 };
 </script>
 

@@ -1,7 +1,7 @@
 <template>
   <a-form :model="formState" name="basic" :span-col="{ span: 8 }" :wrapper-col="{ span: 25 }" autocomplete="off"
     class="relative">
-    <a-form-item name="username" :rules="[{ required: true, message: '请输入你的用户名' }]">
+    <a-form-item name="username" :rules="[{ required: false, message: '请输入你的用户名' }]">
       <div class="input-wrapper">
         <a-input id="formUsername" v-model:value="formState.userName"
           class="text-lg font-normal bg-gray-100 border-transparent" placeholder=" " />
@@ -9,15 +9,15 @@
       </div>
     </a-form-item>
 
-    <a-form-item name="username" :rules="[{ required: true, message: '请输入你的手机号码' }]">
+    <a-form-item name="username" :rules="[{ required: false, message: '请输入你的邮箱' }]">
       <div class="input-wrapper">
-        <a-input id="formUsernum" v-model:value="formState.mobile"
+        <a-input id="formUsernum" v-model:value="formState.email"
           class="text-lg font-normal bg-gray-100 border-transparent" placeholder=" " />
-        <label for="formUsername">请输入你的手机号码</label>
+        <label for="formUsername">请输入你的邮箱</label>
       </div>
     </a-form-item>
 
-    <a-form-item name="password" :rules="[{ required: true, message: '密码不能为空' }]">
+    <a-form-item name="password" :rules="[{ required: false, message: '密码不能为空' }]">
       <div class="input-wrapper">
         <a-input id="formUserpws" v-model:value="formState.password"
           class="text-lg font-normal bg-gray-100 border-transparent" placeholder=" " type="password" />
@@ -27,7 +27,7 @@
       </div>
     </a-form-item>
 
-    <a-form-item name="password" :rules="[{ required: true, message: '密码不能为空',tr }]">
+    <a-form-item name="password" :rules="[{ required: false, message: '密码不能为空',tr }]">
       <div class="input-wrapper">
         <a-input id="formUsercpws" v-model:value="confirmpsw" class="text-lg font-normal bg-gray-100 border-transparent"
           placeholder=" " type="password" />
@@ -50,15 +50,18 @@
 
 <script setup>
 import { ref, reactive, watch } from "vue";
-import { postRegister } from "@/api/path/UserController/index.js";
 import { api } from "@/api";
+import { message } from 'ant-design-vue';
+import { useNotification } from "naive-ui";
+
+const notification = useNotification();
 
 const formState = reactive({
   userName: "",
   nickName: "",
   password: "",
-  mobile: "",
-  email:"ben@ben.com"
+  // mobile: "",
+  email:"",
 });
 
 const Verify = ref(false)
@@ -95,15 +98,31 @@ const register = async () => {
   console.log(formState)
   const [e, r] = await api.postRegister(formState)
   if(r.code === 200) window.location.reload();
+  else{
+    notify("error", "通知", "邮箱或用户名已被注册");
+  }
+}
+
+function notify(type = "info", content, meta, options = {}) {
+  notification[type]({
+    content,
+    meta,
+    duration: 1500,
+    keepAliveOnHover: true,
+    ...options,
+  });
 }
 
 function Verifypsw() {
-  if (formState.password == confirmpsw.value && formState.userName && formState.mobile) {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  if(!emailRegex.test(formState.email)) message.error('邮箱格式错误，请重新输入！')
+  else if (formState.password == confirmpsw.value && formState.userName && formState.email) {
     Verify.value = false;
     formState.nickName = formState.userName
     register()
   }
-  else Verify.value = true;
+  else if(formState.password == null || formState.userName == null ) message.error('用户名或密码为空，请重新输入！')
+  else if(formState.password != confirmpsw.value) Verify.value = true;
 }
 
 </script>

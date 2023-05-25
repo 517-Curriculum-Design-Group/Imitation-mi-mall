@@ -26,7 +26,11 @@ onMounted(() => {
 
 <template>
   <div class="flex items-center w-[1226px] h-[100px] m-auto relative">
-    <img class="w-[56px] h-[56px]" src="../../public/vite.svg" />
+    <img
+      class="w-[56px] h-[56px] cursor-pointer"
+      src="../../public/vite.svg"
+      @click="$router.push('/home')"
+    />
     <div
       class="flex ml-[160px] gap-x-4 pl-[20px] text-[16px] justify-center items-center"
     >
@@ -55,12 +59,22 @@ onMounted(() => {
             </template>
 
             <n-empty
-              class="absolute top-[20%] left-[50%]"
+              class="absolute top-[20%] left-[50%] text-[22px]"
               :class="{
                 'op-0': item.sameCategoryProducts.length !== 0 ? true : false,
               }"
-              description="你什么也找不到"
+              size="huge"
+              description="该商城不卖这商品"
             >
+              <template #icon>
+                <div>
+                  <img
+                    class="w-65px aspect-square"
+                    src="https://www.gstatic.com/android/keyboard/emojikitchen/20201001/u1f635/u1f635_u1f607.png"
+                    alt="找不到呀找不到!!!"
+                  />
+                </div>
+              </template>
             </n-empty>
           </div>
         </nav>

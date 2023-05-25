@@ -18,6 +18,7 @@ const router = useRouter();
 const route = useRoute();
 const dialogSuccess = useDialog();
 const dialogWarning = useDialog();
+const favorite = ref(false);
 
 watchEffect(async () => {
   let params = { product_id: 0, attributeValues: [] };
@@ -39,8 +40,8 @@ async function shoppingClick() {
     if (!e && r) {
       dialogSuccess.success({
         title: "加入购物车成功!",
-        content: "跳转至购物车结账？",
-        positiveText: "跳转",
+        content: "去购物车结账？",
+        positiveText: "结账",
         negativeText: "继续浏览",
         onPositiveClick: () => {
           router.push("/cart");
@@ -50,7 +51,7 @@ async function shoppingClick() {
   } else {
     dialogWarning.warning({
       title: "尚未登录",
-      content: "跳转至登录页？",
+      content: "是否登录？",
       positiveText: "确定",
       onPositiveClick: () => {
         router.push("/login");
@@ -59,14 +60,31 @@ async function shoppingClick() {
   }
 }
 
-function addFavorite(product_id) {
-  console.log(product_id);
-  const id = {
-    productId : product_id
-  }
-  const [e, r] = api.addProductToFavorite(id);
-  if (!e && r) {
-    console.log(r.data);
+async function addFavorite(product_id) {
+  if (utils.isLogin()) {
+    const id = {
+      productId: product_id,
+    };
+    if (favorite.value) {
+      const [e, r] = await api.deleteLike(id);
+      if (!e && r) {
+        favorite.value = false;
+      }
+    } else {
+      const [e, r] = await api.addProductToFavorite(id);
+      if (!e && r) {
+        favorite.value = true;
+      }
+    }
+  } else {
+    dialogWarning.warning({
+      title: "尚未登录",
+      content: "是否登录？",
+      positiveText: "确定",
+      onPositiveClick: () => {
+        router.push("/login");
+      },
+    });
   }
 }
 
@@ -80,6 +98,7 @@ const init = async (ID) => {
       objKeys.push(element.attributeName);
     }
   });
+  favorite.value = r.data.favorite;
 };
 
 onBeforeRouteUpdate(async (to, from) => {
@@ -95,7 +114,10 @@ onMounted(() => {
 
 <template>
   <div>
-    <ProductHead :product-name="product.productName"></ProductHead>
+    <ProductHead
+      :product-name="product.productName"
+      :product-id="product.productId"
+    ></ProductHead>
     <main class="mt-20px flex justify-between w-[80%] mx-auto">
       <img
         class="aspect-square w-560px h-560px object-cover pr-30px"
@@ -150,6 +172,14 @@ onMounted(() => {
             class="w-142px h-54px"
             @click="addFavorite(product.productId)"
           >
+            <div
+              v-if="favorite"
+              class="i-ic-sharp-favorite?mask text-red-500 w-20px h-20px"
+            />
+            <div
+              v-else
+              class="i-ic-round-favorite-border?mask text-red-500 w-20px h-20px"
+            />
             喜欢
           </n-button>
         </div>

@@ -16,11 +16,14 @@ export const userStore = defineStore("user", {
       return this.userInfo;
     },
     setUserInfo(user) {
-      this.userInfo = user;
+      Object.assign(this.userInfo, user);
     },
     deleteUserInfo() {
       this.userInfo = null;
     },
+    setUserAvart(url) {
+      this.userInfo.avatar = url
+    }
   },
   persist: {
     key: "userStore",

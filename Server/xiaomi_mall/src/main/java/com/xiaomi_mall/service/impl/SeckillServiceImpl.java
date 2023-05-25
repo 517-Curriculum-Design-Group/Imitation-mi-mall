@@ -13,6 +13,7 @@ import com.xiaomi_mall.mapper.SkuMapper;
 import com.xiaomi_mall.mapper.UserMapper;
 import com.xiaomi_mall.mq.MQOrderService;
 import com.xiaomi_mall.service.AddressService;
+import com.xiaomi_mall.service.OrderService;
 import com.xiaomi_mall.service.ProductService;
 import com.xiaomi_mall.service.SeckillService;
 import com.xiaomi_mall.util.BeanCopyUtils;
@@ -31,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class SeckillServiceImpl extends ServiceImpl<SeckillMapper, Seckill> implements SeckillService {
@@ -52,6 +54,8 @@ public class SeckillServiceImpl extends ServiceImpl<SeckillMapper, Seckill> impl
     private AddressService addressService;
     @Autowired
     private MQOrderService mqOrderService;
+    @Autowired
+    private OrderService orderService;
 
     private static final Logger logger = LoggerFactory.getLogger(SeckillServiceImpl.class);
 
@@ -71,46 +75,59 @@ public class SeckillServiceImpl extends ServiceImpl<SeckillMapper, Seckill> impl
         int skuId = seckill.getSkuId();
         BigDecimal seckillPrice = seckill.getSeckillPrice();
 
-        logger.info("参加秒杀的用户是: {}, 秒杀的商品时: {}", user.getUserName(), product.getProductName());
+        Object cacheObject = redisCache.getCacheObject("SeckillUserId:" + userId + " " + "ProductId:" + productId);
 
         String message = null;
-        Long decrByResult = redisCache.decrBy("productId+" + productId);
-        //调用redis给相应商品库存量减一
-        if (decrByResult >= 0) {
-            /**
-             * 说明该商品的库存量有剩余，可以进行下订单操作
-             */
-            logger.info("用户：{}秒杀该商品：{}库存有余，可以进行下订单操作", user.getUserName(), product.getProductName());
-            //发消息给库存消息队列，将库存数据减一
-            rabbitTemplate.convertAndSend(MyRabbitMQConfig.STORY_EXCHANGE, MyRabbitMQConfig.STORY_ROUTING_KEY, productId);
-            addressService.getDefaultAddress(userId);
-            //发消息给订单消息队列，创建订单
-            Order order = new Order();
-            order.setUserId(userId);
-            order.setTotalPrice(seckillPrice);
-            order.setOrderTime(new Date());
-            order.setStatus(1);//已支付未发货
-            order.setAddress(getDefaultAddress1(userId));
-            order.setName(getDefaultAddress2(userId).getRecipientName());
-            order.setPhone(getDefaultAddress2(userId).getRecipientPhone());
+        if (cacheObject == null) {
+            logger.info("参加秒杀的用户是: {}, 秒杀的商品时: {}", user.getUserName(), product.getProductName());
 
-            SeckillOrderDto seckillOrderDto = new SeckillOrderDto();
-            seckillOrderDto.setProductName(product.getProductName());
-            seckillOrderDto.setOrder(order);
-            seckillOrderDto.setSkuId(skuId);
+            Long decrByResult = redisCache.decrBy("productId+" + productId);
+            //调用redis给相应商品库存量减一
+            if (decrByResult >= 0) {
+                /**
+                 * 说明该商品的库存量有剩余，可以进行下订单操作
+                 */
+                logger.info("用户：{}秒杀该商品：{}库存有余，可以进行下订单操作", user.getUserName(), product.getProductName());
+                //发消息给库存消息队列，将库存数据减一
+                rabbitTemplate.convertAndSend(MyRabbitMQConfig.STORY_EXCHANGE, MyRabbitMQConfig.STORY_ROUTING_KEY, productId);
+                addressService.getDefaultAddress(userId);
+
+                //发消息给订单消息队列，创建订单
+                Order order = new Order();
+                order.setUserId(userId);
+                order.setTotalPrice(seckillPrice);
+                order.setOrderTime(new Date());
+                order.setStatus(1);//已支付未发货
+                order.setAddress(getDefaultAddress1(userId));
+                order.setName(getDefaultAddress2(userId).getRecipientName());
+                order.setPhone(getDefaultAddress2(userId).getRecipientPhone());
+
+                SeckillOrderDto seckillOrderDto = new SeckillOrderDto();
+                seckillOrderDto.setProductName(product.getProductName());
+                seckillOrderDto.setOrder(order);
+                seckillOrderDto.setSkuId(skuId);
 //            MQOrderService mqOrderService = new MQOrderService();
 //            mqOrderService.createSeckillOrder(seckillOrderDto);
-            rabbitTemplate.convertAndSend(MyRabbitMQConfig.ORDER_EXCHANGE, MyRabbitMQConfig.ORDER_ROUTING_KEY, seckillOrderDto);
-            message = "恭喜，您秒杀商品" + product.getProductName() + "成功";
+                rabbitTemplate.convertAndSend(MyRabbitMQConfig.ORDER_EXCHANGE, MyRabbitMQConfig.ORDER_ROUTING_KEY, seckillOrderDto);
+                //orderService.createSeckillOrder(seckillOrderDto);
+                redisCache.setCacheObject("SeckillUserId:"+ userId + " " + "ProductId:" + productId, 1);
+                redisCache.expire("SeckillUserId:"+ userId+ " " + "ProductId:" + productId, 5000000);
+                message = "恭喜，您秒杀商品" + product.getProductName() + "成功";
+                return Result.okResult(message);
+            } else {
+                /**
+                 * 说明该商品的库存量没有剩余，直接返回秒杀失败的消息给用户
+                 */
+                // logger.info("用户：{}秒杀时商品的库存量没有剩余,秒杀结束", userName);
+                message = "商品" + product.getProductName() + "的库存量没有剩余,秒杀结束";
+                return Result.errorResult(922, message);
+            }
+
         } else {
-            /**
-             * 说明该商品的库存量没有剩余，直接返回秒杀失败的消息给用户
-             */
-            // logger.info("用户：{}秒杀时商品的库存量没有剩余,秒杀结束", userName);
-            message = "商品" + product.getProductName() + "的库存量没有剩余,秒杀结束";
+            message = "您已经参与秒杀过" + product.getProductName() + "商品了，不能继续参加秒杀";
+            return Result.errorResult(923, message);
         }
 
-        return Result.okResult(message);
     }
 
     @Override
@@ -188,12 +205,15 @@ public class SeckillServiceImpl extends ServiceImpl<SeckillMapper, Seckill> impl
             Integer productId = seckillListVos.get(i).getProductId();
             Integer skuId = seckillListVos.get(i).getSkuId();
             Product product = productMapper.selectById(productId);
-            String skuName = skuMapper.selectById(skuId).getSkuName();
+            String skuName = "NotFound";
+            Sku sku = skuMapper.selectById(skuId);
+            if(sku != null)
+                skuName = sku.getSkuName();
             seckillListVos.get(i).setProductName(product.getProductName());
             seckillListVos.get(i).setProductPic(product.getProductPic());
             seckillListVos.get(i).setSkuName(skuName);
-
         }
+        seckillListVos = seckillListVos.stream().filter(p-> !p.getSkuName().equals("NotFound")).collect(Collectors.toList());
         return Result.okResult(seckillListVos);
     }
 

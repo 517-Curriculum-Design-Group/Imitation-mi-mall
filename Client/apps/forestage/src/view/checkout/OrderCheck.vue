@@ -300,7 +300,7 @@
       <n-space tabindex="1">
         <n-form-item label="收货人"
         :rule="{
-                    required: true,
+                    required: false,
                     message: '请输入姓名',
                     trigger: ['blur']
                 }">
@@ -314,7 +314,7 @@
         </n-form-item>
 
         <n-form-item label="收货人手机号" type="text" :rule="{
-                    required: true,
+                    required: false,
                     message: '请输入手机号',
                     trigger: ['blur']
                 }">
@@ -328,7 +328,7 @@
 
         <n-form-item label="省"
         :rule="{
-                    required: true,
+                    required: false,
                     message: '请输入省份',
                     trigger: ['blur']
                 }">
@@ -343,7 +343,7 @@
 
         <n-form-item label="市"
         :rule="{
-                    required: true,
+                    required: false,
                     message: '请输入城市',
                     trigger: ['blur']
                 }">
@@ -358,7 +358,7 @@
 
         <n-form-item label="区"
         :rule="{
-                    required: true,
+                    required: false,
                     message: '请输入区/县',
                     trigger: ['blur']
                 }">
@@ -373,7 +373,7 @@
 
         <n-form-item label="镇"
         :rule="{
-                    required: true,
+                    required: false,
                     message: '请输入乡/镇',
                     trigger: ['blur']
                 }">
@@ -388,7 +388,7 @@
 
         <n-form-item path="address" label="收货地址" placeholder="手机号"
         :rule="{
-                    required: true,
+                    required: false,
                     message: '请输入详细地址',
                     trigger: ['blur']
                 }"

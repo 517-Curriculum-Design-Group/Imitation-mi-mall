@@ -119,6 +119,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     public Result getProductList(Integer pageNum, Integer pageSize, String productName) {
         //构造器
         LambdaQueryWrapper<Product> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.orderByDesc(Product::getCreateTime);
         //判断前端是否传入productName字段
         queryWrapper.like(Objects.nonNull(productName), Product::getProductName, productName);
         //分页
@@ -245,7 +246,6 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         double leastPrice = Double.MAX_VALUE;
         for(ModifySkuDetail modifySkuDetail : modifySkuDetailDto.getSkuDetailList())
         {
-            //BigDecimal price = new BigDecimal(modifySkuDetail.skuPrice);
             leastPrice = Math.min(leastPrice, modifySkuDetail.skuPrice);
         }
         if(leastPrice != 0)
@@ -432,14 +432,14 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         Product product = productMapper.selectById(modifyProductStatusDto.getProductId());
         //没有Sku不准上架
         if(product.getSkuList() == null || product.getSkuList().isEmpty())
-            return Result.errorResult(909, "该商品无SKU");
+            return Result.errorResult2(909, "该商品无SKU");
 
         QueryWrapper<Sku> skuQueryWrapper = new QueryWrapper<>();
         skuQueryWrapper.eq("product_id", modifyProductStatusDto.getProductId())
                 .eq("del_flag", 0);
         int skuCnt = skuService.count(skuQueryWrapper);
         if(skuCnt == 0)
-            return Result.errorResult(909, "该商品无SKU");
+            return Result.errorResult2(909, "该商品无SKU");
 
         product.setStatus(modifyProductStatusDto.getStatus());
         productMapper.updateById(product);
@@ -448,19 +448,31 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
             return Result.okResult("下架成功");
         else if (modifyProductStatusDto.getStatus() == 1)
             return Result.okResult("上架成功");
-        return Result.errorResult(901, "无此ID对应商品");
+        return Result.errorResult2(901, "无此ID对应商品");
     }
 
     @Override
     public Result addProductStock(AddProductStockDto addProductStockDto)
     {
+
+
         int skuId = addProductStockDto.getSkuId();
         double price = addProductStockDto.getPrice();
         int stock = addProductStockDto.getStock();
+
         Sku sku = skuService.getById(skuId);
         sku.setSkuPrice(new BigDecimal(price));
         sku.setSkuStock(stock);
         skuService.updateById(sku);
+
+        int productId = sku.getProductId();
+        Product product = productMapper.selectById(productId);
+        String leastPriceStr = product.getLeastPrice();
+        String[] strs = leastPriceStr.split("元起");
+        Double oldPrice = Double.valueOf(strs[0]);
+        if(oldPrice > price)
+            productMapper.modifyLeastPrice(productId, price + "元起");
+
         return Result.okResult("补货成功");
     }
 

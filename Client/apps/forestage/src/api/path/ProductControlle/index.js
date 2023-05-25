@@ -32,7 +32,11 @@ export function getCateProduct(params) {
 }
 
 export function getComment(params) {
-  return Get("/commentList", params);
+  return Get("/comment/commentList", params);
+}
+
+export function addComment(params) {
+  return Post("/comment/addcomment", params);
 }
 
 export function getCateProductAsc(body) {
@@ -43,6 +47,8 @@ export function getCateProductDesc(body) {
   return Post("/getCateProductDesc", body);
 }
 
+
+
 export const prodApi = {
   getProductDetail,
   getProductPrice,
@@ -52,6 +58,7 @@ export const prodApi = {
   getCategoryList,
   getCateProduct,
   getComment,
+  addComment,
   getCateProductAsc,
   getCateProductDesc,
 };

@@ -2,7 +2,9 @@
 import { ref, onMounted, onBeforeMount } from 'vue'
 import { api } from "@/api";
 import { useRouter } from 'vue-router';
+import { useDetailStore } from '@/stores/detail.js'
 
+const store = useDetailStore()
 const router = useRouter();
 const value = ref('')
 
@@ -23,15 +25,15 @@ onMounted(async () => {
     OrderId.value = r.data.map((item) => item.order_id)
     for (let i = 0; i < orderList.value.length; i++) {
         const [e, r] = await api.getOrderDetails(OrderId.value[i])
-        console.log(r.data.orderDetail.orderStatus)
-        if(r.data.orderDetail.orderStatus === 0) noPay.value.push(r.data)
-        else if(r.data.orderDetail.orderStatus === 1) pay.value.push(r.data)
-        else if(r.data.orderDetail.orderStatus === 2) out.value.push(r.data)
-        else if(r.data.orderDetail.orderStatus === 3) complete.value.push(r.data)
+        if (r.data.orderDetail.orderStatus === 0) noPay.value.push(r.data)
+        else if (r.data.orderDetail.orderStatus === 1) pay.value.push(r.data)
+        else if (r.data.orderDetail.orderStatus === 2) out.value.push(r.data)
+        else if (r.data.orderDetail.orderStatus === 3) complete.value.push(r.data)
         else cancel.value.push(r.data)
+        copy.value.push(r.data)
+        store.setMostProduct(pay.value)
         orderDetail.value.push(r.data)
     }
-    copy.value = orderDetail.value
     console.log(copy.value)
 })
 
@@ -40,7 +42,6 @@ const mySkuname = (skuName) => {
 }
 
 function dateFormat(daterc) {
-
     if (daterc) {
         if (daterc.indexOf('T') === -1) return daterc
         const arr = daterc.split('T')
@@ -70,7 +71,7 @@ function order(id) {
 }
 
 let currentTab = ref(0)
-const menu = ["全部订单", "未支付", "未发货","已发货", "已完成","订单回收站"]
+const menu = ["全部订单", "未支付", "未发货", "已发货", "已完成", "订单回收站"]
 
 function update(index) {
     if (index === 0) {
@@ -81,15 +82,15 @@ function update(index) {
         orderDetail.value = noPay.value
     }
 
-    else if( index === 4){
+    else if (index === 3) {
         orderDetail.value = out.value
     }
 
-    else if(index === 3 ){
+    else if (index === 4) {
         orderDetail.value = complete.value
     }
 
-    else if(index === 2){
+    else if (index === 2) {
         orderDetail.value = pay.value
     }
 
@@ -145,13 +146,14 @@ function update(index) {
 
             <div class="flex justify-between w-full h-auto p-8">
 
-                <div class="flex h-[80px]" v-for="(item, num) in items.productDetail.productList" :key="num">
-                    <img class="w-[60px] h-[40px]" :src="item.skuImage" />
-                    <div class="flex flex-col">
-                        <div class="w-auto h-[14px] text-lg">{{ item.productName }} {{ mySkuname(item.skuName) }}</div>
-                        <div class="w-auto h-[14px] text-lg mt-2">{{ item.skuPrice }}元 x{{ item.skuQuantity }}</div>
+                <div class="flex flex-col">
+                    <div class="flex h-[80px]" v-for="(item, num) in items.productDetail.productList" :key="num">
+                        <img class="w-[60px] h-[40px]" :src="item.skuImage" />
+                        <div class="flex flex-col">
+                            <div class="w-auto h-[14px] text-lg">{{ item.productName }} {{ mySkuname(item.skuName) }}</div>
+                            <div class="w-auto h-[14px] text-lg mt-2">{{ item.skuPrice }}元 x{{ item.skuQuantity }}</div>
+                        </div>
                     </div>
-
                 </div>
 
                 <div class="flex flex-col h-[auto]">

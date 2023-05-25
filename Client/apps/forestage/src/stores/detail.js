@@ -3,7 +3,8 @@ import { defineStore } from "pinia";
 export const useDetailStore = defineStore('useDetailStore',{
     state:()=>{
         return {
-            currentProduct:null,
+            currentProduct:{},
+            mostProduct:[]
         }
     },
     actions:{
@@ -12,7 +13,13 @@ export const useDetailStore = defineStore('useDetailStore',{
         },
         setCurrentProduct(item){
             Object.assign(this.currentProduct,item)
-        }
+        },
+        getMostProduct(){
+            return this.mostProduct;
+        },
+        setMostProduct(item){
+            this.mostProduct = item
+        },
     },
     persist:{
         key:'userDetailStore',

@@ -77,6 +77,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if(nickNameExist(user.getNickName())){
             throw new SystemException(AppHttpCodeEnum.NICKNAME_EXIST);
         }
+        if(emailNameExist(user.getEmail()))
+        {
+            throw new SystemException(AppHttpCodeEnum.EMAIL_EXIST);
+        }
         //对密码进行加密
         String encodePassword = passwordEncoder.encode(user.getPassword());
         user.setCreateBy(-1);
@@ -100,6 +104,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(User::getUserName, userName);
         if (count(queryWrapper) == SystemConstants.USERNAME_NOT_EXIT) {
+            return false;
+        }
+        return true;
+    }
+
+    private boolean emailNameExist(String email) {
+        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(User::getEmail, email);
+        if (count(queryWrapper) == SystemConstants.EMAIL_NOT_EXIT) {
             return false;
         }
         return true;
@@ -267,7 +280,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         res.put("XList", XList);
         res.put("YList", YList);
 
-        //TODO:销售额哦
         //各类订单状态
         QueryWrapper<Order> orderDetailsWrapper = new QueryWrapper<>();
         orderDetailsWrapper
@@ -302,9 +314,27 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             }
         }
 
-        //TODO:销售额
-
         //各类商品状态
+        QueryWrapper<Order> orderQueryWrapper = new QueryWrapper<>();
+        orderQueryWrapper
+                .eq("status" , 3)
+                .or().eq("status" , 2);
+        List<Order> totalPriceList = orderMapper.selectList(orderQueryWrapper);
+        Double totalPrice = Double.valueOf(0f);
+        for (Order o: totalPriceList)
+        {
+            totalPrice += o.getTotalPrice().doubleValue();
+        }
+        if(totalPrice < 10000.00f)
+        {
+            res.put("totalPrice", totalPrice + "元");
+        }
+        else
+        {
+            totalPrice = totalPrice / 10000;
+            res.put("totalPrice", String.format("%.2f",totalPrice) + "万元");
+        }
+
         //正在销售的
         QueryWrapper<Product> onSaleProductCountWrapper = new QueryWrapper<>();
         onSaleProductCountWrapper.eq("status", "1");
@@ -357,7 +387,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         for (int i = 0; i < cates.length; i++) {
             Map<String, Object> map = new LinkedHashMap<>();
             List<Map<String, Object>> sameCategoryProducts = new ArrayList<>();
-            for (int j = 0; j < products.size(); j++) {
+            for (int j = 0; j < products.size() && j <= 6; j++) {
                 if(products.get(j).getCategoryId() != cates[i]) continue;
                 Map<String, Object> singleProduct = new LinkedHashMap<>();
                 singleProduct.put("product_id", products.get(j).getProductId());
@@ -450,14 +480,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                 eachCategory.put("category_name", category.getCategoryName());
                 List<Product> tempProducts = new ArrayList<>();
 
-                //找子类下的所有商品，最多填满八个
+                //找子类下的所有商品，最多填满十个
                 QueryWrapper<Product> productQueryWrapper1 = new QueryWrapper<>();
                 productQueryWrapper1.eq("category_id", category.getCategoryId())
                         .eq("status", 1)
                         .eq("del_flag", 0);
                 List<Product> tempProductList = productMapper.selectList(productQueryWrapper1);
                 for (Product product:tempProductList) {
-                    if(tempProducts.size() >= 8) break;
+                    if(tempProducts.size() >= 10) break;
                     tempProducts.add(product);
                 }
                 eachCategory.put("products", tempProducts);

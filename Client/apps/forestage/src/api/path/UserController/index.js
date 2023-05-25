@@ -1,4 +1,4 @@
-import { Get, Post, Delete,Put } from "../../server";
+import { Get, Post, Delete, Put, PostForm } from "../../server";
 
 export function postLogin(userobj) {
   return Post("/user/login", userobj);
@@ -24,27 +24,31 @@ export function getPersonInfo() {
   return Get("/getPersonInfo");
 }
 
-export function updatePersonInfo(obj){
-  return Put("/updatePersonInfo",obj)
+export function updatePersonInfo(obj) {
+  return Put("/updatePersonInfo", obj)
 }
 
 export function getAllAddresses(id) {
-  return Get("/getAllAddress",id);
+  return Get("/getAllAddress", id);
 }
 
-export function getLike(){
+export function getLike() {
   return Get("/getFavoriteList")
 }
 
-export function uploadAvatar(url){
-  return Post("/upload", url);
-} 
-
-export function updatePassword(psw){
-  return Put("/updatePassword",psw)
+export function uploadAvatar(url) {
+  return PostForm("/upload", url);
 }
 
+export function updatePassword(psw) {
+  return Put("/updatePassword", psw)
+}
+
+export function setDefaultAddress(address) {
+  return Put("/setDefaultAddress", address)
+}
 export const userApi = {
+  setDefaultAddress,
   postLogin,
   postRegister,
   postLogout,

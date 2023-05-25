@@ -27,7 +27,35 @@ export function updateAddress(data) {
     return Put("/updateAddress", data)
 }
 
+
+//未开始
+export function getFollSecList1() {
+    return Get("/getFollSecList1");
+}
+
+//已开始
+export function getFollSecList2() {
+    return Get("/getFollSecList2");
+}
+
+//已结束
+export function getFollSecList3() {
+    return Get("/getFollSecList3");
+}
+
+export function seckill(params) {
+    return Post("/seckill",undefined,params)
+}
+
+export function hasDefaultAddress() {
+    return Get("/hasDefaultAddress");
+}
 export const orderApi = {
+    hasDefaultAddress,
+    seckill,
+    getFollSecList3,
+    getFollSecList2,
+    getFollSecList1,
     updateAddress,
     addAddress,
     getOrderList,

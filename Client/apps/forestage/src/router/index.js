@@ -74,15 +74,20 @@ const routes = [
             component: async () => await import("@/view/user/Comment.vue"),
           },
           {
+            path: "realseComment",
+            name: "RealseComment",
+            component: async () => await import("@/view/user/RealseComment.vue"),
+          },
+          {
             path: "main",
             name: "Main",
             component: async () => await import("@/view/user/UserMain.vue"),
           },
-          {
-            path: "news",
-            name: "News",
-            component: async () => await import("@/view/user/News.vue"),
-          },
+          // {
+          //   path: "news",
+          //   name: "News",
+          //   component: async () => await import("@/view/user/News.vue"),
+          // },
           {
             path: "address",
             name: "Address",
@@ -117,7 +122,6 @@ const routes = [
     name: "Cart",
     component: async () => await import("@/view/cart/CartPage.vue"),
     beforeEnter: (to, from, next) => {
-      console.log(utils.isLogin());
       if (utils.isLogin()) {
         return next();
       } else {

@@ -2,6 +2,7 @@
 import utils from "@/utils";
 import { userStore } from "@/stores/user.js";
 import { postLogout } from "@/api/path/UserController/index.js";
+import SvgVue from "@/components/TwemojiFaceSavoringFood.vue";
 
 const Userstore = userStore();
 // const goods = reactive([{ name: "1", price: 100, count: 1 }, { name: "2", price: 500, count: 2 }])
@@ -24,6 +25,15 @@ const logout = async () => {
 
 <template>
   <div class="containers">
+    <n-button
+      quaternary
+      type="info"
+      class="w-130px"
+      @click="$router.push('/seckill')"
+    >
+      <SvgVue class="h-20px w-20px mr-5px" />
+      去秒杀
+    </n-button>
     <a-button
       type="primary"
       class="cart flex justify-center"
@@ -48,22 +58,43 @@ const logout = async () => {
           <span class="text-xs">共{{ goods.length }}件商品</span>
           <span class="price text-lg">¥{{ totalprice }}</span>
         </span>
-        <a-button type="primary" size="large" class="cart-btn">去购物车结算</a-button>
+        <a-button type="primary" size="large" class="cart-btn"
+          >去购物车结算</a-button
+        >
       </div>
     </div>
     <span class="space"></span>
-    <router-link to="/user/order"><a-button v-if="userid" type="default" class="order">我的订单</a-button></router-link>
+    <router-link to="/user/order"
+      ><a-button v-if="userid" type="default" class="order"
+        >我的订单</a-button
+      ></router-link
+    >
     <span v-if="userid" class="seq"></span>
-    <router-link to="/user/news">
-      <a-button type="default" class="news">消息通知</a-button></router-link
+      <a-button type="default" class="news cursor-not-allowed">消息通知</a-button>
+    <span v-if="!userid" class="seq"></span>
+    <router-link to="/login"
+      ><a-button v-if="!userid" type="default" class="register"
+        >注册</a-button
+      ></router-link
     >
     <span v-if="!userid" class="seq"></span>
-    <router-link to="/login"><a-button v-if="!userid" type="default" class="register">注册</a-button></router-link>
-    <span v-if="!userid" class="seq"></span>
-    <a-button v-if="!userid" type="default" class="login" @click="$router.push('/login')">登录</a-button>
+    <a-button
+      v-if="!userid"
+      type="default"
+      class="login"
+      @click="$router.push('/login')"
+      >登录</a-button
+    >
     <span v-if="userid" class="seq"></span>
     <div v-if="userid" class="user flex relative w-auto h-full cursor-pointer">
-      {{ userid }}
+      <n-avatar
+        round
+        class="mr-12px"
+        size="small"
+        :src="user.avatar ? user.avatar : 'empty.png'"
+        fallback-src="https://www.gstatic.com/android/keyboard/emojikitchen/20201001/u1f924/u1f924_u1f42d.png"
+      />
+      {{ user.nickName }}
       <span class="i-mdi-chevron-down ml-4px w-1.2rem h-1.2rem"></span>
     </div>
     <div class="user-name flex absolute text-xs w-[110px] shadow-lg z-300">
@@ -104,7 +135,6 @@ const logout = async () => {
   font-size: 11px;
   width: 120px;
   height: 40px;
-  margin-right: 9.5rem;
   background-color: #424242;
   border-color: #333333;
 }
@@ -183,12 +213,11 @@ const logout = async () => {
   transition: all 250ms linear;
 }
 
-.cart:hover+.cartdetail,
-.cartdetail:hover {
-  min-height: 100px;
-  height: fit-content;
-  /* max-height: fit-content; */
-}
+// .cart:hover + .cartdetail,
+// .cartdetail:hover {
+//   min-height: 100px;
+//   height: fit-content;
+// }
 
 .goodslist {
   padding: 5%;
@@ -222,7 +251,7 @@ const logout = async () => {
 .user {
   color: #b0b0b0;
   align-items: center;
-  padding: 4px 8px;
+  padding: 4px 12px;
 
   &:hover,
   &:has(+ .user-name:hover) {
@@ -230,7 +259,7 @@ const logout = async () => {
     background-color: white;
   }
 
-  &:hover+.user-name {
+  &:hover + .user-name {
     visibility: visible;
     height: 164px;
   }

@@ -3,7 +3,9 @@ import { ref, onMounted, onBeforeMount, reactive } from 'vue'
 import { api } from "@/api";
 import { useRouter } from 'vue-router';
 import { useNotification } from 'naive-ui'
+import { useDetailStore } from '@/stores/detail.js'
 
+const store = useDetailStore()
 const router = useRouter();
 const orderId = parseInt(router.currentRoute.value.params.orderId)
 
@@ -23,7 +25,7 @@ onBeforeMount(async () => {
     addressDetail.newName = r.data.addressDetail.name
     addressDetail.newPhone = r.data.addressDetail.phone
     addressDetail.newAddress = r.data.addressDetail.address
-    Object.assign(copy,addressDetail)
+    Object.assign(copy, addressDetail)
 })
 
 function clearStatus(status) {
@@ -59,42 +61,48 @@ const notification = useNotification()
 const update = async (addressDetail) => {
     console.log(addressDetail)
     const [e, r] = await api.updateOrderDetails(addressDetail)
-   if(r.code === 200){
-    notify('success')
-    isShow.value = false
-   } 
-   else{
-    Object.assign(addressDetail,copy)
-    notify('error')
-   }
+    if (r.code === 200) {
+        notify('success')
+        isShow.value = false
+    }
+    else {
+        Object.assign(addressDetail, copy)
+        notify('error')
+    }
 }
 
-function anotherUpdate(){
-    Object.assign(addressDetail,copy)
+function anotherUpdate() {
+    Object.assign(addressDetail, copy)
     isShow.value = false
 }
 
 function notify(type) {
-    if(type==='success'){
-         notification['success']({
-          content: "修改成功",
-          meta: "收货信息已变更",
-          duration: 2500,
-          keepAliveOnHover: true
+    if (type === 'success') {
+        notification['success']({
+            content: "修改成功",
+            meta: "收货信息已变更",
+            duration: 2500,
+            keepAliveOnHover: true
         });
     }
-    else{
+    else {
         notification['error']({
-          content: "修改失败",
-          meta: "请仔细核对收货信息",
-          duration: 2500,
-          keepAliveOnHover: true
+            content: "修改失败",
+            meta: "请仔细核对收货信息",
+            duration: 2500,
+            keepAliveOnHover: true
         });
-    }   
+    }
 }
 
-
 const thefalse = false
+
+function toComment(items){
+    console.log(items)
+    store.setCurrentProduct(items)
+    console.log(store.getCurrentProduct())
+    router.push("/user/realseComment")
+}
 </script>
 
 <template>
@@ -114,8 +122,20 @@ const thefalse = false
                     <span>{{ items.productName }}</span>
                     <span>{{ mySkuname(items.skuName) }}</span>
                 </div>
-                <span class="ml-auto">{{ items.skuPrice }}元 x{{ items.skuQuantity }}</span>
+                <span class="m-auto">{{ items.skuPrice }}元 x{{ items.skuQuantity }}</span>
+                <n-button class="text-light-50 bg-orange-500 w-[120px] h-[34px]" attr-type="button" style="
+            --n-color-hover: var(--button-background-color);
+            --n-border-hover: var(--n-border-hover);
+            --n-text-color-hover: white;
+            --n-boreder-focus: var(--button-background-color);
+            --n-ripple-color: var(--button-background-color);
+            --n-color-focus: gray;
+            --n-text-color-focus: white;
+          " @click="toComment(items)">
+                    立即评价
+                </n-button>
             </div>
+
             <n-divider style="margin-top:5px;margin-bottom: 10px;" />
         </div>
 
