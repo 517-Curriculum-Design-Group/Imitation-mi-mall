@@ -207,8 +207,14 @@ const handleDelete = (attributeId) => {
   console.log(temp);
   deleteSkubig(attributeId)
     .then((res) => {
-      toast("删除成功");
-      getData();
+      console.log(res)
+      if(!res.code){
+        toast("删除成功");
+        getData();
+      }
+      else{
+        toast(res.msg,'error')
+      }
     })
     .finally(() => {
       loading.value = false;

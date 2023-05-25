@@ -82,12 +82,19 @@ const onSubmit = () => {
         login(form)
         .then((res)=>{
             console.log(res);
+            if(!res.code){
+            
             toast("登陆成功")
- 
-            setToken(res.token)
+                        setToken(res.token)
             setType(res.user.userType)
             setNName(res.user.nickName)
             router.push("/")
+            }
+            else{
+                toast(res.msg,'error')
+            }
+ 
+
         }).finally(()=>{
             loading.value = false
         }

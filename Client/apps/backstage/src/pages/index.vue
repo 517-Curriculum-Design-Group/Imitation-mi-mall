@@ -82,7 +82,7 @@
         </template>
         <el-row :gutter="20">
 
-            <el-col :span="8" :offset="0" class="flex justify-between">
+            <el-col :span="6" :offset="0" class="flex justify-between">
                 <el-card shadow="hover" class="border-0 bg-light-400">
                     <div class="flex flex-col items-center justify-center">
                         <span class="text-xl mb-2"><CountTo :value="datas.onSaleProductCount
@@ -92,7 +92,7 @@
                 </el-card>
             </el-col>
 
-            <el-col :span="8" :offset="0" class="flex justify-between">
+            <el-col :span="6" :offset="0" class="flex justify-between">
                 <el-card shadow="hover" class="border-0 bg-light-400">
                     <div class="flex flex-col items-center justify-center">
                         <span class="text-xl mb-2"><CountTo :value="datas.notSaleProductCount" /></span>
@@ -101,7 +101,7 @@
                 </el-card>
             </el-col>
 
-            <el-col :span="8" :offset="0" class="flex justify-between">
+            <el-col :span="6" :offset="0" class="flex justify-between">
                 <el-card shadow="hover" class="border-0 bg-light-400">
                     <div class="flex flex-col items-center justify-center">
                         <span class="text-xl mb-2"><CountTo :value="datas.productStockLowCount" /></span>
@@ -109,6 +109,16 @@
                     </div>
                 </el-card>
             </el-col>
+
+            <el-col :span="6" :offset="0" class="flex justify-between">
+                <el-card shadow="hover" class="border-0 bg-light-400">
+                    <div class="flex flex-col items-center justify-center">
+                        <span class="text-l mb-2">{{datas.totalPrice}}</span>
+                        <span class="text-xs text-gray-500">销售额 </span>
+                    </div>
+                </el-card>
+            </el-col>
+
         </el-row>
     </el-card>
 

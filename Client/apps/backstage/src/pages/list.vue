@@ -302,6 +302,7 @@ import { gettypelist } from "~/api/type";
 import { getskulist } from "~/api/sku";
 import { ref, onMounted, reactive, computed } from "vue";
 import { ElNotification } from "element-plus";
+import { toast } from "~/composables/util";
 
 const list = ref([]);
 const currentPage = ref(1);
@@ -556,11 +557,18 @@ function clickSwitch(obj) {
     status: obj.status ? 1 : 0,
   };
   updateproductstatus(o).then((r) => {
-    ElNotification({
+    if(!r.code){
+          ElNotification({
       title: "成功",
       message: r || "修改 SKU 成功",
       type: "success",
     });
+    }
+    else{
+      toast(r.msg,'error')
+      obj.status = 0
+      
+    }
   });
 }
 
