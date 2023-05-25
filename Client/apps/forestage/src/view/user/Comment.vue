@@ -44,8 +44,10 @@ function toComment(items) {
 
     <div v-else class="flex">
         <div class="flex flex-col h-auto">
+
             <div class="flex flex-col w-full h-auto p-4" v-for="(items, index) in list" :key="index">
-                <div class="w-full h-[100px] flex items-center" v-for="(item, num) in items.productDetail.productList"
+                
+                <div class="w-[882px] h-[100px] flex items-center" v-for="(item, num) in items.productDetail.productList"
                     :key="num">
                     <img class="h-[40px] w-[40px]" :src="item.skuImage" />
                     <p>{{ item.productName }}<br>{{ mySkuname(item.skuName) }}</p>
