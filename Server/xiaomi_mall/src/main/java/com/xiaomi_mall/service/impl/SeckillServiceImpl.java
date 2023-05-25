@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class SeckillServiceImpl extends ServiceImpl<SeckillMapper, Seckill> implements SeckillService {
@@ -204,12 +205,15 @@ public class SeckillServiceImpl extends ServiceImpl<SeckillMapper, Seckill> impl
             Integer productId = seckillListVos.get(i).getProductId();
             Integer skuId = seckillListVos.get(i).getSkuId();
             Product product = productMapper.selectById(productId);
-            String skuName = skuMapper.selectById(skuId).getSkuName();
+            String skuName = "NotFound";
+            Sku sku = skuMapper.selectById(skuId);
+            if(sku != null)
+                skuName = sku.getSkuName();
             seckillListVos.get(i).setProductName(product.getProductName());
             seckillListVos.get(i).setProductPic(product.getProductPic());
             seckillListVos.get(i).setSkuName(skuName);
-
         }
+        seckillListVos = seckillListVos.stream().filter(p-> !p.getSkuName().equals("NotFound")).collect(Collectors.toList());
         return Result.okResult(seckillListVos);
     }
 

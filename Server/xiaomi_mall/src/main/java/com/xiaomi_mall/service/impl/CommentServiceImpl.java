@@ -47,7 +47,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     public Result getBackCommentList(Integer pageNum, Integer pageSize, Integer rate) {
 
         LambdaQueryWrapper<Comment> queryWrapper = new LambdaQueryWrapper<>();
-
+        queryWrapper.orderByDesc(Comment::getCommentTime);
         String rateStr[] = {"好评", "一般", "差评"};
 
         if(rate == -1)
